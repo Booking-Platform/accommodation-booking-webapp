@@ -7,11 +7,9 @@ using System.Threading.Tasks;
 
 namespace AccomodationServiceLibrary.Core.Repository.Interfaces
 {
-    public interface IAccomodationRepository
+    public interface IAppointmentRepository
     {
-        Task<List<Accomodation>> GetAsync();
-        Task<Accomodation?> GetAsync(string id);
-        Task CreateAsync(Accomodation newAccomodation);
-        Task RemoveAsync(string id);
+        Task<string> RemoveAppointmentAsync(string id);
+        Task AddAppointmentsAsync(string id, List<Appointment> appointments, bool automaticConfirmation);
     }
 }

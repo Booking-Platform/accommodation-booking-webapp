@@ -13,7 +13,6 @@ namespace AccomodationServiceLibrary.Core.Service.Interfaces
         Task<List<Accomodation>> GetAsync();
         Task<Accomodation?> GetAsync(string id);
         Task CreateAsync(AccomodationDTO newAccomodation);
-        Task UpdateAsync(string id, List<AppointmentDTO> appointments, bool automaticConfirmation);
         Task RemoveAsync(string id);
 
     }

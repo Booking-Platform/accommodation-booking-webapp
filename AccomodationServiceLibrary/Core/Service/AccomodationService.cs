@@ -11,11 +11,13 @@ namespace AccomodationServiceLibrary.Core.Service
     {
         private readonly IAccomodationRepository _accomodationRepository;
         private readonly IMapper _mapper;
+        private readonly IAppointmentService _appointmentService;
 
-        public AccomodationService(IAccomodationRepository accomodationRepository, IMapper mapper)
+        public AccomodationService(IAccomodationRepository accomodationRepository, IMapper mapper, IAppointmentService appointmentService)
         {
             _accomodationRepository = accomodationRepository;
             _mapper = mapper;
+            _appointmentService = appointmentService;
         }
         public async Task CreateAsync(AccomodationDTO newAccomodation)
         {
@@ -40,11 +42,5 @@ namespace AccomodationServiceLibrary.Core.Service
             await _accomodationRepository.RemoveAsync(id);
         }
 
-        public async Task UpdateAsync(string id, List<AppointmentDTO> appointments, bool automaticConfirmation)
-        {
-            var newAppointments = _mapper.Map<List<Appointment>>(appointments);
-            newAppointments.ForEach(app => app.Id = ObjectId.GenerateNewId().ToString());
-            await _accomodationRepository.UpdateAsync(id, newAppointments, automaticConfirmation);
-        }
     }
 }
