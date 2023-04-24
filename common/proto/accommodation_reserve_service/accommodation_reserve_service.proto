@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+option go_package = "github.com/Booking-Platform/accommodation-booking-webapp/common/accommodation_reserve";
+
+package catalogue;
+
+import "google/api/annotations.proto";
+
+service accommodation_reserve_service{
+  rpc Get(GetRequest) returns(GetResponse) {
+    option (google.api.http) = {
+      get: "/david"
+    };
+}
+}
+
+message GetRequest {
+  string id = 1;
+}
+
+message GetResponse {
+  string hello = 1;
+}
