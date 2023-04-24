@@ -1,5 +1,5 @@
-﻿using AccomodationServiceLibrary.Core.Model;
-using AccomodationServiceLibrary.Core.Model.DTO;
+﻿using accommodation_service.Core.Model;
+using accommodation_service.Core.Model.DTO;
 using AutoMapper;
 using MongoDB.Bson;
 using static Google.Protobuf.Reflection.SourceCodeInfo.Types;

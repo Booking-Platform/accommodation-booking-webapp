@@ -1,13 +1,12 @@
-using AccomodationServiceLibrary.Core.Repository;
-using AccomodationServiceLibrary.Core.Repository.Interfaces;
-using AccomodationServiceLibrary.Core.Service;
-using AccomodationServiceLibrary.Core.Service.Interfaces;
-using AccomodationServiceLibrary.Persistence;
+using accommodation_service.Core.Repository;
+using accommodation_service.Core.Repository.Interfaces;
+using accommodation_service.Core.Service;
+using accommodation_service.Core.Service.Interfaces;
+using accommodation_service.Persistence;
 using Microsoft.Extensions.Options;
+using Service;
 
 var builder = WebApplication.CreateBuilder(args);
-
-
 
 // Add services to the container.
 builder.Services.AddScoped<IAccomodationService, AccomodationService>();
@@ -30,18 +29,33 @@ builder.Services.AddControllers()
         options => options.JsonSerializerOptions.PropertyNamingPolicy = null); ;
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
 
 builder.Services.AddAutoMapper(typeof(Program).Assembly);
 
+builder.Services.AddGrpc().AddJsonTranscoding();
+builder.Services.AddGrpcSwagger();
+builder.Services.AddSwaggerGen(options =>
+{
+    options.SwaggerDoc("v1",
+        new Microsoft.OpenApi.Models.OpenApiInfo { Title = "grpc Transcoding", Version = "v1" });
+});
+
+
+
+// Additional configuration is required to successfully run gRPC on macOS.
+// For instructions on how to configure Kestrel and gRPC clients on macOS, visit https://go.microsoft.com/fwlink/?linkid=2099682
+
+// Add services to the container.
+builder.Services.AddGrpc();
+builder.Services.AddGrpcReflection();
+
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+app.UseSwagger();
+app.UseSwaggerUI(c =>
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Accomodation API");
+});
 
 app.UseHttpsRedirection();
 
@@ -49,4 +63,10 @@ app.UseAuthorization();
 
 app.MapControllers();
 
+// Configure the HTTP request pipeline.
+app.MapGrpcService<GreeterService>();
+app.MapGrpcReflectionService();
+app.MapGet("/", () => "Communication with gRPC endpoints must be made through a gRPC client. To learn how to create a client, visit: https://go.microsoft.com/fwlink/?linkid=2086909");
+
 app.Run();
+

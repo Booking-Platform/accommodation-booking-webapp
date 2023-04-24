@@ -1,6 +1,5 @@
-﻿using AccomodationServiceLibrary.Core.Model.DTO;
-using AccomodationServiceLibrary.Core.Service;
-using AccomodationServiceLibrary.Core.Service.Interfaces;
+﻿using accommodation_service.Core.Model.DTO;
+using accommodation_service.Core.Service.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace accommodation_service.Controllers

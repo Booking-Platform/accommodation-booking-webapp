@@ -1,7 +1,6 @@
-﻿using AccomodationServiceLibrary.Core.Model;
-using AccomodationServiceLibrary.Core.Model.DTO;
-using AccomodationServiceLibrary.Core.Service;
-using AccomodationServiceLibrary.Core.Service.Interfaces;
+﻿using accommodation_service.Core.Model;
+using accommodation_service.Core.Model.DTO;
+using accommodation_service.Core.Service.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace accommodation_service.Controllers
@@ -67,5 +66,10 @@ namespace accommodation_service.Controllers
             return NoContent();
         }
 
+        [HttpPost("search")]
+        public async Task<ActionResult<List<Accomodation>>> SearchAccomodations([FromBody] AccomodationSerachDTO searchParams)
+        {
+            return await _accomodationService.SearchAsync(searchParams.Location, searchParams.Guests, searchParams.StartDate, searchParams.EndDate);
+        }
     }
 }
