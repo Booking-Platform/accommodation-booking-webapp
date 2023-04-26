@@ -11,6 +11,13 @@ service accommodation_reserve_service{
     option (google.api.http) = {
       get: "/david"
     };
+
+  rpc CreateOrder(CreateOrderRequest) returns(CreateOrderResponse) {
+    option (google.api.http) = {
+      post: "/order"
+        body: "order"
+        };
+        }
 }
 }
 

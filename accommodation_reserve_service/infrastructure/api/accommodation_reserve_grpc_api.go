@@ -3,6 +3,7 @@ package api
 import (
 	"context"
 	"fmt"
+	"google.golang.org/genproto/googleapis/type/date"
 
 	"github.com/Booking-Platform/accommodation-booking-webapp/accommodation_reserve_service/application"
 
@@ -21,7 +22,7 @@ func NewAccommodationReserveHandler(service *application.AccommodationReserveSer
 	}
 }
 
-func (handler *AccommodationReserveHandler) Get(ctx context.Context, request *pb.GetRequest) (*pb.GetResponse, error) {
+func (handler *AccommodationReserveHandler) availableAccommodations(ctx context.Context, request *pb.GetRequest, accommodationIDs []string, start date.Date, start date.Date end) (*pb.GetResponse, error) {
 	fmt.Println("Hello from accommodation reserve handler")
 	id := request.Id
 	_, err := primitive.ObjectIDFromHex(id)
@@ -38,3 +39,5 @@ func (handler *AccommodationReserveHandler) Get(ctx context.Context, request *pb
 	}
 	return response, err
 }
+
+
