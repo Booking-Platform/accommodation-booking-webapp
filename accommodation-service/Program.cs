@@ -3,8 +3,11 @@ using accommodation_service.Core.Repository.Interfaces;
 using accommodation_service.Core.Service;
 using accommodation_service.Core.Service.Interfaces;
 using accommodation_service.Persistence;
+using accommodation_service.Service;
+using Google.Api;
+using Grpc.Core;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.Extensions.Options;
-using Service;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -37,7 +40,7 @@ builder.Services.AddGrpcSwagger();
 builder.Services.AddSwaggerGen(options =>
 {
     options.SwaggerDoc("v1",
-        new Microsoft.OpenApi.Models.OpenApiInfo { Title = "grpc Transcoding", Version = "v1" });
+        new Microsoft.OpenApi.Models.OpenApiInfo { Title = "Booking", Version = "v1" });
 });
 
 
@@ -51,6 +54,8 @@ builder.Services.AddGrpcReflection();
 
 var app = builder.Build();
 
+
+
 app.UseSwagger();
 app.UseSwaggerUI(c =>
 {
@@ -63,8 +68,9 @@ app.UseAuthorization();
 
 app.MapControllers();
 
+
 // Configure the HTTP request pipeline.
-app.MapGrpcService<GreeterService>();
+app.MapGrpcService<TestService>();
 app.MapGrpcReflectionService();
 app.MapGet("/", () => "Communication with gRPC endpoints must be made through a gRPC client. To learn how to create a client, visit: https://go.microsoft.com/fwlink/?linkid=2086909");
 

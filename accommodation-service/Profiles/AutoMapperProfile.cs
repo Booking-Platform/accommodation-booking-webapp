@@ -1,8 +1,7 @@
 ﻿using accommodation_service.Core.Model;
 using accommodation_service.Core.Model.DTO;
 using AutoMapper;
-using MongoDB.Bson;
-using static Google.Protobuf.Reflection.SourceCodeInfo.Types;
+
 
 namespace accommodation_service.Profiles
 {
@@ -14,6 +13,8 @@ namespace accommodation_service.Profiles
             CreateMap<BenefitDTO, Benefit>();
             CreateMap<AppointmentDTO, Appointment>();
             CreateMap<AccomodationDTO, Accomodation>();
+
+            CreateMap<accommodation_service.Core.Model.Accomodation, accommodation_service.Protos.Accommodation>();
         }
     }
 }
