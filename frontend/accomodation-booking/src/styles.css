@@ -1,0 +1,8 @@
+.toast-container {
+  top: 80px;
+}
+
+.toast {
+  background-color: #ff0000;
+  color: #ffffff;
+}
