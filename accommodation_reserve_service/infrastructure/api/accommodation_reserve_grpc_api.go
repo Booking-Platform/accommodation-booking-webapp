@@ -2,13 +2,10 @@ package api
 
 import (
 	"context"
-	"fmt"
-	"google.golang.org/genproto/googleapis/type/date"
 
 	"github.com/Booking-Platform/accommodation-booking-webapp/accommodation_reserve_service/application"
 
 	pb "github.com/Booking-Platform/accommodation-booking-webapp/common/proto/accommodation_reserve_service"
-	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 type AccommodationReserveHandler struct {
@@ -22,22 +19,22 @@ func NewAccommodationReserveHandler(service *application.AccommodationReserveSer
 	}
 }
 
-func (handler *AccommodationReserveHandler) availableAccommodations(ctx context.Context, request *pb.GetRequest, accommodationIDs []string, start date.Date, start date.Date end) (*pb.GetResponse, error) {
-	fmt.Println("Hello from accommodation reserve handler")
-	id := request.Id
-	_, err := primitive.ObjectIDFromHex(id)
+func (handler *AccommodationReserveHandler) CreateReservation(ctx context.Context, request *pb.CreateReservationRequest) (*pb.CreateReservationResponse, error) {
+
+	reservation, err := mapReservation(request.NewReservation)
+	if err != nil {
+		return nil, err
+	}
+
+	err = handler.service.Create(reservation)
 
 	if err != nil {
 		return nil, err
 	}
-	product := handler.service.Get()
-	if product != nil {
-		return nil, err
+
+	response := &pb.CreateReservationResponse{
+		Reservation: mapReservationPb(reservation),
 	}
-	response := &pb.GetResponse{
-		Hello: "caoooo",
-	}
-	return response, err
+
+	return response, nil
 }
-
-

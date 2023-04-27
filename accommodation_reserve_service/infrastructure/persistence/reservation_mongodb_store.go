@@ -1,6 +1,7 @@
 package persistence
 
 import (
+	"context"
 	"github.com/Booking-Platform/accommodation-booking-webapp/accommodation_reserve_service/domain"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -20,9 +21,17 @@ func (r ReservationMongoDBStore) Get(id primitive.ObjectID) (*domain.Reservation
 	panic("implement me")
 }
 
-func (r ReservationMongoDBStore) Insert(product *domain.Reservation) error {
-	//TODO implement me
-	panic("implement me")
+func (store *ReservationMongoDBStore) Insert(reservation *domain.Reservation) error {
+	if reservation.Id.IsZero() {
+		reservation.Id = primitive.NewObjectID()
+	}
+
+	result, err := store.reservations.InsertOne(context.TODO(), reservation)
+	if err != nil {
+		return err
+	}
+	reservation.Id = result.InsertedID.(primitive.ObjectID)
+	return nil
 }
 
 func NewReservationMongoDBStore(client *mongo.Client) domain.ReservationStore {

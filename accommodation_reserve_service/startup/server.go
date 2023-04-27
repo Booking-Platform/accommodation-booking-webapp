@@ -2,6 +2,9 @@ package startup
 
 import (
 	"fmt"
+	"github.com/Booking-Platform/accommodation-booking-webapp/accommodation_reserve_service/domain"
+	"github.com/Booking-Platform/accommodation-booking-webapp/accommodation_reserve_service/infrastructure/persistence"
+	"go.mongodb.org/mongo-driver/mongo"
 	"log"
 	"net"
 
@@ -24,19 +27,31 @@ func NewServer(config *config.Config) *Server {
 }
 
 func (server *Server) Start() {
+	mongoClient := server.initMongoClient()
+	reservationStore := server.initReservationStore(mongoClient)
 
-	accommodationReserveService := server.initAccommodationReserveService()
-
-	server.initAccommodationReserveHandler(accommodationReserveService)
+	accommodationReserveService := server.initAccommodationReserveService(reservationStore)
 
 	accommodationReserveHandler := server.initAccommodationReserveHandler(accommodationReserveService)
 
 	server.startGrpcServer(accommodationReserveHandler)
-
 }
 
-func (server *Server) initAccommodationReserveService() *application.AccommodationReserveService {
-	return application.NewAccommodationReserveService()
+func (server *Server) initMongoClient() *mongo.Client {
+	client, err := persistence.GetClient(server.config.ReservationDBHost, server.config.ReservationDBPort)
+	if err != nil {
+		log.Fatal(err)
+	}
+	return client
+}
+
+func (server *Server) initReservationStore(client *mongo.Client) domain.ReservationStore {
+	store := persistence.NewReservationMongoDBStore(client)
+	return store
+}
+
+func (server *Server) initAccommodationReserveService(store domain.ReservationStore) *application.AccommodationReserveService {
+	return application.NewAccommodationReserveService(store)
 }
 
 func (server *Server) initAccommodationReserveHandler(service *application.AccommodationReserveService) *api.AccommodationReserveHandler {

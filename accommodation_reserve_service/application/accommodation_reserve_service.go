@@ -1,20 +1,23 @@
 package application
 
 import (
-	"fmt"
+	"github.com/Booking-Platform/accommodation-booking-webapp/accommodation_reserve_service/domain"
 )
 
 type AccommodationReserveService struct {
+	store domain.ReservationStore
 }
 
-func NewAccommodationReserveService() *AccommodationReserveService {
-	fmt.Println("#####################################   4")
-
-	return &AccommodationReserveService{}
-
+func NewAccommodationReserveService(store domain.ReservationStore) *AccommodationReserveService {
+	return &AccommodationReserveService{
+		store: store,
+	}
 }
 
 func (service *AccommodationReserveService) Get() error {
-	fmt.Println("#####################################")
-	return nil
+	panic("implement me")
+}
+
+func (service *AccommodationReserveService) Create(reservation *domain.Reservation) error {
+	return service.store.Insert(reservation)
 }
