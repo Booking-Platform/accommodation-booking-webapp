@@ -10,9 +10,19 @@ import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
+import { ViewComponent } from './modules/view/view.component';
+import { ReserveAccommodationComponent } from './modules/reserve-accommodation/reserve-accommodation.component';
+import { MatDialogModule } from '@angular/material/dialog';
+import { ReservationDetailsComponent } from './modules/reservation-details/reservation-details.component';
 
 @NgModule({
-  declarations: [AppComponent, NavbarComponent],
+  declarations: [
+    AppComponent,
+    NavbarComponent,
+    ViewComponent,
+    ReserveAccommodationComponent,
+    ReservationDetailsComponent,
+  ],
   imports: [
     BrowserAnimationsModule,
     ToastrModule.forRoot({
@@ -24,6 +34,7 @@ import { ToastrModule } from 'ngx-toastr';
     NgbModule,
     AppRoutingModule,
     MatCardModule,
+    MatDialogModule,
     HttpClientModule,
   ],
   providers: [],

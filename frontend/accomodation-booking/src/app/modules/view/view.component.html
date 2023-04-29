@@ -1,1 +1,71 @@
-<div class="container"></div>
+<div class="container">
+  <h1>Accommodations</h1>
+</div>
+
+<div class="search-container">
+  <div class="form-group" style="display: inline-block; margin-right: 10px">
+    <label
+      for="checkin-date"
+      style="display: block; margin-bottom: 5px; width: 100%"
+      >Check-in date:</label
+    >
+    <input
+      type="date"
+      class="form-control"
+      id="checkin-date"
+      style="display: block; width: 100%"
+    />
+  </div>
+  <div class="form-group" style="display: inline-block; margin-right: 10px">
+    <label for="checkout-date" style="display: block; margin-bottom: 5px"
+      >Check-out date:</label
+    >
+    <input
+      type="date"
+      class="form-control"
+      id="checkout-date"
+      style="display: block; width: 100%"
+    />
+  </div>
+  <div class="form-group" style="display: inline-block; margin-right: 10px">
+    <label for="num-guests" style="display: block; margin-bottom: 5px"
+      >Num of guests:</label
+    >
+    <input
+      type="number"
+      class="form-control"
+      id="num-guests"
+      min="1"
+      max="10"
+      style="display: block; width: 100%"
+    />
+  </div>
+  <button type="submit" class="btn btn-primary" style="display: inline-block">
+    Search
+  </button>
+</div>
+
+<div class="card-deck">
+  <div class="card" *ngFor="let acc of accommodations">
+    <img
+      class="card-img-top"
+      src="{{ acc.photo[1] }}"
+      alt="{{ acc.name }} image"
+    />
+    <div class="card-body">
+      <h5 class="card-title">{{ acc.name }}</h5>
+      <p class="card-text">
+        {{ acc.address.street }} {{ acc.address.number }},
+        {{ acc.address.city }}, {{ acc.address.country }}
+      </p>
+      <p class="card-text">
+        Num of guests: {{ acc.minGuestNum }} - {{ acc.maxGuestNum }}
+      </p>
+    </div>
+    <div class="card-footer">
+      <button class="btn btn-primary" (click)="reserveAccommodation(acc)">
+        Reserve
+      </button>
+    </div>
+  </div>
+</div>
