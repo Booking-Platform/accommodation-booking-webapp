@@ -41,12 +41,17 @@ func (server *Server) initHandlers() {
 }
 
 func (server *Server) Start() {
+	handler := server.getHandlerCORSWrapped()
+
+	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%s", server.config.Port), handler))
+}
+
+func (server *Server) getHandlerCORSWrapped() http.Handler {
 	corsMiddleware := cors.New(cors.Options{
 		AllowedOrigins: []string{"http://localhost:4200"},
 	})
 
-	// Wrap the ServeMux with the CORS middleware
 	handler := corsMiddleware.Handler(server.mux)
 
-	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%s", server.config.Port), handler))
+	return handler
 }
