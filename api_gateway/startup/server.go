@@ -48,7 +48,7 @@ func (server *Server) Start() {
 
 func (server *Server) getHandlerCORSWrapped() http.Handler {
 	corsMiddleware := cors.New(cors.Options{
-		AllowedOrigins: []string{"http://localhost:4200"},
+		AllowedOrigins: []string{server.config.AllowedCorsOrigin},
 	})
 
 	handler := corsMiddleware.Handler(server.mux)

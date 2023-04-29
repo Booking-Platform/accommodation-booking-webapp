@@ -5,7 +5,6 @@ import (
 	pb "github.com/Booking-Platform/accommodation-booking-webapp/common/proto/accommodation_reserve_service"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"google.golang.org/genproto/googleapis/type/date"
-	"strconv"
 	"time"
 )
 
@@ -25,16 +24,16 @@ func mapReservation(reservationPb *pb.NewReservation) (*domain.Reservation, erro
 
 	endDate := date.Date{Year: int32(end.Year()), Month: int32(end.Month()), Day: int32(end.Day())}
 
-	guestNum, err := strconv.ParseUint(reservationPb.GuestNum, 10, 32)
-	if err != nil {
-		return nil, err
-	}
+	//guestNum, err := strconv.ParseUint(reservationPb.GuestNum, 10, 32)
+	//if err != nil {
+	//	return nil, err
+	//}
 
 	reservation := &domain.Reservation{
 		AccommodationID: accommodationID,
 		Start:           startDate,
 		End:             endDate,
-		GuestNum:        uint(guestNum),
+		//GuestNum:        uint(guestNum),
 	}
 
 	return reservation, nil

@@ -11,7 +11,6 @@ import { FormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
 import { ViewComponent } from './modules/view/view.component';
-import { ReserveAccommodationComponent } from './modules/reserve-accommodation/reserve-accommodation.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { ReservationDetailsComponent } from './modules/reservation-details/reservation-details.component';
 
@@ -20,7 +19,6 @@ import { ReservationDetailsComponent } from './modules/reservation-details/reser
     AppComponent,
     NavbarComponent,
     ViewComponent,
-    ReserveAccommodationComponent,
     ReservationDetailsComponent,
   ],
   imports: [

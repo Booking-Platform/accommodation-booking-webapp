@@ -11,7 +11,7 @@ import { ReservationService } from 'src/app/services/reservation/reservation.ser
   styleUrls: ['./reservation-details.component.css'],
 })
 export class ReservationDetailsComponent implements OnInit {
-  public accommodationID: any = '';
+  public accommodationID: any = '123321';
   public startDate: any = '';
   public endDate: any = '';
   public guestNum: any = '';
@@ -40,8 +40,10 @@ export class ReservationDetailsComponent implements OnInit {
 
   ngOnInit(): void {
     this.route.queryParams.subscribe((params) => {
-      this.startDate = params['startDate'];
-      this.endDate = params['endDate'];
+      this.startDate = '2023-11-11'
+      this.endDate = '2024-11-11'
+      // this.startDate = params['startDate'];
+      // this.endDate = params['endDate'];
     });
   }
 
