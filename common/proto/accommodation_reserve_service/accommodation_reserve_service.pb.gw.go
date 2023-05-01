@@ -65,6 +65,24 @@ func local_request_AccommodationReserveService_CreateReservation_0(ctx context.C
 
 }
 
+func request_AccommodationReserveService_GetAllForConfirmation_0(ctx context.Context, marshaler runtime.Marshaler, client AccommodationReserveServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var protoReq GetAllForConfirmationRequest
+	var metadata runtime.ServerMetadata
+
+	msg, err := client.GetAllForConfirmation(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
+	return msg, metadata, err
+
+}
+
+func local_request_AccommodationReserveService_GetAllForConfirmation_0(ctx context.Context, marshaler runtime.Marshaler, server AccommodationReserveServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var protoReq GetAllForConfirmationRequest
+	var metadata runtime.ServerMetadata
+
+	msg, err := server.GetAllForConfirmation(ctx, &protoReq)
+	return msg, metadata, err
+
+}
+
 // RegisterAccommodationReserveServiceHandlerServer registers the http handlers for service AccommodationReserveService to "mux".
 // UnaryRPC     :call AccommodationReserveServiceServer directly.
 // StreamingRPC :currently unsupported pending https://github.com/grpc/grpc-go/issues/906.
@@ -93,6 +111,31 @@ func RegisterAccommodationReserveServiceHandlerServer(ctx context.Context, mux *
 		}
 
 		forward_AccommodationReserveService_CreateReservation_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+
+	})
+
+	mux.Handle("GET", pattern_AccommodationReserveService_GetAllForConfirmation_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+		ctx, cancel := context.WithCancel(req.Context())
+		defer cancel()
+		var stream runtime.ServerTransportStream
+		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
+		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
+		var err error
+		var annotatedContext context.Context
+		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/accommodation_reserve.AccommodationReserveService/GetAllForConfirmation", runtime.WithHTTPPathPattern("/api/reservation/getAllForConfirmation"))
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+		resp, md, err := local_request_AccommodationReserveService_GetAllForConfirmation_0(annotatedContext, inboundMarshaler, server, req, pathParams)
+		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
+		annotatedContext = runtime.NewServerMetadataContext(annotatedContext, md)
+		if err != nil {
+			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
+			return
+		}
+
+		forward_AccommodationReserveService_GetAllForConfirmation_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
@@ -159,13 +202,39 @@ func RegisterAccommodationReserveServiceHandlerClient(ctx context.Context, mux *
 
 	})
 
+	mux.Handle("GET", pattern_AccommodationReserveService_GetAllForConfirmation_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+		ctx, cancel := context.WithCancel(req.Context())
+		defer cancel()
+		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
+		var err error
+		var annotatedContext context.Context
+		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/accommodation_reserve.AccommodationReserveService/GetAllForConfirmation", runtime.WithHTTPPathPattern("/api/reservation/getAllForConfirmation"))
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+		resp, md, err := request_AccommodationReserveService_GetAllForConfirmation_0(annotatedContext, inboundMarshaler, client, req, pathParams)
+		annotatedContext = runtime.NewServerMetadataContext(annotatedContext, md)
+		if err != nil {
+			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
+			return
+		}
+
+		forward_AccommodationReserveService_GetAllForConfirmation_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+
+	})
+
 	return nil
 }
 
 var (
 	pattern_AccommodationReserveService_CreateReservation_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"api", "reservation", "create"}, ""))
+
+	pattern_AccommodationReserveService_GetAllForConfirmation_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"api", "reservation", "getAllForConfirmation"}, ""))
 )
 
 var (
 	forward_AccommodationReserveService_CreateReservation_0 = runtime.ForwardResponseMessage
+
+	forward_AccommodationReserveService_GetAllForConfirmation_0 = runtime.ForwardResponseMessage
 )
