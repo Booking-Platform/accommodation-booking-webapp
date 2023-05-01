@@ -38,3 +38,18 @@ func (handler *AccommodationReserveHandler) CreateReservation(ctx context.Contex
 
 	return response, nil
 }
+
+func (handler *AccommodationReserveHandler) GetAllForConfirmation(ctx context.Context, request *pb.GetAllForConfirmationRequest) (*pb.GetAllForConfirmationResponse, error) {
+	reservations, err := handler.service.GetAllForConfirmation()
+	if err != nil {
+		return nil, err
+	}
+	response := &pb.GetAllForConfirmationResponse{
+		Reservations: []*pb.Reservation{},
+	}
+	for _, reservation := range reservations {
+		current := mapReservationPb(reservation)
+		response.Reservations = append(response.Reservations, current)
+	}
+	return response, nil
+}

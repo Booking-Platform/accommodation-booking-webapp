@@ -1,14 +1,14 @@
 package api
 
 import (
-	"github.com/Booking-Platform/accommodation-booking-webapp/accommodation_reserve_service/domain"
+	"github.com/Booking-Platform/accommodation-booking-webapp/accommodation_reserve_service/domain/model"
 	pb "github.com/Booking-Platform/accommodation-booking-webapp/common/proto/accommodation_reserve_service"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"google.golang.org/genproto/googleapis/type/date"
 	"time"
 )
 
-func mapReservation(reservationPb *pb.NewReservation) (*domain.Reservation, error) {
+func mapReservation(reservationPb *pb.NewReservation) (*model.Reservation, error) {
 	accommodationID, err := primitive.ObjectIDFromHex(reservationPb.AccommodationID)
 
 	start, err := time.Parse("2006-01-02", reservationPb.StartDate)
@@ -29,7 +29,7 @@ func mapReservation(reservationPb *pb.NewReservation) (*domain.Reservation, erro
 	//	return nil, err
 	//}
 
-	reservation := &domain.Reservation{
+	reservation := &model.Reservation{
 		AccommodationID: accommodationID,
 		Start:           startDate,
 		End:             endDate,
@@ -39,7 +39,7 @@ func mapReservation(reservationPb *pb.NewReservation) (*domain.Reservation, erro
 	return reservation, nil
 }
 
-func mapReservationPb(reservation *domain.Reservation) *pb.Reservation {
+func mapReservationPb(reservation *model.Reservation) *pb.Reservation {
 	reservationPb := &pb.Reservation{
 		EndDate:         reservation.End.String(),
 		StartDate:       reservation.Start.String(),

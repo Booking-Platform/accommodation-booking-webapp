@@ -13,6 +13,7 @@ import { ToastrModule } from 'ngx-toastr';
 import { ViewComponent } from './modules/view/view.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { ReservationDetailsComponent } from './modules/reservation-details/reservation-details.component';
+import { ReservationConfirmationComponent } from './reservation-confirmation/reservation-confirmation.component';
 
 @NgModule({
   declarations: [
@@ -20,6 +21,7 @@ import { ReservationDetailsComponent } from './modules/reservation-details/reser
     NavbarComponent,
     ViewComponent,
     ReservationDetailsComponent,
+    ReservationConfirmationComponent,
   ],
   imports: [
     BrowserAnimationsModule,

@@ -2,6 +2,7 @@ package application
 
 import (
 	"github.com/Booking-Platform/accommodation-booking-webapp/accommodation_reserve_service/domain"
+	"github.com/Booking-Platform/accommodation-booking-webapp/accommodation_reserve_service/domain/model"
 )
 
 type AccommodationReserveService struct {
@@ -18,6 +19,11 @@ func (service *AccommodationReserveService) Get() error {
 	panic("implement me")
 }
 
-func (service *AccommodationReserveService) Create(reservation *domain.Reservation) error {
+func (service *AccommodationReserveService) Create(reservation *model.Reservation) error {
+	reservation.ReservationStatus = model.ReservationStatus(1)
 	return service.store.Insert(reservation)
+}
+
+func (service *AccommodationReserveService) GetAllForConfirmation() ([]*model.Reservation, error) {
+	return service.store.GetByStatus(model.WAITING)
 }
