@@ -12,4 +12,5 @@ type Reservation struct {
 	Start             date.Date          `bson:"start"`
 	End               date.Date          `bson:"end"`
 	ReservationStatus ReservationStatus  `bson:"reservation_status"`
+	UserID            primitive.ObjectID `bson:"user_id"`
 }

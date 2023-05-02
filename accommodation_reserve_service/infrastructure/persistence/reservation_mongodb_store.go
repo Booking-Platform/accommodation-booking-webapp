@@ -18,9 +18,16 @@ type ReservationMongoDBStore struct {
 	reservations *mongo.Collection
 }
 
-func (store ReservationMongoDBStore) Get(id primitive.ObjectID) (*model.Reservation, error) {
-	//TODO implement me
-	panic("implement me")
+func NewReservationMongoDBStore(client *mongo.Client) domain.ReservationStore {
+	reservations := client.Database(DATABASE).Collection(COLLECTION)
+	return &ReservationMongoDBStore{
+		reservations: reservations,
+	}
+}
+
+func (store ReservationMongoDBStore) GetAllByUserID(id primitive.ObjectID) ([]*model.Reservation, error) {
+	filter := bson.M{"user_id": id}
+	return store.filter(filter)
 }
 
 func (store *ReservationMongoDBStore) Insert(reservation *model.Reservation) error {
@@ -39,13 +46,6 @@ func (store *ReservationMongoDBStore) Insert(reservation *model.Reservation) err
 func (store *ReservationMongoDBStore) GetByStatus(status model.ReservationStatus) ([]*model.Reservation, error) {
 	filter := bson.M{"reservation_status": status}
 	return store.filter(filter)
-}
-
-func NewReservationMongoDBStore(client *mongo.Client) domain.ReservationStore {
-	reservations := client.Database(DATABASE).Collection(COLLECTION)
-	return &ReservationMongoDBStore{
-		reservations: reservations,
-	}
 }
 
 func (store *ReservationMongoDBStore) filter(filter interface{}) ([]*model.Reservation, error) {

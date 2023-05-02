@@ -10,6 +10,7 @@ import (
 
 func mapReservation(reservationPb *pb.NewReservation) (*model.Reservation, error) {
 	accommodationID, err := primitive.ObjectIDFromHex(reservationPb.AccommodationID)
+	userID, err := primitive.ObjectIDFromHex(reservationPb.UserID)
 
 	start, err := time.Parse("2006-01-02", reservationPb.StartDate)
 	if err != nil {
@@ -24,16 +25,11 @@ func mapReservation(reservationPb *pb.NewReservation) (*model.Reservation, error
 
 	endDate := date.Date{Year: int32(end.Year()), Month: int32(end.Month()), Day: int32(end.Day())}
 
-	//guestNum, err := strconv.ParseUint(reservationPb.GuestNum, 10, 32)
-	//if err != nil {
-	//	return nil, err
-	//}
-
 	reservation := &model.Reservation{
 		AccommodationID: accommodationID,
 		Start:           startDate,
 		End:             endDate,
-		//GuestNum:        uint(guestNum),
+		UserID:          userID,
 	}
 
 	return reservation, nil

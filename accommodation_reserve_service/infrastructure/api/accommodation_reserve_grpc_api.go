@@ -2,6 +2,7 @@ package api
 
 import (
 	"context"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 
 	"github.com/Booking-Platform/accommodation-booking-webapp/accommodation_reserve_service/application"
 
@@ -45,6 +46,27 @@ func (handler *AccommodationReserveHandler) GetAllForConfirmation(ctx context.Co
 		return nil, err
 	}
 	response := &pb.GetAllForConfirmationResponse{
+		Reservations: []*pb.Reservation{},
+	}
+	for _, reservation := range reservations {
+		current := mapReservationPb(reservation)
+		response.Reservations = append(response.Reservations, current)
+	}
+	return response, nil
+}
+
+func (handler *AccommodationReserveHandler) GetReserfationsByUserID(ctx context.Context, request *pb.GetReservationsByUserIDRequest) (*pb.GetReservationsByUserIDResponse, error) {
+	objectId, err := primitive.ObjectIDFromHex(request.Id)
+	if err != nil {
+		return nil, err
+	}
+
+	reservations, err := handler.service.GetAllByUserID(objectId)
+	if err != nil {
+		return nil, err
+	}
+
+	response := &pb.GetReservationsByUserIDResponse{
 		Reservations: []*pb.Reservation{},
 	}
 	for _, reservation := range reservations {

@@ -3,6 +3,7 @@ package application
 import (
 	"github.com/Booking-Platform/accommodation-booking-webapp/accommodation_reserve_service/domain"
 	"github.com/Booking-Platform/accommodation-booking-webapp/accommodation_reserve_service/domain/model"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 type AccommodationReserveService struct {
@@ -26,4 +27,8 @@ func (service *AccommodationReserveService) Create(reservation *model.Reservatio
 
 func (service *AccommodationReserveService) GetAllForConfirmation() ([]*model.Reservation, error) {
 	return service.store.GetByStatus(model.WAITING)
+}
+
+func (service *AccommodationReserveService) GetAllByUserID(id primitive.ObjectID) ([]*model.Reservation, error) {
+	return service.store.GetAllByUserID(id)
 }

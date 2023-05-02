@@ -6,7 +6,7 @@ import (
 )
 
 type ReservationStore interface {
-	Get(id primitive.ObjectID) (*model.Reservation, error)
 	Insert(reservation *model.Reservation) error
 	GetByStatus(status model.ReservationStatus) ([]*model.Reservation, error)
+	GetAllByUserID(id primitive.ObjectID) ([]*model.Reservation, error)
 }
