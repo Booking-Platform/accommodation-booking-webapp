@@ -1,6 +1,7 @@
 package api
 
 import (
+	"fmt"
 	"github.com/Booking-Platform/accommodation-booking-webapp/accommodation_reserve_service/domain/model"
 	pb "github.com/Booking-Platform/accommodation-booking-webapp/common/proto/accommodation_reserve_service"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -37,11 +38,16 @@ func mapReservation(reservationPb *pb.NewReservation) (*model.Reservation, error
 
 func mapReservationPb(reservation *model.Reservation) *pb.Reservation {
 	reservationPb := &pb.Reservation{
-		EndDate:         reservation.End.String(),
-		StartDate:       reservation.Start.String(),
+		EndDate:         getDateStringForm(reservation.End),
+		StartDate:       getDateStringForm(reservation.Start),
 		GuestNum:        string(reservation.GuestNum),
 		AccommodationID: reservation.AccommodationID.String(),
 		Id:              reservation.Id.String(),
 	}
 	return reservationPb
+}
+
+func getDateStringForm(date date.Date) string {
+	return fmt.Sprintf("%d-%02d-%02d", date.Year, date.Month, date.Day)
+
 }

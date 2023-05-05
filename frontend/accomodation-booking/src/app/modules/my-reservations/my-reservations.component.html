@@ -1,1 +1,25 @@
-<p>my-reservations works!</p>
+<div class="container">
+  <h1>My reservations</h1>
+</div>
+
+<div class="card-deck">
+  <div class="card" *ngFor="let reservation of reservations">
+    <div class="card-body">
+      <h5 class="card-title">{{ reservation.name }}</h5>
+      <p class="card-text">
+         From: {{ reservation.startDate}} 
+      </p>
+      <p class="card-text">
+        To: {{ reservation.endDate}} 
+     </p>
+     <p class="card-text">
+        Num of guests: {{ reservation.minGuestNum }} - {{ reservation.maxGuestNum }}
+      </p>
+    </div>
+    <div class="card-footer">
+      <button class="btn btn-primary" (click)="cancelReservation(reservation)">
+        Cancel
+      </button>
+    </div>
+  </div>
+</div>

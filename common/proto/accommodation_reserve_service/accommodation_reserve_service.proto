@@ -21,7 +21,7 @@ service accommodation_reserve_service{
     };
   }
 
-  rpc GetReserfationsByUserID(GetReservationsByUserIDRequest) returns(GetReservationsByUserIDResponse) {
+  rpc GetReservationsByUserID(GetReservationsByUserIDRequest) returns(GetReservationsByUserIDResponse) {
     option (google.api.http) = {
       get: "/api/reservation/getReservationsByUserID/{id}"
     };

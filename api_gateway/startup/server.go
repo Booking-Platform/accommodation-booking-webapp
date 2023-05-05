@@ -26,6 +26,7 @@ func NewServer(config *cfg.Config) *Server {
 		mux:    runtime.NewServeMux(),
 	}
 	server.initHandlers()
+	server.initCustomHandlers()
 	return server
 }
 
@@ -38,6 +39,14 @@ func (server *Server) initHandlers() {
 		panic(err)
 	}
 
+}
+
+func (server *Server) initCustomHandlers() {
+	//accommodationReserveEndpoint := fmt.Sprintf("%s:%s", server.config.AccommodationReserveHost, server.config.AccommodationReservePort)
+	//orderingEmdpoint := fmt.Sprintf("%s:%s", server.config.OrderingHost, server.config.OrderingPort)
+	//shippingEmdpoint := fmt.Sprintf("%s:%s", server.config.ShippingHost, server.config.ShippingPort)
+	//orderingHandler := api.NewOrderingHandler(orderingEmdpoint, catalogueEmdpoint, shippingEmdpoint)
+	//orderingHandler.Init(server.mux)
 }
 
 func (server *Server) Start() {
