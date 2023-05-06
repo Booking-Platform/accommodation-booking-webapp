@@ -1,6 +1,0 @@
-obj\Debug\net7.0\Protos/AccommodationService.cs \
-obj\Debug\net7.0\Protos/AccommodationServiceGrpc.cs: google/api/http.proto\
- C:/Users/david/.nuget/packages/grpc.tools/2.49.0/build/native/include/google/protobuf/descriptor.proto\
- google/api/annotations.proto\
- C:/Users/david/.nuget/packages/grpc.tools/2.49.0/build/native/include/google/protobuf/timestamp.proto\
- Protos/accommodation_service.proto

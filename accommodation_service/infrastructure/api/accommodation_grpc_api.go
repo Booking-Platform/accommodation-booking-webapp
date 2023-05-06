@@ -3,7 +3,6 @@ package api
 import (
 	"accommodation_service/application"
 	"context"
-	"fmt"
 	pb "github.com/Booking-Platform/accommodation-booking-webapp/common/proto/accommodation_service"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
@@ -19,8 +18,7 @@ func NewAccommodationHandler(service *application.AccommodationService) *Accommo
 	}
 }
 
-func (handler *AccommodationHandler) Get(ctx context.Context, request *pb.GetRequest) (*pb.GetResponse, error) {
-	fmt.Println("Hello from accommodation handler")
+func (handler *AccommodationHandler) GetById(ctx context.Context, request *pb.GetAccommodationByIdRequest) (*pb.GetAccommodationByIdResponse, error) {
 	id := request.Id
 	_, err := primitive.ObjectIDFromHex(id)
 
@@ -31,8 +29,6 @@ func (handler *AccommodationHandler) Get(ctx context.Context, request *pb.GetReq
 	if product != nil {
 		return nil, err
 	}
-	response := &pb.GetResponse{
-		Hello: "caoooo",
-	}
+	response := &pb.GetAccommodationByIdResponse{}
 	return response, err
 }

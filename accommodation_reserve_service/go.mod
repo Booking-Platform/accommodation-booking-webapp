@@ -7,16 +7,13 @@ replace github.com/Booking-Platform/accommodation-booking-webapp/common => ../co
 require (
 	github.com/Booking-Platform/accommodation-booking-webapp/common v0.0.0-00010101000000-000000000000
 	go.mongodb.org/mongo-driver v1.11.4
-	google.golang.org/grpc v1.54.0
+	google.golang.org/genproto v0.0.0-20230410155749-daa745c078e1
+	google.golang.org/grpc v1.55.0
 )
 
 require (
-<<<<<<< HEAD
 	github.com/golang/protobuf v1.5.3 // indirect
-=======
-	github.com/golang/protobuf v1.5.2 // indirect
 	github.com/golang/snappy v0.0.1 // indirect
->>>>>>> be423cb7973c155aea64b562ac3894b6e0588ee6
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.15.2 // indirect
 	github.com/klauspost/compress v1.13.6 // indirect
 	github.com/montanaflynn/stats v0.0.0-20171201202039-1bf9dbcd8cbe // indirect
@@ -30,6 +27,5 @@ require (
 	golang.org/x/sync v0.0.0-20210220032951-036812b2e83c // indirect
 	golang.org/x/sys v0.6.0 // indirect
 	golang.org/x/text v0.9.0 // indirect
-	google.golang.org/genproto v0.0.0-20230410155749-daa745c078e1 // indirect
 	google.golang.org/protobuf v1.30.0 // indirect
 )
