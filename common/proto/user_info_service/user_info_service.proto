@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+option go_package = "github.com/Booking-Platform/accommodation-booking-webapp/common/user_info";
+
+package user_info;
+
+import "google/api/annotations.proto";
+
+service user_info_service{
+  rpc GetUserByID(GetUserByIDRequest) returns(GetUserByIDResponse) {
+    option (google.api.http) = {
+      get: "/api/user/{id}"
+    };
+  }
+}
+
+message GetUserByIDRequest {
+  string id = 1;
+}
+
+message GetUserByIDResponse {
+  string name = 1;
+  string surname = 2;
+}

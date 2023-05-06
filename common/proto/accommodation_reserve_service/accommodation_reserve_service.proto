@@ -2,22 +2,70 @@ syntax = "proto3";
 
 option go_package = "github.com/Booking-Platform/accommodation-booking-webapp/common/accommodation_reserve";
 
-package catalogue;
+package accommodation_reserve;
 
 import "google/api/annotations.proto";
 
 service accommodation_reserve_service{
-  rpc Get(GetRequest) returns(GetResponse) {
+
+  rpc CreateReservation(CreateReservationRequest) returns(CreateReservationResponse) {
     option (google.api.http) = {
-      get: "/david"
+      post: "/api/reservation/create"
+      body: "newReservation"
     };
-}
+  }
+
+  rpc GetAllForConfirmation(GetAllForConfirmationRequest) returns(GetAllForConfirmationResponse) {
+    option (google.api.http) = {
+      get: "/api/reservation/getAllForConfirmation"
+    };
+  }
+
+  rpc GetReservationsByUserID(GetReservationsByUserIDRequest) returns(GetReservationsByUserIDResponse) {
+    option (google.api.http) = {
+      get: "/api/reservation/getReservationsByUserID/{id}"
+    };
+  }
+
 }
 
-message GetRequest {
+message GetReservationsByUserIDRequest {
   string id = 1;
 }
 
-message GetResponse {
-  string hello = 1;
+message GetReservationsByUserIDResponse {
+  repeated Reservation reservations = 1;
+}
+
+message GetAllForConfirmationRequest {
+
+}
+
+message GetAllForConfirmationResponse {
+  repeated Reservation reservations = 1;
+}
+
+message CreateReservationRequest {
+  NewReservation newReservation = 1;
+}
+
+message CreateReservationResponse {
+  Reservation reservation = 1;
+}
+
+message NewReservation {
+  string startDate = 1;
+  string endDate = 2;
+  string accommodationID = 3;
+  string guestNum = 4;
+  string userID = 5;
+}
+
+message Reservation {
+  string id = 1;
+  string startDate = 2;
+  string endDate = 3;
+  string accommodationID = 4;
+  string guestNum = 5;
+  string userID = 6;
 }

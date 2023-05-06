@@ -2,12 +2,11 @@ package api
 
 import (
 	"context"
-	"fmt"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 
 	"github.com/Booking-Platform/accommodation-booking-webapp/accommodation_reserve_service/application"
 
 	pb "github.com/Booking-Platform/accommodation-booking-webapp/common/proto/accommodation_reserve_service"
-	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 type AccommodationReserveHandler struct {
@@ -21,20 +20,58 @@ func NewAccommodationReserveHandler(service *application.AccommodationReserveSer
 	}
 }
 
-func (handler *AccommodationReserveHandler) Get(ctx context.Context, request *pb.GetRequest) (*pb.GetResponse, error) {
-	fmt.Println("Hello from accommodation reserve handler")
-	id := request.Id
-	_, err := primitive.ObjectIDFromHex(id)
+func (handler *AccommodationReserveHandler) CreateReservation(ctx context.Context, request *pb.CreateReservationRequest) (*pb.CreateReservationResponse, error) {
+
+	reservation, err := mapReservation(request.NewReservation)
+	if err != nil {
+		return nil, err
+	}
+
+	err = handler.service.Create(reservation)
 
 	if err != nil {
 		return nil, err
 	}
-	product := handler.service.Get()
-	if product != nil {
+
+	response := &pb.CreateReservationResponse{
+		Reservation: mapReservationPb(reservation),
+	}
+
+	return response, nil
+}
+
+func (handler *AccommodationReserveHandler) GetAllForConfirmation(ctx context.Context, request *pb.GetAllForConfirmationRequest) (*pb.GetAllForConfirmationResponse, error) {
+	reservations, err := handler.service.GetAllForConfirmation()
+	if err != nil {
 		return nil, err
 	}
-	response := &pb.GetResponse{
-		Hello: "caoooo",
+	response := &pb.GetAllForConfirmationResponse{
+		Reservations: []*pb.Reservation{},
 	}
-	return response, err
+	for _, reservation := range reservations {
+		current := mapReservationPb(reservation)
+		response.Reservations = append(response.Reservations, current)
+	}
+	return response, nil
+}
+
+func (handler *AccommodationReserveHandler) GetReservationsByUserID(ctx context.Context, request *pb.GetReservationsByUserIDRequest) (*pb.GetReservationsByUserIDResponse, error) {
+	objectId, err := primitive.ObjectIDFromHex(request.Id)
+	if err != nil {
+		return nil, err
+	}
+
+	reservations, err := handler.service.GetAllByUserID(objectId)
+	if err != nil {
+		return nil, err
+	}
+
+	response := &pb.GetReservationsByUserIDResponse{
+		Reservations: []*pb.Reservation{},
+	}
+	for _, reservation := range reservations {
+		current := mapReservationPb(reservation)
+		response.Reservations = append(response.Reservations, current)
+	}
+	return response, nil
 }

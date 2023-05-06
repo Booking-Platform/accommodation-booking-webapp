@@ -4,6 +4,8 @@ import { Accommodation } from 'src/app/model/accommodation';
 import { Address } from 'src/app/model/address';
 import { Benefit } from 'src/app/model/benefit';
 import { AccommodationService } from 'src/app/services/accommodation/accommodation.service';
+import { MatDialog } from '@angular/material/dialog';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-view',
@@ -32,7 +34,11 @@ export class ViewComponent implements OnInit {
 
   public accommodations: Accommodation[] = [];
 
-  constructor(private accommodationService: AccommodationService) {}
+  constructor(
+    private accommodationService: AccommodationService,
+    public dialog: MatDialog,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
     this.accommodationService.getAccommodations().subscribe((res: any) => {
@@ -46,5 +52,15 @@ export class ViewComponent implements OnInit {
     this.accommodations.push(this.accommodation);
     this.accommodations.push(this.accommodation);
     this.accommodations.push(this.accommodation);
+  }
+
+  reserveAccommodation(acc: any) {
+    this.router.navigate(['/accommodation-details'], {
+      queryParams: {
+        accommodationID: 'accID',
+        startDate: '2023-10-10',
+        endDate: '2023-10-11',
+      },
+    });
   }
 }
