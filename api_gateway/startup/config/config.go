@@ -14,6 +14,6 @@ func NewConfig() *Config {
 		AccommodationReserveHost: "localhost",
 		AccommodationReservePort: "8001",
 		AccommodationHost:        "localhost",
-		AccommodationPort:        "5001",
+		AccommodationPort:        "8002",
 	}
 }

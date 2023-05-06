@@ -1,16 +1,14 @@
 package startup
 
 import (
+	"accommodation_service/application"
+	"accommodation_service/infrastructure/api"
+	"accommodation_service/startup/config"
 	"fmt"
+	accommodation "github.com/Booking-Platform/accommodation-booking-webapp/common/proto/accommodation_service"
+	"google.golang.org/grpc"
 	"log"
 	"net"
-
-	"github.com/Booking-Platform/accommodation-booking-webapp/accommodation_reserve_service/startup/config"
-	accommodation_reserve "github.com/Booking-Platform/accommodation-booking-webapp/common/proto/accommodation_reserve_service"
-
-	"github.com/Booking-Platform/accommodation-booking-webapp/accommodation_reserve_service/application"
-	"github.com/Booking-Platform/accommodation-booking-webapp/accommodation_reserve_service/infrastructure/api"
-	"google.golang.org/grpc"
 )
 
 type Server struct {
@@ -25,31 +23,31 @@ func NewServer(config *config.Config) *Server {
 
 func (server *Server) Start() {
 
-	accommodationReserveService := server.initAccommodationReserveService()
+	accommodationService := server.initAccommodationService()
 
-	server.initAccommodationReserveHandler(accommodationReserveService)
+	server.initAccommodationHandler(accommodationService)
 
-	accommodationReserveHandler := server.initAccommodationReserveHandler(accommodationReserveService)
+	accommodationHandler := server.initAccommodationHandler(accommodationService)
 
-	server.startGrpcServer(accommodationReserveHandler)
+	server.startGrpcServer(accommodationHandler)
 
 }
 
-func (server *Server) initAccommodationReserveService() *application.AccommodationReserveService {
-	return application.NewAccommodationReserveService()
+func (server *Server) initAccommodationService() *application.AccommodationService {
+	return application.NewAccommodationService()
 }
 
-func (server *Server) initAccommodationReserveHandler(service *application.AccommodationReserveService) *api.AccommodationReserveHandler {
-	return api.NewAccommodationReserveHandler(service)
+func (server *Server) initAccommodationHandler(service *application.AccommodationService) *api.AccommodationHandler {
+	return api.NewAccommodationHandler(service)
 }
 
-func (server *Server) startGrpcServer(accommodationReserveHandler *api.AccommodationReserveHandler) {
+func (server *Server) startGrpcServer(accommodationHandler *api.AccommodationHandler) {
 	listener, err := net.Listen("tcp", fmt.Sprintf(":%s", server.config.Port))
 	if err != nil {
 		log.Fatalf("failed to listen: %v", err)
 	}
 	grpcServer := grpc.NewServer()
-	accommodation_reserve.RegisterAccommodationReserveServiceServer(grpcServer, accommodationReserveHandler)
+	accommodation.RegisterAccommodationServiceServer(grpcServer, accommodationHandler)
 	if err := grpcServer.Serve(listener); err != nil {
 		log.Fatalf("failed to serve: %s", err)
 	}

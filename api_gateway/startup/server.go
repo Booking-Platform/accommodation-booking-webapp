@@ -7,8 +7,7 @@ import (
 	"net/http"
 
 	accommodation_reserve_Gw "github.com/Booking-Platform/accommodation-booking-webapp/common/proto/accommodation_reserve_service"
-
-	accommodation_Gw "github.com/Booking-Platform/accommodation-booking-webapp/common/proto/accommodation_handle_service"
+	accommodation_Gw "github.com/Booking-Platform/accommodation-booking-webapp/common/proto/accommodation_service"
 
 	cfg "github.com/Booking-Platform/accommodation-booking-webapp/api_gateway/startup/config"
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
@@ -41,10 +40,16 @@ func (server *Server) initHandlers() {
 		panic(err)
 	}
 
+	//accommodationEndpoint := fmt.Sprintf("%s:%s", server.config.AccommodationHost, server.config.AccommodationPort)
+	//accom_err := accommodation_Gw.RegisterAccommodationServiceHandlerFromEndpoint(context.TODO(), server.mux, accommodationEndpoint, opts)
+	//if accom_err != nil {
+	//	panic(accom_err)
+	//}
+
 	accommodationEndpoint := fmt.Sprintf("%s:%s", server.config.AccommodationHost, server.config.AccommodationPort)
-	accom_err := accommodation_Gw.RegisterAccommodationServiceHandlerFromEndpoint(context.TODO(), server.mux, accommodationEndpoint, opts)
-	if accom_err != nil {
-		panic(accom_err)
+	err2 := accommodation_Gw.RegisterAccommodationServiceHandlerFromEndpoint(context.TODO(), server.mux, accommodationEndpoint, opts)
+	if err2 != nil {
+		panic(err2)
 	}
 
 }
