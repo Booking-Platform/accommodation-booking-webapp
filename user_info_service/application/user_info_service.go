@@ -1,11 +1,15 @@
 package application
 
-type UserInfoService struct{}
+import (
+	"github.com/Booking-Platform/accommodation-booking-webapp/user_info_service/domain"
+)
 
-func NewUserInfoService() *UserInfoService {
-	return &UserInfoService{}
+type UserService struct {
+	store domain.UserStore
 }
 
-func (service *UserInfoService) Get() error {
-	return nil
+func NewUserService(store domain.UserStore) *UserService {
+	return &UserService{
+		store: store,
+	}
 }

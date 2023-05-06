@@ -11,10 +11,11 @@ import { ReservationService } from 'src/app/services/reservation/reservation.ser
   styleUrls: ['./reservation-details.component.css'],
 })
 export class ReservationDetailsComponent implements OnInit {
-  public accommodationID: any = '123321';
+  public accommodationID: any = '644abbea0af7618727bf6512';
   public startDate: any = '';
   public endDate: any = '';
   public guestNum: any = '';
+  public userID: any = '511abbea5af7118727bf2312';
 
   public address = new Address('1', 'Serbia', 'Belgrade', 'Main Street', '123');
   public benefits = [
@@ -51,7 +52,8 @@ export class ReservationDetailsComponent implements OnInit {
     var newReservation = {
       "startDate": this.startDate,
       "endDate": this.endDate,
-      "accommodationID": this.accommodationID
+      "accommodationID": this.accommodationID,
+      "userID": this.userID
     }
     this.reservationService.createReservation(newReservation).subscribe()
   }

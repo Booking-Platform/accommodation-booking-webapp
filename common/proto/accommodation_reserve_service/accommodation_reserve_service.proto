@@ -14,6 +14,35 @@ service accommodation_reserve_service{
       body: "newReservation"
     };
   }
+
+  rpc GetAllForConfirmation(GetAllForConfirmationRequest) returns(GetAllForConfirmationResponse) {
+    option (google.api.http) = {
+      get: "/api/reservation/getAllForConfirmation"
+    };
+  }
+
+  rpc GetReservationsByUserID(GetReservationsByUserIDRequest) returns(GetReservationsByUserIDResponse) {
+    option (google.api.http) = {
+      get: "/api/reservation/getReservationsByUserID/{id}"
+    };
+  }
+
+}
+
+message GetReservationsByUserIDRequest {
+  string id = 1;
+}
+
+message GetReservationsByUserIDResponse {
+  repeated Reservation reservations = 1;
+}
+
+message GetAllForConfirmationRequest {
+
+}
+
+message GetAllForConfirmationResponse {
+  repeated Reservation reservations = 1;
 }
 
 message CreateReservationRequest {
@@ -29,6 +58,7 @@ message NewReservation {
   string endDate = 2;
   string accommodationID = 3;
   string guestNum = 4;
+  string userID = 5;
 }
 
 message Reservation {
@@ -37,4 +67,5 @@ message Reservation {
   string endDate = 3;
   string accommodationID = 4;
   string guestNum = 5;
+  string userID = 6;
 }
