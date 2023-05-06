@@ -10,7 +10,7 @@ import "google/protobuf/timestamp.proto";
 service AccommodationService{
 
 
-  rpc GetAll(GetAllRequest) returns(GetAllAccommodationsResponse) {
+  rpc GetAll(GetAllAccommodationsRequest) returns(GetAllAccommodationsResponse) {
     option (google.api.http) = {
       get: "/accommodations"
     };
@@ -22,10 +22,16 @@ service AccommodationService{
       get: "/accommodations/{id}"
     };
   }
+
+  rpc CreateAccommodation(CreateAccommodationRequest) returns(CreateAccommodationResponse) {
+    option (google.api.http) = {
+      post: "/accommodation/create"
+      body: "newAccommodation"
+    };
+  }
 }
 
-message GetAllRequest {
-  // no fields needed for this request
+message GetAllAccommodationsRequest {
 }
 
 message GetAllAccommodationsResponse {
@@ -38,6 +44,36 @@ message GetAccommodationByIdRequest {
 
 message GetAccommodationByIdResponse {
   Accommodation accommodation = 1;
+}
+
+message CreateAccommodationRequest{
+  NewAccommodation newAccommodation = 1;
+}
+
+message CreateAccommodationResponse{
+  Accommodation accommodation = 1;
+}
+
+
+message AddressDTO {
+  string street = 1;
+  string city = 2;
+  string country = 3;
+  string number = 4;
+}
+
+message BenefitDTO {
+  string name = 1;
+}
+
+message NewAccommodation {
+  string name = 1;
+  int32 min_guest_num = 2;
+  int32 max_guest_num = 3;
+  AddressDTO address = 4;
+  bool automatic_confirmation = 5;
+  repeated string photo = 6;
+  repeated BenefitDTO benefits = 7;
 }
 
 
