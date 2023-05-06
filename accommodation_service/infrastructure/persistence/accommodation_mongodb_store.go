@@ -1,72 +1,78 @@
 package persistence
 
 import (
-	"context"
 	"accommodation_service/domain"
 	"accommodation_service/domain/model"
+	"context"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
 const (
-	DATABASE   = "accommodation"
-	COLLECTION = "reservation"
+	DATABASE   = "accomodation"
+	COLLECTION = "accomodations"
 )
 
 type AccommodationMongoDBStore struct {
 	accommodations *mongo.Collection
 }
 
-func NewAccommodationMongoDBStore(client *mongo.Client) domain. {
-	reservations := client.Database(DATABASE).Collection(COLLECTION)
+func NewAccommodationMongoDBStore(client *mongo.Client) domain.AccommodationStore {
+	accommodations := client.Database(DATABASE).Collection(COLLECTION)
 	return &AccommodationMongoDBStore{
 		accommodations: accommodations,
 	}
 }
 
-func (store AccommodationMongoDBStore) GetAllAccommodationsID(id primitive.ObjectID) ([]*model.Accommodation, error) {
-	filter := bson.M{"user_id": id}
+func (store *AccommodationMongoDBStore) GetAllAccommodations() ([]*model.Accommodation, error) {
+	filter := bson.D{{}}
 	return store.filter(filter)
 }
 
-//func (store *ReservationMongoDBStore) Insert(reservation *model.Reservation) error {
-//	if reservation.Id.IsZero() {
-//		reservation.Id = primitive.NewObjectID()
-//	}
-//
-//	result, err := store.reservations.InsertOne(context.TODO(), reservation)
-//	if err != nil {
-//		return err
-//	}
-//	reservation.Id = result.InsertedID.(primitive.ObjectID)
-//	return nil
-//}
-//
-//func (store *ReservationMongoDBStore) GetByStatus(status model.ReservationStatus) ([]*model.Reservation, error) {
-//	filter := bson.M{"reservation_status": status}
-//	return store.filter(filter)
-//}
-//
-//func (store *ReservationMongoDBStore) filter(filter interface{}) ([]*model.Reservation, error) {
-//	cursor, err := store.reservations.Find(context.TODO(), filter)
-//	defer cursor.Close(context.TODO())
-//
-//	if err != nil {
-//		return nil, err
-//	}
-//	return decode(cursor)
-//}
-//
-//func decode(cursor *mongo.Cursor) (products []*model.Reservation, err error) {
-//	for cursor.Next(context.TODO()) {
-//		var product model.Reservation
-//		err = cursor.Decode(&product)
-//		if err != nil {
-//			return
-//		}
-//		products = append(products, &product)
-//	}
-//	err = cursor.Err()
-//	return
-//}
+func (store AccommodationMongoDBStore) GetAccomodationByID(id primitive.ObjectID) (*model.Accommodation, error) {
+	filter := bson.M{"_id": id}
+	return store.filterOne(filter)
+}
+
+func (store *AccommodationMongoDBStore) Insert(accommodation *model.Accommodation) error {
+	if accommodation.ID.IsZero() {
+		accommodation.ID = primitive.NewObjectID()
+	}
+
+	result, err := store.accommodations.InsertOne(context.TODO(), accommodation)
+	if err != nil {
+		return err
+	}
+	accommodation.ID = result.InsertedID.(primitive.ObjectID)
+	return nil
+}
+
+func (store *AccommodationMongoDBStore) filter(filter interface{}) ([]*model.Accommodation, error) {
+	cursor, err := store.accommodations.Find(context.TODO(), filter)
+	defer cursor.Close(context.TODO())
+
+	if err != nil {
+		return nil, err
+	}
+	return decode(cursor)
+}
+
+func (store *AccommodationMongoDBStore) filterOne(filter interface{}) (accommodation *model.Accommodation, err error) {
+	result := store.accommodations.FindOne(context.TODO(), filter)
+	err = result.Decode(&accommodation)
+	return
+}
+
+func decode(cursor *mongo.Cursor) (products []*model.Accommodation, err error) {
+	for cursor.Next(context.TODO()) {
+		var product model.Accommodation
+		err = cursor.Decode(&product)
+		if err != nil {
+			return
+		}
+		products = append(products, &product)
+	}
+	err = cursor.Err()
+	return
+}

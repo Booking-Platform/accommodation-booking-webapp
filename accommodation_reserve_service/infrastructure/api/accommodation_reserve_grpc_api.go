@@ -56,7 +56,8 @@ func (handler *AccommodationReserveHandler) GetAllForConfirmation(ctx context.Co
 }
 
 func (handler *AccommodationReserveHandler) GetReservationsByUserID(ctx context.Context, request *pb.GetReservationsByUserIDRequest) (*pb.GetReservationsByUserIDResponse, error) {
-	objectId, err := primitive.ObjectIDFromHex(request.Id)
+	id := request.Id
+	objectId, err := primitive.ObjectIDFromHex(id)
 	if err != nil {
 		return nil, err
 	}
