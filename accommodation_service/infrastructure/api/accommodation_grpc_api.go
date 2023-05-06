@@ -19,16 +19,53 @@ func NewAccommodationHandler(service *application.AccommodationService) *Accommo
 }
 
 func (handler *AccommodationHandler) GetById(ctx context.Context, request *pb.GetAccommodationByIdRequest) (*pb.GetAccommodationByIdResponse, error) {
-	id := request.Id
-	_, err := primitive.ObjectIDFromHex(id)
+	objectId, err := primitive.ObjectIDFromHex(request.Id)
+	if err != nil {
+		return nil, err
+	}
+
+	accommodation, err := handler.service.GetAccommodationByID(objectId)
+	if err != nil {
+		return nil, err
+	}
+
+	accommodationPb := mapAccommodationPb(accommodation)
+	response := &pb.GetAccommodationByIdResponse{
+		Accommodation: accommodationPb,
+	}
+	return response, nil
+}
+
+func (handler *AccommodationHandler) GetAll(ctx context.Context, request *pb.GetAllAccommodationsRequest) (*pb.GetAllAccommodationsResponse, error) {
+	accommodations, err := handler.service.GetAllAccommodations()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &pb.GetAllAccommodationsResponse{
+		Accommodations: []*pb.Accommodation{},
+	}
+	for _, accommodation := range accommodations {
+		current := mapAccommodationPb(accommodation)
+		response.Accommodations = append(response.Accommodations, current)
+	}
+	return response, nil
+}
+
+func (handler *AccommodationHandler) CreateAccommodation(ctx context.Context, request *pb.CreateAccommodationRequest) (*pb.CreateAccommodationResponse, error) {
+	accommodation, err := mapNewAccommodation(request.NewAccommodation)
+	if err != nil {
+		return nil, err
+	}
+
+	err = handler.service.Create(accommodation)
 
 	if err != nil {
 		return nil, err
 	}
-	product := handler.service.Get()
-	if product != nil {
-		return nil, err
+
+	response := &pb.CreateAccommodationResponse{
+		Accommodation: mapAccommodationPb(accommodation),
 	}
-	response := &pb.GetAccommodationByIdResponse{}
-	return response, err
+	return response, nil
 }
