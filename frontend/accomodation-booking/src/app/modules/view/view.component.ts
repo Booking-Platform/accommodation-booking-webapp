@@ -14,6 +14,9 @@ import { Router } from '@angular/router';
 })
 export class ViewComponent implements OnInit {
   public accommodations: Accommodation[] = [];
+  public startDate: any;  
+  public endDate: any;
+
 
   constructor(
     private accommodationService: AccommodationService,
@@ -29,12 +32,12 @@ export class ViewComponent implements OnInit {
     });
   }
 
-  reserveAccommodation(acc: any) {
+  reserveAccommodation(acc: Accommodation) {
     this.router.navigate(['/accommodation-details'], {
       queryParams: {
-        accommodationID: 'accID',
-        startDate: '2023-10-10',
-        endDate: '2023-10-11',
+        accommodationID: acc.id,
+        startDate: this.startDate,
+        endDate: this.endDate,
       },
     });
   }
