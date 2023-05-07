@@ -2,12 +2,12 @@ package api
 
 import (
 	"context"
+	"encoding/json"
 	"github.com/Booking-Platform/accommodation-booking-webapp/api_gateway/domain"
 	"github.com/Booking-Platform/accommodation-booking-webapp/api_gateway/infrastructure/services"
 	"github.com/Booking-Platform/accommodation-booking-webapp/common/proto/accommodation_reserve_service"
 	reservation "github.com/Booking-Platform/accommodation-booking-webapp/common/proto/accommodation_reserve_service"
 	accommodation "github.com/Booking-Platform/accommodation-booking-webapp/common/proto/accommodation_service"
-	user_info "github.com/Booking-Platform/accommodation-booking-webapp/common/proto/user_info_service"
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"net/http"
 )
@@ -52,9 +52,29 @@ func (handler *ReservationHandler) GetAllForConfirmation(w http.ResponseWriter, 
 			GuestNum: res.GuestNum,
 		}
 
-		reservations = append(reservations, &reservation)
+		fetchedAccommodation, err := handler.getAccommodationForReservation(res.AccommodationID)
+		accommodationForReservation := fetchedAccommodation.GetAccommodation()
 
-		user := handler.getUserForReservation()
+		if err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			return
+		}
+
+		accommodation := domain.Accommodation{
+			Id:      accommodationForReservation.Id,
+			Name:    accommodationForReservation.Name,
+			Address: accommodationForReservation.Address.String(),
+		}
+
+		reservation.Accommodation = accommodation
+
+		reservations = append(reservations, &reservation)
+	}
+
+	response, err := json.Marshal(reservations)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
 	}
 
 	w.WriteHeader(http.StatusOK)
@@ -66,12 +86,7 @@ func (handler *ReservationHandler) getReservationsWithStatusWAITING() (*accommod
 	return reservationClient.GetAllForConfirmation(context.TODO(), &reservation.GetAllForConfirmationRequest{})
 }
 
-func (handler *ReservationHandler) getUserForReservation(id string) (*user_info.GetUserByIDResponse, error) {
-	reservationClient := services.NewReservationClient(handler.accommodationReserveClientAddress)
-	return reservationClient.GetAllForConfirmation(context.TODO(), &reservation.GetAllForConfirmationRequest{})
-}
-
-func (handler *ReservationHandler) getAccommodationByForReservation(id string) (*accommodation.GetAccommodationByIdResponse, error) {
-	userClient := services.NewUserClient(handler.userInfoClientAddress)
-	return userClient.GetUserByID()
+func (handler *ReservationHandler) getAccommodationForReservation(id string) (*accommodation.GetAccommodationByIdResponse, error) {
+	accommodationClient := services.NewAccommodationClient(handler.accommodationClientAddress)
+	return accommodationClient.GetById(context.TODO(), &accommodation.GetAccommodationByIdRequest{Id: id})
 }
