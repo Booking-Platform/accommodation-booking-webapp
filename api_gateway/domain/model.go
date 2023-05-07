@@ -1,18 +1,10 @@
 package domain
 
-import (
-	"google.golang.org/genproto/googleapis/type/date"
-)
-
-type Reservations struct {
-	Reservations []Reservation
-}
-
 type Reservation struct {
-	Start         date.Date
-	End           date.Date
+	Start         string
+	End           string
 	Accommodation Accommodation
-	GuestNum      int
+	GuestNum      string
 	User          User
 }
 
