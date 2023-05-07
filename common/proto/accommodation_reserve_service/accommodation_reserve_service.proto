@@ -68,4 +68,5 @@ message Reservation {
   string accommodationID = 4;
   string guestNum = 5;
   string userID = 6;
+  string status = 7;
 }
