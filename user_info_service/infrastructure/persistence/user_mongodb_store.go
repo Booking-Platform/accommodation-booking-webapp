@@ -4,8 +4,10 @@ import (
 	"context"
 	"github.com/Booking-Platform/accommodation-booking-webapp/user_info_service/domain"
 	"github.com/Booking-Platform/accommodation-booking-webapp/user_info_service/domain/model"
+	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 const (
@@ -17,9 +19,34 @@ type UserMongoDBStore struct {
 	users *mongo.Collection
 }
 
+func (u *UserMongoDBStore) CreateUser(user *model.User) error {
+	user.Id = primitive.NewObjectID()
+	indexModel := mongo.IndexModel{
+		Keys:    bson.M{"email": 1},
+		Options: options.Index().SetUnique(true),
+	}
+
+	if _, err := u.users.Indexes().CreateOne(context.Background(), indexModel); err != nil {
+		return err
+	}
+
+	_, err := u.users.InsertOne(context.Background(), user)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func (u UserMongoDBStore) GetUserByID(id primitive.ObjectID) (*model.User, error) {
-	//TODO implement me
-	panic("implement me")
+	filter := bson.M{"_id": id}
+
+	usr := model.User{}
+	err := u.users.FindOne(context.Background(), filter).Decode(usr)
+	if err != nil {
+		return nil, err
+	}
+	return &usr, nil
 }
 
 func NewUserMongoDBStore(client *mongo.Client) domain.UserStore {
