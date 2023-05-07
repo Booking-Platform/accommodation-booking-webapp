@@ -5,6 +5,7 @@ import (
 	pb "github.com/Booking-Platform/accommodation-booking-webapp/common/proto/user_info_service"
 	"github.com/Booking-Platform/accommodation-booking-webapp/user_info_service/application"
 	"github.com/Booking-Platform/accommodation-booking-webapp/user_info_service/domain/model"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 type UserInfoHandler struct {
@@ -18,14 +19,34 @@ func NewUserInfoHandler(service *application.UserService) *UserInfoHandler {
 	}
 }
 
+func (handler *UserInfoHandler) CreateUser(ctx context.Context, request *pb.CreateUserRequest) (*pb.CreateUserResponse, error) {
+
+	user, err := mapUser(request.NewUser)
+	if err != nil {
+		return nil, err
+	}
+
+	err = handler.service.Create(user)
+
+	if err != nil {
+		response := &pb.CreateUserResponse{User: mapUserPb(&model.User{
+			Email: "error",
+		})}
+		return response, nil
+	}
+
+	response := &pb.CreateUserResponse{User: mapUserPb(user)}
+
+	return response, nil
+}
+
 func (handler *UserInfoHandler) GetUserByID(ctx context.Context, request *pb.GetUserByIDRequest) (*pb.GetUserByIDResponse, error) {
 
-	user := model.User{
-
-		Email:   "email@com.com",
-		Name:    "bojan",
-		Surname: "radovic",
+	id, err := primitive.ObjectIDFromHex(request.Id)
+	if err != nil {
+		return nil, err
 	}
+	user, _ := handler.service.GetByID(id)
 
 	response := &pb.GetUserByIDResponse{
 		Surname: user.Surname,

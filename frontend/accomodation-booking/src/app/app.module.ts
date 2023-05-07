@@ -15,6 +15,8 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { ReservationDetailsComponent } from './modules/reservation-details/reservation-details.component';
 import { ReservationConfirmationComponent } from './modules/reservation-confirmation/reservation-confirmation.component';
 import { MyReservationsComponent } from './modules/my-reservations/my-reservations.component';
+import { RegisterComponent } from './modules/register/register.component';
+import { LoginComponent } from './modules/login/login.component';
 
 @NgModule({
   declarations: [
@@ -24,6 +26,8 @@ import { MyReservationsComponent } from './modules/my-reservations/my-reservatio
     ReservationDetailsComponent,
     ReservationConfirmationComponent,
     MyReservationsComponent,
+    RegisterComponent,
+    LoginComponent,
   ],
   imports: [
     BrowserAnimationsModule,
