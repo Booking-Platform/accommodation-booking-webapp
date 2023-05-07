@@ -99,17 +99,7 @@ func (handler *AccommodationHandler) CreateAppointment(ctx context.Context, requ
 }
 
 func (handler *AccommodationHandler) Search(ctx context.Context, request *pb.GetAccommodationsByParamsRequest) (*pb.GetAccommodationsByParamsResponse, error) {
-
-	objectIDs := []primitive.ObjectID{}
-	for i := 0; i < 3; i++ {
-		objectID := primitive.NewObjectID()
-		objectIDs = append(objectIDs, objectID)
-	}
-
-	objectID2, _ := primitive.ObjectIDFromHex("6457a727e794f9761fcb1644")
-	objectIDs = append(objectIDs, objectID2)
-
-	accommodations, err := handler.service.GetAllAccommodationsByParams(request.SearchParams, objectIDs)
+	accommodations, err := handler.service.GetAllAccommodationsByParams(request.SearchParams, request.SearchParams.Id)
 	if err != nil {
 		return nil, err
 	}

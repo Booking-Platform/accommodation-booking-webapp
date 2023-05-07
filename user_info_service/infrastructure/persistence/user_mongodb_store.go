@@ -42,7 +42,7 @@ func (u UserMongoDBStore) GetUserByID(id primitive.ObjectID) (*model.User, error
 	filter := bson.M{"_id": id}
 
 	usr := model.User{}
-	err := u.users.FindOne(context.Background(), filter).Decode(usr)
+	err := u.users.FindOne(context.Background(), filter).Decode(&usr)
 	if err != nil {
 		return nil, err
 	}

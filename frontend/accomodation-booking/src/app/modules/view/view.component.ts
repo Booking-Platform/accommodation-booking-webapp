@@ -31,12 +31,12 @@ export class ViewComponent implements OnInit {
     });
   }
 
-  reserveAccommodation(acc: any) {
+  reserveAccommodation(acc: Accommodation) {
     this.router.navigate(['/accommodation-details'], {
       queryParams: {
-        accommodationID: 'accID',
-        startDate: '2023-10-10',
-        endDate: '2023-10-11',
+        accommodationID: acc.id,
+        startDate: this.from,
+        endDate: this.to,
       },
     });
   }

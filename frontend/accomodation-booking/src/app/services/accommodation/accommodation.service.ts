@@ -42,4 +42,9 @@ export class AccommodationService {
       }
     );
   }
+
+  getAccommodationByID(id: string): Observable<any[]> {
+    const url = `${this.apiHost}accommodations/${id}`;
+    return this.http.get<any[]>(url, { headers: this.headers });
+  }
 }

@@ -49,7 +49,15 @@ func (service *AccommodationService) AddAppointment(accommodation *model.Accommo
 	return nil
 }
 
-func (service *AccommodationService) GetAllAccommodationsByParams(searchParams *pb.SearchParams, accommodationIds []primitive.ObjectID) ([]*model.Accommodation, error) {
+func (service *AccommodationService) GetAllAccommodationsByParams(searchParams *pb.SearchParams, reservedAccommodationIds []string) ([]*model.Accommodation, error) {
+	accommodationIds := make([]primitive.ObjectID, len(reservedAccommodationIds))
+	for i, s := range reservedAccommodationIds {
+		objectID, err := primitive.ObjectIDFromHex(s)
+		if err != nil {
+			return nil, err
+		}
+		accommodationIds[i] = objectID
+	}
 	accommodations, err := service.store.GetAllAccommodationsByParams(searchParams, accommodationIds)
 	if err != nil {
 		return nil, err
