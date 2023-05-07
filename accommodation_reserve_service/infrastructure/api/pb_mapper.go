@@ -49,5 +49,4 @@ func mapReservationPb(reservation *model.Reservation) *pb.Reservation {
 
 func getDateStringForm(date date.Date) string {
 	return fmt.Sprintf("%d-%02d-%02d", date.Year, date.Month, date.Day)
-
 }
