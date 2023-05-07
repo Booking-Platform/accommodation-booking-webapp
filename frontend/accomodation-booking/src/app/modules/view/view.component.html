@@ -5,11 +5,11 @@
 <div class="search-container">
   <div class="form-group" style="display: inline-block; margin-right: 10px">
     <label for="checkin-date" style="display: block; margin-bottom: 5px; width: 100%">Check-in date:</label>
-    <input type="date" class="form-control" id="checkin-date" style="display: block; width: 100%" />
+    <input  [(ngModel)]="startDate" type="date" class="form-control" id="checkin-date" style="display: block; width: 100%" />
   </div>
   <div class="form-group" style="display: inline-block; margin-right: 10px">
     <label for="checkout-date" style="display: block; margin-bottom: 5px">Check-out date:</label>
-    <input type="date" class="form-control" id="checkout-date" style="display: block; width: 100%" />
+    <input type="date" [(ngModel)]="endDate" class="form-control" id="checkout-date" style="display: block; width: 100%" />
   </div>
   <div class="form-group" style="display: inline-block; margin-right: 10px">
     <label for="num-guests" style="display: block; margin-bottom: 5px">Num of guests:</label>
@@ -35,6 +35,7 @@
       <p class="card-text">
         Num of guests: {{ acc.minGuestNum }} - {{ acc.maxGuestNum }}
       </p>
+    
     </div>
     <div class="card-footer">
       <button class="btn btn-primary" (click)="reserveAccommodation(acc)">
