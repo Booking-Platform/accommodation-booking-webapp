@@ -32,3 +32,7 @@ func (service *AccommodationReserveService) GetAllForConfirmation() ([]*model.Re
 func (service *AccommodationReserveService) GetAllByUserID(id primitive.ObjectID) ([]*model.Reservation, error) {
 	return service.store.GetAllByUserID(id)
 }
+
+func (service *AccommodationReserveService) GetReservedAccommodationsIds(from string, to string) ([]*primitive.ObjectID, error) {
+	return service.store.GetReservedAccommodationsIds(from, to)
+}

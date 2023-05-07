@@ -3,6 +3,7 @@ package application
 import (
 	"accommodation_service/domain"
 	"accommodation_service/domain/model"
+	pb "github.com/Booking-Platform/accommodation-booking-webapp/common/proto/accommodation_service"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
@@ -46,4 +47,20 @@ func (service *AccommodationService) AddAppointment(accommodation *model.Accommo
 		return err
 	}
 	return nil
+}
+
+func (service *AccommodationService) GetAllAccommodationsByParams(searchParams *pb.SearchParams, reservedAccommodationIds []string) ([]*model.Accommodation, error) {
+	accommodationIds := make([]primitive.ObjectID, len(reservedAccommodationIds))
+	for i, s := range reservedAccommodationIds {
+		objectID, err := primitive.ObjectIDFromHex(s)
+		if err != nil {
+			return nil, err
+		}
+		accommodationIds[i] = objectID
+	}
+	accommodations, err := service.store.GetAllAccommodationsByParams(searchParams, accommodationIds)
+	if err != nil {
+		return nil, err
+	}
+	return accommodations, nil
 }

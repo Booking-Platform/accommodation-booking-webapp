@@ -97,3 +97,19 @@ func (handler *AccommodationHandler) CreateAppointment(ctx context.Context, requ
 
 	return response, nil
 }
+
+func (handler *AccommodationHandler) Search(ctx context.Context, request *pb.GetAccommodationsByParamsRequest) (*pb.GetAccommodationsByParamsResponse, error) {
+	accommodations, err := handler.service.GetAllAccommodationsByParams(request.SearchParams, request.SearchParams.Id)
+	if err != nil {
+		return nil, err
+	}
+
+	response := &pb.GetAccommodationsByParamsResponse{
+		Accommodations: []*pb.AccommodationDTO{},
+	}
+	for _, accommodation := range accommodations {
+		current := mapAccommodationDTOPb(accommodation)
+		response.Accommodations = append(response.Accommodations, current)
+	}
+	return response, nil
+}

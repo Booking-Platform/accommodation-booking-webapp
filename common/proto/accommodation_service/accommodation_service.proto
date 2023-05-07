@@ -23,6 +23,9 @@ service AccommodationService{
     };
   }
 
+  rpc Search(GetAccommodationsByParamsRequest) returns (GetAccommodationsByParamsResponse) {
+  }
+
   rpc CreateAccommodation(CreateAccommodationRequest) returns(CreateAccommodationResponse) {
     option (google.api.http) = {
       post: "/accommodation/create"
@@ -71,6 +74,23 @@ message CreateAppointmentRequest{
 message CreateAppointmentResponse{
   Accommodation accommodation = 1;
 }
+
+
+message GetAccommodationsByParamsRequest {
+  SearchParams searchParams = 1;
+}
+
+message GetAccommodationsByParamsResponse {
+  repeated AccommodationDTO accommodations = 1;
+}
+
+
+message SearchParams{
+    int64 num_of_guests = 3;
+    string city = 4;
+    repeated string id = 1;
+}
+
 
 message AddressDTO {
   string street = 1;

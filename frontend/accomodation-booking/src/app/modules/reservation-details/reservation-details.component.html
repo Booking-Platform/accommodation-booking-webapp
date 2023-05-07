@@ -1,8 +1,15 @@
 <div class="container">
+<<<<<<< HEAD
+  <div class="card">
+    <img class="card-img-top"
+      src="https://exej2saedb8.exactdn.com/wp-content/uploads/2022/02/Screen-Shot-2022-02-04-at-2.28.40-PM.png?strip=all&amp;lossy=1&amp;ssl=1"
+      alt="{{ accommodation.name }}" />
+=======
   <div  class="card">
     <img style="height: 10%" class="card-img-top" src="{{ accommodation?.photo[0] }}" alt="{{ accommodation?.name }} image" />
 
     
+>>>>>>> a534c84d4c05c76891f7d46a178c2f96fa1bf4c8
     <div class="card-body">
       <h5 class="card-title">{{ accommodation?.name }}</h5>
       <p class="card-text">
@@ -10,8 +17,13 @@
         {{ accommodation?.address?.city }}, {{ accommodation?.address?.country }}
       </p>
       <p class="card-text">
+<<<<<<< HEAD
+        <small class="text-muted">Num of guests: {{ accommodation.minGuestNum }} -
+          {{ accommodation.maxGuestNum }}</small>
+=======
         <small class="text-muted">Num of guests: {{ accommodation?.minGuestNum }} -
           {{ accommodation?.maxGuestNum }}</small>
+>>>>>>> a534c84d4c05c76891f7d46a178c2f96fa1bf4c8
       </p>
       <br />
       <p class="card-text">from: {{ startDate }} | to: {{ endDate }}</p>
@@ -23,6 +35,10 @@
       <a (click)="createReservation()" class="btn btn-primary confirm-btn">Confirm</a>
     </div>
   </div>
+<<<<<<< HEAD
+</div>
+=======
   
 </div>
 
+>>>>>>> a534c84d4c05c76891f7d46a178c2f96fa1bf4c8

@@ -23,7 +23,7 @@ export class ReservationDetailsComponent implements OnInit {
     private route: ActivatedRoute,
     private reservationService: ReservationService,
     private accommodationService: AccommodationService,
-    private router: Router,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -48,7 +48,6 @@ export class ReservationDetailsComponent implements OnInit {
       userID: this.userID,
     };
     this.reservationService.createReservation(newReservation).subscribe();
-   this.router.navigate(['/myReservations']);
-
+    this.router.navigate(['/myReservations']);
   }
 }

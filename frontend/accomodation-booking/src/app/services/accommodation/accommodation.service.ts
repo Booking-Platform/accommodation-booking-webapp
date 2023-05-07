@@ -20,6 +20,16 @@ export class AccommodationService {
     });
   }
 
+  search(searchParams: any): Observable<Accommodation[]> {
+    return this.http.post<any>(
+      this.apiHost + 'accommodations/search',
+      JSON.stringify(searchParams),
+      {
+        headers: this.headers,
+      }
+    );
+  }
+
   createAccommodation(accommodation: any) {
     const { id, ...newAccommodation } = accommodation;
     console.log(newAccommodation);
