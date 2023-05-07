@@ -11,8 +11,7 @@ type Accommodation struct {
 	MaxGuestNum           int                `bson:"max_guest_num" validate:"gte=1,lte=10"`
 	Address               Address            `bson:"address"`
 	AutomaticConfirmation bool               `bson:"automatic_confirmation"`
-	Photo                 []string           `bson:"photo"`
-
-	Benefits     []*Benefit     `bson:"benefits,omitempty"`
-	Appointments []*Appointment `bson:"appointments,omitempty"`
+	Photos                []string           `bson:"photos"`
+	Benefits              []*Benefit         `bson:"benefits,omitempty"`
+	Appointments          []*Appointment     `bson:"appointments,omitempty"`
 }
