@@ -16,6 +16,8 @@ import { ReservationDetailsComponent } from './modules/reservation-details/reser
 import { ReservationConfirmationComponent } from './modules/reservation-confirmation/reservation-confirmation.component';
 import { MyReservationsComponent } from './modules/my-reservations/my-reservations.component';
 import { CreateAccommodationComponent } from './modules/create-accommodation/create-accommodation.component';
+import { RegisterComponent } from './modules/register/register.component';
+import { LoginComponent } from './modules/login/login.component';
 
 @NgModule({
   declarations: [
@@ -26,6 +28,8 @@ import { CreateAccommodationComponent } from './modules/create-accommodation/cre
     ReservationConfirmationComponent,
     MyReservationsComponent,
     CreateAccommodationComponent,
+    RegisterComponent,
+    LoginComponent,
   ],
   imports: [
     BrowserAnimationsModule,

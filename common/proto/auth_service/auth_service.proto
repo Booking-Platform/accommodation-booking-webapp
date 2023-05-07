@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+option go_package = "github.com/Booking-Platform/accommodation-booking-webapp/common/auth";
+
+package auth;
+
+import "google/api/annotations.proto";
+
+service user_info_service{
+  rpc LoginUser(LoginUserRequest) returns(LoginUserResponse) {
+    option (google.api.http) = {
+      post: "/api/auth/login";
+      body: "user"
+    };
+  }
+}
+
+message LoginUserRequest {
+  User user = 1;
+}
+
+message LoginUserResponse {
+  string status = 1;
+}
+
+message User {
+  string email = 1;
+  string password = 2;
+}

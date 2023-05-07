@@ -30,12 +30,14 @@ service AccommodationService{
     };
   }
 
+
   rpc CreateAppointment(CreateAppointmentRequest) returns(CreateAppointmentResponse) {
     option (google.api.http) = {
       put: "/accommodation/appointment"
       body: "appointment"
     };
   }
+
 }
 
 message GetAllAccommodationsRequest {

@@ -12,7 +12,6 @@ type Accommodation struct {
 	Address               Address            `bson:"address"`
 	AutomaticConfirmation bool               `bson:"automatic_confirmation"`
 	Photos                []string           `bson:"photos"`
-
-	Benefits     []*Benefit     `bson:"benefits,omitempty"`
-	Appointments []*Appointment `bson:"appointments,omitempty"`
+	Benefits              []*Benefit         `bson:"benefits,omitempty"`
+	Appointments          []*Appointment     `bson:"appointments,omitempty"`
 }

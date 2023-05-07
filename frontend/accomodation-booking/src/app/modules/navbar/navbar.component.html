@@ -1,8 +1,10 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-success">
   <a class="navbar-brand" href="#">Accommodation Booking</a>
   <a class="nav-item nav-link" [routerLink]="['/view']" routerLinkActive="active">All accommodations</a>
-
   <a class="nav-item nav-link" [routerLink]="['/reservations']" routerLinkActive="active">All reservations</a>
-
   <a class="nav-item nav-link" [routerLink]="['/myReservations']" routerLinkActive="active">My reservations</a>
+  <div class="nav-right">
+    <a class="nav-item nav-link" [routerLink]="['/login']" routerLinkActive="active">Login</a>
+    <a class="nav-item nav-link" [routerLink]="['/register']" routerLinkActive="active">Register</a>
+  </div>
 </nav>
