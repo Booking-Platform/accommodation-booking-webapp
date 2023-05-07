@@ -8,6 +8,7 @@ import (
 	"github.com/Booking-Platform/accommodation-booking-webapp/common/proto/accommodation_reserve_service"
 	reservation "github.com/Booking-Platform/accommodation-booking-webapp/common/proto/accommodation_reserve_service"
 	accommodation "github.com/Booking-Platform/accommodation-booking-webapp/common/proto/accommodation_service"
+	user_info "github.com/Booking-Platform/accommodation-booking-webapp/common/proto/user_info_service"
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"net/http"
 )
@@ -34,49 +35,61 @@ func (handler *ReservationHandler) Init(mux *runtime.ServeMux) {
 }
 
 func (handler *ReservationHandler) GetAllForConfirmation(w http.ResponseWriter, r *http.Request, pathParams map[string]string) {
-
+	// Create a slice to hold all the reservations
 	reservations := []*domain.Reservation{}
 
+	// Retrieve all reservations with status WAITING
 	reservationsWithStatusWAITING, err := handler.getReservationsWithStatusWAITING()
-
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 
+	// Loop through each reservation and add it to the slice
 	for _, res := range reservationsWithStatusWAITING.GetReservations() {
-		// create a new reservation with the details from the current reservation
-		reservation := domain.Reservation{
-			Start:    res.StartDate,
-			End:      res.EndDate,
-			GuestNum: res.GuestNum,
-		}
-
+		// Retrieve the accommodation for the reservation
 		fetchedAccommodation, err := handler.getAccommodationForReservation(res.AccommodationID)
-		accommodationForReservation := fetchedAccommodation.GetAccommodation()
-
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 			return
 		}
 
-		accommodation := domain.Accommodation{
-			Id:      accommodationForReservation.Id,
-			Name:    accommodationForReservation.Name,
-			Address: accommodationForReservation.Address.String(),
+		// Retrieve the user for the reservation
+		fetchedUser, err := handler.getUserForReservation(res.UserID)
+		if err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			return
 		}
 
-		reservation.Accommodation = accommodation
+		// Create a new reservation with the details from the current reservation
+		reservation := &domain.Reservation{
+			Start:    res.StartDate,
+			End:      res.EndDate,
+			GuestNum: res.GuestNum,
+			Accommodation: domain.Accommodation{
+				Id:      fetchedAccommodation.GetAccommodation().Id,
+				Name:    fetchedAccommodation.GetAccommodation().Name,
+				Address: fetchedAccommodation.GetAccommodation().Address.String(),
+			},
+			User: domain.User{
+				Name:    fetchedUser.Name,
+				Surname: fetchedUser.Surname,
+			},
+		}
 
-		reservations = append(reservations, &reservation)
+		// Add the reservation to the slice
+		reservations = append(reservations, reservation)
 	}
 
+	// Marshal the slice into JSON
 	response, err := json.Marshal(reservations)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 
+	// Return the JSON response
+	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
 	w.Write(response)
 }
@@ -89,4 +102,9 @@ func (handler *ReservationHandler) getReservationsWithStatusWAITING() (*accommod
 func (handler *ReservationHandler) getAccommodationForReservation(id string) (*accommodation.GetAccommodationByIdResponse, error) {
 	accommodationClient := services.NewAccommodationClient(handler.accommodationClientAddress)
 	return accommodationClient.GetById(context.TODO(), &accommodation.GetAccommodationByIdRequest{Id: id})
+}
+
+func (handler *ReservationHandler) getUserForReservation(id string) (*user_info.GetUserByIDResponse, error) {
+	userClient := services.NewUserClient(handler.userInfoClientAddress)
+	return userClient.GetUserByID(context.TODO(), &user_info.GetUserByIDRequest{Id: id})
 }

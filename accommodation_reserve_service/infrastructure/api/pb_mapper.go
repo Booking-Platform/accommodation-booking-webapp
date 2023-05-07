@@ -37,6 +37,7 @@ func mapReservationPb(reservation *model.Reservation) *pb.Reservation {
 	reservationPb := &pb.Reservation{
 		EndDate:         getDateStringForm(reservation.End),
 		StartDate:       getDateStringForm(reservation.Start),
+		UserID:          reservation.UserID,
 		GuestNum:        string(reservation.GuestNum),
 		AccommodationID: reservation.AccommodationID,
 		Id:              reservation.Id.String(),
