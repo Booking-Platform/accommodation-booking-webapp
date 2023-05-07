@@ -17,14 +17,33 @@ func NewAccommodationService(store domain.AccommodationStore) *AccommodationServ
 }
 
 func (service *AccommodationService) GetAccommodationByID(id primitive.ObjectID) (*model.Accommodation, error) {
-	return service.store.GetAccomodationByID(id)
+	accommodation, err := service.store.GetAccomodationByID(id)
+	if err != nil {
+		return nil, err
+	}
+	return accommodation, nil
 }
 
 func (service *AccommodationService) GetAllAccommodations() ([]*model.Accommodation, error) {
-	return service.store.GetAllAccommodations()
+	accommodations, err := service.store.GetAllAccommodations()
+	if err != nil {
+		return nil, err
+	}
+	return accommodations, nil
 }
 
 func (service *AccommodationService) Create(accommodation *model.Accommodation) error {
-	accommodation.Appointments = []*model.Appointment{}
-	return service.store.Insert(accommodation)
+	err := service.store.Insert(accommodation)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (service *AccommodationService) AddAppointment(accommodation *model.Accommodation, appointment *model.Appointment) error {
+	err := service.store.AddAppointment(accommodation.ID, appointment)
+	if err != nil {
+		return err
+	}
+	return nil
 }

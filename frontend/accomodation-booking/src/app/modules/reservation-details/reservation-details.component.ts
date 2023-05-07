@@ -17,12 +17,12 @@ export class ReservationDetailsComponent implements OnInit {
   public guestNum: any = '';
   public userID: any = '511abbea5af7118727bf2312';
 
-  public address = new Address('1', 'Serbia', 'Belgrade', 'Main Street', '123');
-  public benefits = [
-    new Benefit('1', 'Free Wi-Fi'),
-    new Benefit('2', 'Swimming pool'),
-    new Benefit('3', 'Gym'),
-  ];
+  public address = new Address('Serbia', 'Belgrade', 'Main Street', '123');
+  // public benefits = [
+  //   new Benefit('Free Wi-Fi'),
+  //   new Benefit('Swimming pool'),
+  //   new Benefit('Gym'),
+  // ];
 
   public accommodation = new Accommodation(
     '1',
@@ -34,15 +34,18 @@ export class ReservationDetailsComponent implements OnInit {
       'https://i.dummyjson.com/data/products/1/3.jpg',
       'https://i.dummyjson.com/data/products/1/4.jpg',
     ],
-    this.benefits
+    ['pool']
   );
 
-  constructor(private route: ActivatedRoute, private reservationService: ReservationService) {}
+  constructor(
+    private route: ActivatedRoute,
+    private reservationService: ReservationService
+  ) {}
 
   ngOnInit(): void {
     this.route.queryParams.subscribe((params) => {
-      this.startDate = '2023-11-11'
-      this.endDate = '2024-11-11'
+      this.startDate = '2023-11-11';
+      this.endDate = '2024-11-11';
       // this.startDate = params['startDate'];
       // this.endDate = params['endDate'];
     });
@@ -50,11 +53,11 @@ export class ReservationDetailsComponent implements OnInit {
 
   createReservation(): void {
     var newReservation = {
-      "startDate": this.startDate,
-      "endDate": this.endDate,
-      "accommodationID": this.accommodationID,
-      "userID": this.userID
-    }
-    this.reservationService.createReservation(newReservation).subscribe()
+      startDate: this.startDate,
+      endDate: this.endDate,
+      accommodationID: this.accommodationID,
+      userID: this.userID,
+    };
+    this.reservationService.createReservation(newReservation).subscribe();
   }
 }

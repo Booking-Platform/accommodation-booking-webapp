@@ -9,4 +9,5 @@ type AccommodationStore interface {
 	GetAccomodationByID(id primitive.ObjectID) (*model.Accommodation, error)
 	GetAllAccommodations() ([]*model.Accommodation, error)
 	Insert(accommodation *model.Accommodation) error
+	AddAppointment(accommodationID primitive.ObjectID, appointment *model.Appointment) error
 }
