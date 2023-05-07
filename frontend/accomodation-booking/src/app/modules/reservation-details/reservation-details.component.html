@@ -1,10 +1,8 @@
 <div class="container">
   <div class="card">
-    <img
-      class="card-img-top"
+    <img class="card-img-top"
       src="https://exej2saedb8.exactdn.com/wp-content/uploads/2022/02/Screen-Shot-2022-02-04-at-2.28.40-PM.png?strip=all&amp;lossy=1&amp;ssl=1"
-      alt="{{ accommodation.name }}"
-    />
+      alt="{{ accommodation.name }}" />
     <div class="card-body">
       <h5 class="card-title">{{ accommodation.name }}</h5>
       <p class="card-text">
@@ -12,10 +10,8 @@
         {{ accommodation.address.city }}, {{ accommodation.address.country }}
       </p>
       <p class="card-text">
-        <small class="text-muted"
-          >Num of guests: {{ accommodation.minGuestNum }} -
-          {{ accommodation.maxGuestNum }}</small
-        >
+        <small class="text-muted">Num of guests: {{ accommodation.minGuestNum }} -
+          {{ accommodation.maxGuestNum }}</small>
       </p>
       <br />
       <p class="card-text">from: {{ startDate }} | to: {{ endDate }}</p>

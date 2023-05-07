@@ -7,6 +7,10 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
+
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
+	"time"
 )
 
 const (
@@ -45,6 +49,74 @@ func (store *AccommodationMongoDBStore) Insert(accommodation *model.Accommodatio
 		return err
 	}
 	accommodation.ID = result.InsertedID.(primitive.ObjectID)
+	return nil
+}
+
+//
+//func (store *AccommodationMongoDBStore) Update(accommodation *model.Accommodation) error {
+//	filter := bson.M{"_id": accommodation.ID}
+//	update := bson.M{
+//		"$set": bson.M{
+//			"name":                   accommodation.Name,
+//			"min_guest_num":          accommodation.MinGuestNum,
+//			"max_guest_num":          accommodation.MaxGuestNum,
+//			"address":                accommodation.Address,
+//			"automatic_confirmation": accommodation.AutomaticConfirmation,
+//			"photo":                  accommodation.Photo,
+//			"benefits":               accommodation.Benefits,
+//			"appointments":           accommodation.Appointments,
+//		},
+//	}
+//	_, err := store.accommodations.UpdateOne(context.Background(), filter, update)
+//	if err != nil {
+//		return err
+//	}
+//	return nil
+//}
+
+func (store *AccommodationMongoDBStore) AddAppointment(accommodationID primitive.ObjectID, appointment *model.Appointment) error {
+	// Check if there is an overlap with an existing appointment
+	filter := bson.M{
+		"_id": accommodationID,
+		"appointments.from": bson.M{
+			"$nin": []time.Time{appointment.To},
+			"$lt":  appointment.To,
+		},
+		"appointments.to": bson.M{
+			"$nin": []time.Time{appointment.From},
+			"$gt":  appointment.From,
+		},
+	}
+	count, err := store.accommodations.CountDocuments(context.Background(), filter)
+	if err != nil {
+		return status.Errorf(
+			codes.Internal,
+			"Error counting documents: %v",
+			err,
+		)
+	}
+	if count > 0 {
+		return status.Errorf(
+			codes.FailedPrecondition,
+			"Appointment overlaps with existing appointment",
+		)
+	}
+
+	// Add the new appointment to the appointments array
+	update := bson.M{
+		"$push": bson.M{
+			"appointments": appointment,
+		},
+	}
+	filter = bson.M{"_id": accommodationID}
+	_, err = store.accommodations.UpdateOne(context.Background(), filter, update)
+	if err != nil {
+		return status.Errorf(
+			codes.Internal,
+			"Error updating document: %v",
+			err,
+		)
+	}
 	return nil
 }
 

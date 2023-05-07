@@ -43,10 +43,10 @@ func (handler *AccommodationHandler) GetAll(ctx context.Context, request *pb.Get
 	}
 
 	response := &pb.GetAllAccommodationsResponse{
-		Accommodations: []*pb.Accommodation{},
+		Accommodations: []*pb.AccommodationDTO{},
 	}
 	for _, accommodation := range accommodations {
-		current := mapAccommodationPb(accommodation)
+		current := mapAccommodationDTOPb(accommodation)
 		response.Accommodations = append(response.Accommodations, current)
 	}
 	return response, nil
@@ -67,5 +67,33 @@ func (handler *AccommodationHandler) CreateAccommodation(ctx context.Context, re
 	response := &pb.CreateAccommodationResponse{
 		Accommodation: mapAccommodationPb(accommodation),
 	}
+	return response, nil
+}
+
+func (handler *AccommodationHandler) CreateAppointment(ctx context.Context, request *pb.CreateAppointmentRequest) (*pb.CreateAppointmentResponse, error) {
+	accommodationId, err := primitive.ObjectIDFromHex(request.Appointment.Id)
+	if err != nil {
+		return nil, err
+	}
+
+	accommodationForUpdate, err := handler.service.GetAccommodationByID(accommodationId)
+	if err != nil {
+		return nil, err
+	}
+
+	err = handler.service.AddAppointment(accommodationForUpdate, mapPbAppointment(request.Appointment))
+	if err != nil {
+		return nil, err
+	}
+
+	updated, err := handler.service.GetAccommodationByID(accommodationId)
+	if err != nil {
+		return nil, err
+	}
+
+	response := &pb.CreateAppointmentResponse{
+		Accommodation: mapAccommodationPb(updated),
+	}
+
 	return response, nil
 }
