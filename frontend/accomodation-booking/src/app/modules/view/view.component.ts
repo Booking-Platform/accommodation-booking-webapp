@@ -14,6 +14,10 @@ import { Router } from '@angular/router';
 })
 export class ViewComponent implements OnInit {
   public accommodations: Accommodation[] = [];
+  public from: string = '';
+  public to: string = '';
+  public numOfGuests: string = '';
+  public city: string = '';
 
   constructor(
     private accommodationService: AccommodationService,
@@ -23,9 +27,7 @@ export class ViewComponent implements OnInit {
 
   ngOnInit() {
     this.accommodationService.getAccommodations().subscribe((res: any) => {
-      console.log(res);
       this.accommodations = res.accommodations;
-      console.log(this.accommodations);
     });
   }
 
@@ -39,5 +41,15 @@ export class ViewComponent implements OnInit {
     });
   }
 
-  createAccommodation() {}
+  search() {
+    var searchParams = {
+      from: this.from,
+      to: this.to,
+      numOfGuests: this.numOfGuests,
+      city: this.city,
+    };
+    this.accommodationService.search(searchParams).subscribe((res: any) => {
+      this.accommodations = res.accommodations;
+    });
+  }
 }

@@ -4,6 +4,7 @@ import (
 	"accommodation_service/domain"
 	"accommodation_service/domain/model"
 	"context"
+	pb "github.com/Booking-Platform/accommodation-booking-webapp/common/proto/accommodation_service"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -52,28 +53,6 @@ func (store *AccommodationMongoDBStore) Insert(accommodation *model.Accommodatio
 	return nil
 }
 
-//
-//func (store *AccommodationMongoDBStore) Update(accommodation *model.Accommodation) error {
-//	filter := bson.M{"_id": accommodation.ID}
-//	update := bson.M{
-//		"$set": bson.M{
-//			"name":                   accommodation.Name,
-//			"min_guest_num":          accommodation.MinGuestNum,
-//			"max_guest_num":          accommodation.MaxGuestNum,
-//			"address":                accommodation.Address,
-//			"automatic_confirmation": accommodation.AutomaticConfirmation,
-//			"photo":                  accommodation.Photo,
-//			"benefits":               accommodation.Benefits,
-//			"appointments":           accommodation.Appointments,
-//		},
-//	}
-//	_, err := store.accommodations.UpdateOne(context.Background(), filter, update)
-//	if err != nil {
-//		return err
-//	}
-//	return nil
-//}
-
 func (store *AccommodationMongoDBStore) AddAppointment(accommodationID primitive.ObjectID, appointment *model.Appointment) error {
 	// Check if there is an overlap with an existing appointment
 	filter := bson.M{
@@ -118,6 +97,27 @@ func (store *AccommodationMongoDBStore) AddAppointment(accommodationID primitive
 		)
 	}
 	return nil
+}
+
+func (store *AccommodationMongoDBStore) GetAllAccommodationsByParams(searchParams *pb.SearchParams, accommodationIds []primitive.ObjectID) ([]*model.Accommodation, error) {
+	if searchParams.NumOfGuests < 0 {
+		return nil, status.Errorf(codes.InvalidArgument, "Number of guests must be greater than 0")
+	}
+
+	filter := bson.M{
+		"_id": bson.M{
+			"$nin": accommodationIds,
+		},
+		"address.city": searchParams.City,
+	}
+
+	if searchParams.NumOfGuests > 0 {
+		filter["max_guest_num"] = bson.M{
+			"$gte": searchParams.NumOfGuests,
+		}
+	}
+
+	return store.filter(filter)
 }
 
 func (store *AccommodationMongoDBStore) filter(filter interface{}) ([]*model.Accommodation, error) {
