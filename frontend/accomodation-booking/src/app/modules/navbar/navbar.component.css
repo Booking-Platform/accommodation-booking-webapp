@@ -1,36 +1,44 @@
-/* Navbar styling */
 .navbar {
-  background-color: #28a745; /* set the background color */
-  padding: 0.5rem 1rem; /* add some padding */
+  background-color: #28a745;
+  padding: 0.5rem 1rem;
 }
 
 .navbar-brand {
-  font-weight: bold; /* set the font weight to bold */
-  font-size: 24px; /* make the text bigger */
-  color: #fff; /* set the font color */
-  margin-right: 2rem; /* add some margin */
+  font-weight: bold;
+  font-size: 24px;
+  color: #fff;
+  margin-right: 2rem;
 }
 
-.nav-link {
-  color: #fff; /* set the font color */
-  text-decoration: none; /* remove the default underline */
-  font-size: 18px; /* make the text bigger */
-  padding: 0.5rem; /* add some padding */
-  margin-right: 2rem; /* add some margin */
+.nav-item {
+  color: #fff;
+  text-decoration: none;
+  font-size: 18px;
+  padding: 0.5rem;
 }
 
 .nav-link:last-child {
-  margin-right: 0; /* remove the margin on the last link */
+  margin-right: 0;
 }
 
 .nav-link:hover,
 .nav-link:focus {
-  color: #fff; /* set the font color on hover and focus */
-  text-decoration: none; /* remove the default underline on hover and focus */
-  background-color: rgba(255, 255, 255, 0.2); /* add a background color on hover and focus */
+  color: #fff;
+  text-decoration: none;
+  background-color: rgba(255, 255, 255, 0.2);
 }
 
 .active {
-  font-weight: bold; /* set the font weight to bold for the active link */
-  background-color: rgba(255, 255, 255, 0.3); /* add a background color for the active link */
+  font-weight: bold;
+  background-color: rgba(255, 255, 255, 0.3);
+}
+
+.nav-right {
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+}
+
+.nav-right a {
+  margin-left: 1rem;
 }
