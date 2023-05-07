@@ -3,6 +3,7 @@ package domain
 type Reservation struct {
 	Start         string
 	End           string
+	Status        string
 	Accommodation Accommodation
 	GuestNum      string
 	User          User

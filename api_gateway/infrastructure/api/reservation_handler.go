@@ -3,6 +3,7 @@ package api
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"github.com/Booking-Platform/accommodation-booking-webapp/api_gateway/domain"
 	"github.com/Booking-Platform/accommodation-booking-webapp/api_gateway/infrastructure/services"
 	"github.com/Booking-Platform/accommodation-booking-webapp/common/proto/accommodation_reserve_service"
@@ -32,71 +33,120 @@ func (handler *ReservationHandler) Init(mux *runtime.ServeMux) {
 	if err != nil {
 		panic(err)
 	}
+	err = mux.HandlePath("GET", "/reservation/getReservationsByUserID/{id}", handler.GetReservationsByUserID)
+	if err != nil {
+		panic(err)
+	}
+
 }
 
 func (handler *ReservationHandler) GetAllForConfirmation(w http.ResponseWriter, r *http.Request, pathParams map[string]string) {
-	// Create a slice to hold all the reservations
-	reservations := []*domain.Reservation{}
-
-	// Retrieve all reservations with status WAITING
-	reservationsWithStatusWAITING, err := handler.getReservationsWithStatusWAITING()
+	reservations, err := handler.getReservationsWithStatusWAITING()
 	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
+		writeErrorResponse(w, http.StatusInternalServerError, err)
 		return
 	}
 
-	// Loop through each reservation and add it to the slice
-	for _, res := range reservationsWithStatusWAITING.GetReservations() {
-		// Retrieve the accommodation for the reservation
-		fetchedAccommodation, err := handler.getAccommodationForReservation(res.AccommodationID)
+	response := make([]*domain.Reservation, len(reservations.GetReservations()))
+
+	for i, res := range reservations.GetReservations() {
+		acc, err := handler.getAccommodationForReservation(res.AccommodationID)
 		if err != nil {
-			w.WriteHeader(http.StatusInternalServerError)
+			writeErrorResponse(w, http.StatusInternalServerError, err)
 			return
 		}
 
-		// Retrieve the user for the reservation
-		fetchedUser, err := handler.getUserForReservation(res.UserID)
+		user, err := handler.getUserForReservation(res.UserID)
 		if err != nil {
-			w.WriteHeader(http.StatusInternalServerError)
+			writeErrorResponse(w, http.StatusInternalServerError, err)
 			return
 		}
 
-		// Create a new reservation with the details from the current reservation
-		reservation := &domain.Reservation{
+		response[i] = &domain.Reservation{
 			Start:    res.StartDate,
 			End:      res.EndDate,
 			GuestNum: res.GuestNum,
 			Accommodation: domain.Accommodation{
-				Id:      fetchedAccommodation.GetAccommodation().Id,
-				Name:    fetchedAccommodation.GetAccommodation().Name,
-				Address: fetchedAccommodation.GetAccommodation().Address.String(),
+				Id:      acc.GetAccommodation().Id,
+				Name:    acc.GetAccommodation().Name,
+				Address: acc.GetAccommodation().Address.String(),
 			},
 			User: domain.User{
-				Name:    fetchedUser.Name,
-				Surname: fetchedUser.Surname,
+				Name:    user.Name,
+				Surname: user.Surname,
 			},
 		}
-
-		// Add the reservation to the slice
-		reservations = append(reservations, reservation)
 	}
 
-	// Marshal the slice into JSON
-	response, err := json.Marshal(reservations)
-	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
+	writeJsonResponse(w, http.StatusOK, response)
+}
+
+func (handler *ReservationHandler) GetReservationsByUserID(w http.ResponseWriter, r *http.Request, pathParams map[string]string) {
+	id := pathParams["id"]
+	if id == "" {
+		writeErrorResponse(w, http.StatusBadRequest, errors.New("invalid user id"))
 		return
 	}
 
-	// Return the JSON response
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusOK)
-	w.Write(response)
+	reservations, err := handler.getReservationsByUserID(id)
+	if err != nil {
+		writeErrorResponse(w, http.StatusInternalServerError, err)
+		return
+	}
+
+	response := make([]*domain.Reservation, len(reservations.GetReservations()))
+
+	for i, res := range reservations.GetReservations() {
+		acc, err := handler.getAccommodationForReservation(res.AccommodationID)
+		if err != nil {
+			writeErrorResponse(w, http.StatusInternalServerError, err)
+			return
+		}
+
+		user, err := handler.getUserForReservation(res.UserID)
+		if err != nil {
+			writeErrorResponse(w, http.StatusInternalServerError, err)
+			return
+		}
+
+		response[i] = &domain.Reservation{
+			Start:    res.StartDate,
+			End:      res.EndDate,
+			GuestNum: res.GuestNum,
+			Accommodation: domain.Accommodation{
+				Id:      acc.GetAccommodation().Id,
+				Name:    acc.GetAccommodation().Name,
+				Address: acc.GetAccommodation().Address.String(),
+			},
+			User: domain.User{
+				Name:    user.Name,
+				Surname: user.Surname,
+			},
+		}
+	}
+
+	writeJsonResponse(w, http.StatusOK, response)
 }
 
+func writeErrorResponse(w http.ResponseWriter, status int, err error) {
+	http.Error(w, err.Error(), status)
+}
+
+func writeJsonResponse(w http.ResponseWriter, status int, response interface{}) {
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(status)
+	if err := json.NewEncoder(w).Encode(response); err != nil {
+		writeErrorResponse(w, http.StatusInternalServerError, err)
+	}
+}
 func (handler *ReservationHandler) getReservationsWithStatusWAITING() (*accommodation_reserve.GetAllForConfirmationResponse, error) {
 	reservationClient := services.NewReservationClient(handler.accommodationReserveClientAddress)
 	return reservationClient.GetAllForConfirmation(context.TODO(), &reservation.GetAllForConfirmationRequest{})
+}
+
+func (handler *ReservationHandler) getReservationsByUserID(id string) (*accommodation_reserve.GetReservationsByUserIDResponse, error) {
+	reservationClient := services.NewReservationClient(handler.accommodationReserveClientAddress)
+	return reservationClient.GetReservationsByUserID(context.TODO(), &reservation.GetReservationsByUserIDRequest{Id: id})
 }
 
 func (handler *ReservationHandler) getAccommodationForReservation(id string) (*accommodation.GetAccommodationByIdResponse, error) {
