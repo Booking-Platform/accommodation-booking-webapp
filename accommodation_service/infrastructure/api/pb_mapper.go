@@ -2,11 +2,10 @@ package api
 
 import (
 	"accommodation_service/domain/model"
-	"fmt"
 	pb "github.com/Booking-Platform/accommodation-booking-webapp/common/proto/accommodation_service"
 	"go.mongodb.org/mongo-driver/bson/primitive"
-	"google.golang.org/genproto/googleapis/type/date"
 	"google.golang.org/protobuf/types/known/timestamppb"
+	"strconv"
 )
 
 func mapNewAccommodation(accommodationPb *pb.NewAccommodation) (*model.Accommodation, error) {
@@ -19,16 +18,17 @@ func mapNewAccommodation(accommodationPb *pb.NewAccommodation) (*model.Accommoda
 			Country: accommodationPb.Address.Country,
 			City:    accommodationPb.Address.City,
 			Street:  accommodationPb.Address.Street,
-			Number:  accommodationPb.Address.Number,
+			Number:  int(accommodationPb.Address.Number),
 		},
 		AutomaticConfirmation: accommodationPb.AutomaticConfirmation,
-		Photo:                 accommodationPb.Photo,
+		Photos:                accommodationPb.Photos,
 		Benefits:              make([]*model.Benefit, 0),
+		//Appointments:          []*model.Appointment{},
 	}
 
-	for _, benefitPb := range accommodationPb.Benefits {
+	for _, benefitName := range accommodationPb.Benefits {
 		benefit := &model.Benefit{
-			Name: benefitPb.Name,
+			Name: benefitName,
 			ID:   primitive.NewObjectID(),
 		}
 		accommodation.Benefits = append(accommodation.Benefits, benefit)
@@ -55,9 +55,28 @@ func mapAccommodationPb(accommodation *model.Accommodation) *pb.Accommodation {
 		MaxGuestNum:           int32(accommodation.MaxGuestNum),
 		Address:               mapAddressPb(&accommodation.Address),
 		AutomaticConfirmation: accommodation.AutomaticConfirmation,
-		Photo:                 accommodation.Photo,
+		Photo:                 accommodation.Photos,
 		Benefits:              pbBenefits,
 		Appointments:          pbAppointments,
+	}
+	return accommodationPb
+}
+
+func mapAccommodationDTOPb(accommodation *model.Accommodation) *pb.AccommodationDTO {
+	var pbBenefits []*pb.Benefit
+	for _, benefit := range accommodation.Benefits {
+		pbBenefits = append(pbBenefits, mapBenefitPb(benefit))
+	}
+
+	accommodationPb := &pb.AccommodationDTO{
+		Id:                    accommodation.ID.Hex(),
+		Name:                  accommodation.Name,
+		MinGuestNum:           strconv.Itoa(accommodation.MinGuestNum),
+		MaxGuestNum:           strconv.Itoa(accommodation.MaxGuestNum),
+		Address:               mapAddressPb(&accommodation.Address),
+		AutomaticConfirmation: accommodation.AutomaticConfirmation,
+		Photos:                accommodation.Photos,
+		Benefits:              pbBenefits,
 	}
 	return accommodationPb
 }
@@ -80,16 +99,30 @@ func mapAppointmentPb(appointment *model.Appointment) *pb.Appointment {
 	}
 }
 
+func mapPbAppointment(appointmentPb *pb.Appointment) *model.Appointment {
+	from := appointmentPb.From.AsTime()
+	to := appointmentPb.To.AsTime()
+
+	return &model.Appointment{
+		ID:       primitive.NewObjectID(),
+		From:     from,
+		To:       to,
+		Status:   model.AppointmentStatus(appointmentPb.Status),
+		Price:    appointmentPb.Price,
+		PerGuest: appointmentPb.PerGuest,
+	}
+}
+
 func mapAddressPb(address *model.Address) *pb.Address {
 	return &pb.Address{
 		Id:      address.ID.Hex(),
 		Country: address.Country,
 		City:    address.City,
 		Street:  address.Street,
-		Number:  address.Number,
+		Number:  strconv.Itoa(address.Number),
 	}
 }
 
-func getDateStringForm(date date.Date) string {
-	return fmt.Sprintf("%d-%02d-%02d", date.Year, date.Month, date.Day)
-}
+//func mapUpdateAccommodation(accommodation *model.Accommodation, appointment *pb.Appointment) *model.Accommodation {
+//
+//}

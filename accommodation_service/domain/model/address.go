@@ -7,5 +7,5 @@ type Address struct {
 	Country string             `bson:"country"`
 	City    string             `bson:"city"`
 	Street  string             `bson:"street"`
-	Number  string             `bson:"number"`
+	Number  int                `bson:"number"`
 }

@@ -4,9 +4,14 @@ import (
 	"accommodation_service/domain"
 	"accommodation_service/domain/model"
 	"context"
+	pb "github.com/Booking-Platform/accommodation-booking-webapp/common/proto/accommodation_service"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
+
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
+	"time"
 )
 
 const (
@@ -46,6 +51,73 @@ func (store *AccommodationMongoDBStore) Insert(accommodation *model.Accommodatio
 	}
 	accommodation.ID = result.InsertedID.(primitive.ObjectID)
 	return nil
+}
+
+func (store *AccommodationMongoDBStore) AddAppointment(accommodationID primitive.ObjectID, appointment *model.Appointment) error {
+	// Check if there is an overlap with an existing appointment
+	filter := bson.M{
+		"_id": accommodationID,
+		"appointments.from": bson.M{
+			"$nin": []time.Time{appointment.To},
+			"$lt":  appointment.To,
+		},
+		"appointments.to": bson.M{
+			"$nin": []time.Time{appointment.From},
+			"$gt":  appointment.From,
+		},
+	}
+	count, err := store.accommodations.CountDocuments(context.Background(), filter)
+	if err != nil {
+		return status.Errorf(
+			codes.Internal,
+			"Error counting documents: %v",
+			err,
+		)
+	}
+	if count > 0 {
+		return status.Errorf(
+			codes.FailedPrecondition,
+			"Appointment overlaps with existing appointment",
+		)
+	}
+
+	// Add the new appointment to the appointments array
+	update := bson.M{
+		"$push": bson.M{
+			"appointments": appointment,
+		},
+	}
+	filter = bson.M{"_id": accommodationID}
+	_, err = store.accommodations.UpdateOne(context.Background(), filter, update)
+	if err != nil {
+		return status.Errorf(
+			codes.Internal,
+			"Error updating document: %v",
+			err,
+		)
+	}
+	return nil
+}
+
+func (store *AccommodationMongoDBStore) GetAllAccommodationsByParams(searchParams *pb.SearchParams, accommodationIds []primitive.ObjectID) ([]*model.Accommodation, error) {
+	if searchParams.NumOfGuests < 0 {
+		return nil, status.Errorf(codes.InvalidArgument, "Number of guests must be greater than 0")
+	}
+
+	filter := bson.M{
+		"_id": bson.M{
+			"$nin": accommodationIds,
+		},
+		"address.city": searchParams.City,
+	}
+
+	if searchParams.NumOfGuests > 0 {
+		filter["max_guest_num"] = bson.M{
+			"$gte": searchParams.NumOfGuests,
+		}
+	}
+
+	return store.filter(filter)
 }
 
 func (store *AccommodationMongoDBStore) filter(filter interface{}) ([]*model.Accommodation, error) {

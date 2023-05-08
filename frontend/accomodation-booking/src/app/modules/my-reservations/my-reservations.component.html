@@ -1,25 +1,28 @@
 <div class="container">
   <h1>My reservations</h1>
 </div>
-
-<div class="card-deck">
-  <div class="card" *ngFor="let reservation of reservations">
-    <div class="card-body">
-      <h5 class="card-title">{{ reservation.name }}</h5>
-      <p class="card-text">
-         From: {{ reservation.startDate}} 
-      </p>
-      <p class="card-text">
-        To: {{ reservation.endDate}} 
-     </p>
-     <p class="card-text">
-        Num of guests: {{ reservation.minGuestNum }} - {{ reservation.maxGuestNum }}
-      </p>
+<div class="reservation-list">
+  <div *ngFor="let reservation of reservations" class="reservation-card">
+    <div class="card-header">
+      <h2>{{reservation.Accommodation.Name}}</h2>
+      <p>{{reservation.Accommodation.Address}}</p>
     </div>
-    <div class="card-footer">
-      <button class="btn btn-primary" (click)="cancelReservation(reservation)">
-        Cancel
-      </button>
+    <br>
+    <div class="card-body">
+      <div class="reservation-info">
+        <p><strong>Check-in:</strong> {{reservation.Start | date:'mediumDate'}}</p>
+        <p><strong>Check-out:</strong> {{reservation.End | date:'mediumDate'}}</p>
+        <p><strong>Guests:</strong> {{reservation.GuestNum}}</p>
+        <p><strong>Status:</strong> {{reservation.Status}}</p>
+      </div>
+      <br>
+      <div class="user-info">
+        <p><strong>Name:</strong> {{reservation.User.Name}} {{reservation.User.Surname}}</p>
+
+      </div>
+      <div class="button-container">
+        <button *ngIf="reservation.Status !== 'CANCELED' && reservation.Status !== 'UNCONFIRMED' " (click)="cancelReservation(reservation)">Cancel Reservation</button>
+      </div>
     </div>
   </div>
 </div>

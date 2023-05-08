@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Accommodation } from 'src/app/model/accommodation';
 import { Address } from 'src/app/model/address';
@@ -13,26 +13,11 @@ import { Router } from '@angular/router';
   styleUrls: ['./view.component.css'],
 })
 export class ViewComponent implements OnInit {
-  public address = new Address('1', 'Serbia', 'Belgrade', 'Main Street', '123');
-  public benefits = [
-    new Benefit('1', 'Free Wi-Fi'),
-    new Benefit('2', 'Swimming pool'),
-    new Benefit('3', 'Gym'),
-  ];
-  public accommodation = new Accommodation(
-    '1',
-    'Luxury Apartment in Belgrade',
-    '2',
-    '4',
-    this.address,
-    [
-      'https://i.dummyjson.com/data/products/1/3.jpg',
-      'https://i.dummyjson.com/data/products/1/4.jpg',
-    ],
-    this.benefits
-  );
-
   public accommodations: Accommodation[] = [];
+  public from: string = '';
+  public to: string = '';
+  public numOfGuests: string = '';
+  public city: string = '';
 
   constructor(
     private accommodationService: AccommodationService,
@@ -40,27 +25,31 @@ export class ViewComponent implements OnInit {
     private router: Router
   ) {}
 
-  ngOnInit(): void {
+  ngOnInit() {
     this.accommodationService.getAccommodations().subscribe((res: any) => {
-      this.accommodations = res;
+      this.accommodations = res.accommodations;
     });
-
-    this.accommodations.push(this.accommodation);
-    this.accommodations.push(this.accommodation);
-    this.accommodations.push(this.accommodation);
-    this.accommodations.push(this.accommodation);
-    this.accommodations.push(this.accommodation);
-    this.accommodations.push(this.accommodation);
-    this.accommodations.push(this.accommodation);
   }
 
-  reserveAccommodation(acc: any) {
+  reserveAccommodation(acc: Accommodation) {
     this.router.navigate(['/accommodation-details'], {
       queryParams: {
-        accommodationID: 'accID',
-        startDate: '2023-10-10',
-        endDate: '2023-10-11',
+        accommodationID: acc.id,
+        startDate: this.from,
+        endDate: this.to,
       },
+    });
+  }
+
+  search() {
+    var searchParams = {
+      from: this.from,
+      to: this.to,
+      numOfGuests: this.numOfGuests,
+      city: this.city,
+    };
+    this.accommodationService.search(searchParams).subscribe((res: any) => {
+      this.accommodations = res.accommodations;
     });
   }
 }

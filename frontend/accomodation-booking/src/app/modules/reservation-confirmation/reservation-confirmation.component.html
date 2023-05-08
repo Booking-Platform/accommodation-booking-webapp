@@ -1,2 +1,29 @@
-<p>reservation-confirmation works!</p>
-    
+<div class="container">
+  </div>
+  <div class="reservation-list">
+    <div *ngFor="let reservation of reservations" class="reservation-card">
+      <div class="card-header">
+        <h2>{{reservation.Accommodation.Name}}</h2>
+        <p>{{reservation.Accommodation.Address}}</p>
+      </div>
+      <br>
+      <div class="card-body">
+        <div class="reservation-info">
+          <p><strong>Check-in:</strong> {{reservation.Start | date:'mediumDate'}}</p>
+          <p><strong>Check-out:</strong> {{reservation.End | date:'mediumDate'}}</p>
+          <p><strong>Status:</strong> {{reservation.Status}}</p>
+        </div>
+        <br>
+        <div class="user-info">
+          <p><strong>Reservation on guest name:</strong> {{reservation.User.Name}} {{reservation.User.Surname}}</p>
+          <p><strong>Number of guests:</strong> {{reservation.GuestNum}}</p>
+          
+        </div>
+        <br>
+        <div class="button-container">
+          <button  (click)="confirm(reservation)" style="margin-left: 3%; margin-right: 3%; width: 32%;">Confirm</button>
+          <button  (click)="reject(reservation)" style=" background-color: #e53935; margin-left: 3%; margin-right: 3%;  width: 32%">Reject</button>
+        </div>
+      </div>
+    </div>
+  </div>

@@ -2,7 +2,10 @@ package api
 
 import (
 	"context"
+	"fmt"
+	"github.com/Booking-Platform/accommodation-booking-webapp/accommodation_reserve_service/domain/model"
 	"go.mongodb.org/mongo-driver/bson/primitive"
+	"strconv"
 
 	"github.com/Booking-Platform/accommodation-booking-webapp/accommodation_reserve_service/application"
 
@@ -55,7 +58,26 @@ func (handler *AccommodationReserveHandler) GetAllForConfirmation(ctx context.Co
 	return response, nil
 }
 
-func (handler *AccommodationReserveHandler) GetReservationsByUserID(ctx context.Context, request *pb.GetReservationsByUserIDRequest) (*pb.GetReservationsByUserIDResponse, error) {
+func (handler *AccommodationReserveHandler) GetReservedAccommodationIds(ctx context.Context, request *pb.GetReservedAccommodationIdsRequest) (*pb.GetReservedAccommodationIdsResponse, error) {
+
+	ids, err := handler.service.GetReservedAccommodationsIds(request.SearchParams.From, request.SearchParams.To)
+	if err != nil {
+		return nil, err
+	}
+
+	accommodationIds := make([]string, len(ids))
+	for i, objectId := range ids {
+		accommodationIds[i] = objectId.Hex()
+	}
+
+	response := &pb.GetReservedAccommodationIdsResponse{
+		Id: accommodationIds,
+	}
+
+	return response, nil
+}
+
+func (handler *AccommodationReserveHandler) GetReservationsByUserID(ctx context.Context, request *pb.IdMessageRequest) (*pb.GetReservationsByUserIDResponse, error) {
 	id := request.Id
 	objectId, err := primitive.ObjectIDFromHex(id)
 	if err != nil {
@@ -74,5 +96,25 @@ func (handler *AccommodationReserveHandler) GetReservationsByUserID(ctx context.
 		current := mapReservationPb(reservation)
 		response.Reservations = append(response.Reservations, current)
 	}
+	return response, nil
+}
+
+func (handler *AccommodationReserveHandler) ChangeReservationStatus(ctx context.Context, req *pb.ChangeReservationStatusRequest) (*pb.ChangeReservationStatusResponse, error) {
+	id := req.ReservationWithIdAndStatus.Id
+
+	objectId, err := primitive.ObjectIDFromHex(id)
+	statusNum, err := strconv.Atoi(req.ReservationWithIdAndStatus.Status)
+
+	if err != nil {
+		fmt.Println("Error:", err)
+	}
+
+	err = handler.service.ChangeReservationStatus(objectId, model.ReservationStatus(statusNum))
+	if err != nil {
+		return nil, err
+	}
+
+	response := &pb.ChangeReservationStatusResponse{}
+
 	return response, nil
 }
