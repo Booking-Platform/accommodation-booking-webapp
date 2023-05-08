@@ -21,15 +21,21 @@ service accommodation_reserve_service{
     };
   }
 
-  rpc GetReservationsByUserID(GetReservationsByUserIDRequest) returns(GetReservationsByUserIDResponse) {
+  rpc GetReservationsByUserID(IdMessageRequest) returns(GetReservationsByUserIDResponse) {
     option (google.api.http) = {
       get: "/api/reservation/getReservationsByUserID/{id}"
     };
   }
 
+  rpc CancelReservation(IdMessageRequest) returns(CancelReservationResponse) {
+    option (google.api.http) = {
+      get: "/api/reservation/cancel/{id}"
+    };
+  }
+
 }
 
-message GetReservationsByUserIDRequest {
+message IdMessageRequest {
   string id = 1;
 }
 
@@ -51,6 +57,10 @@ message CreateReservationRequest {
 
 message CreateReservationResponse {
   Reservation reservation = 1;
+}
+
+message CancelReservationResponse {
+
 }
 
 message NewReservation {

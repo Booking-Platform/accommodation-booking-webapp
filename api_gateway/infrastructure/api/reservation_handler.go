@@ -63,13 +63,14 @@ func (handler *ReservationHandler) GetAllForConfirmation(w http.ResponseWriter, 
 		}
 
 		response[i] = &domain.Reservation{
+			Status:   res.Status,
 			Start:    res.StartDate,
 			End:      res.EndDate,
 			GuestNum: res.GuestNum,
 			Accommodation: domain.Accommodation{
 				Id:      acc.GetAccommodation().Id,
 				Name:    acc.GetAccommodation().Name,
-				Address: acc.GetAccommodation().Address.String(),
+				Address: acc.GetAccommodation().Address.GetCity() + "," + acc.GetAccommodation().Address.GetCountry(),
 			},
 			User: domain.User{
 				Name:    user.Name,
@@ -110,13 +111,14 @@ func (handler *ReservationHandler) GetReservationsByUserID(w http.ResponseWriter
 		}
 
 		response[i] = &domain.Reservation{
+			Status:   res.Status,
 			Start:    res.StartDate,
 			End:      res.EndDate,
 			GuestNum: res.GuestNum,
 			Accommodation: domain.Accommodation{
 				Id:      acc.GetAccommodation().Id,
 				Name:    acc.GetAccommodation().Name,
-				Address: acc.GetAccommodation().Address.String(),
+				Address: acc.GetAccommodation().Address.GetCity() + "," + acc.GetAccommodation().Address.GetCountry(),
 			},
 			User: domain.User{
 				Name:    user.Name,
@@ -146,7 +148,7 @@ func (handler *ReservationHandler) getReservationsWithStatusWAITING() (*accommod
 
 func (handler *ReservationHandler) getReservationsByUserID(id string) (*accommodation_reserve.GetReservationsByUserIDResponse, error) {
 	reservationClient := services.NewReservationClient(handler.accommodationReserveClientAddress)
-	return reservationClient.GetReservationsByUserID(context.TODO(), &reservation.GetReservationsByUserIDRequest{Id: id})
+	return reservationClient.GetReservationsByUserID(context.TODO(), &reservation.IdMessageRequest{Id: id})
 }
 
 func (handler *ReservationHandler) getAccommodationForReservation(id string) (*accommodation.GetAccommodationByIdResponse, error) {

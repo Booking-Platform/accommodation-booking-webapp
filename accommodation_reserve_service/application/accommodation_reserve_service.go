@@ -32,3 +32,7 @@ func (service *AccommodationReserveService) GetAllForConfirmation() ([]*model.Re
 func (service *AccommodationReserveService) GetAllByUserID(id primitive.ObjectID) ([]*model.Reservation, error) {
 	return service.store.GetAllByUserID(id)
 }
+
+func (service *AccommodationReserveService) CancelReservation(reservationID primitive.ObjectID) error {
+	return service.store.ChangeReservationStatus(reservationID, model.CANCELED)
+}

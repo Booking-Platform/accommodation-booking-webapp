@@ -52,28 +52,6 @@ func (store *AccommodationMongoDBStore) Insert(accommodation *model.Accommodatio
 	return nil
 }
 
-//
-//func (store *AccommodationMongoDBStore) Update(accommodation *model.Accommodation) error {
-//	filter := bson.M{"_id": accommodation.ID}
-//	update := bson.M{
-//		"$set": bson.M{
-//			"name":                   accommodation.Name,
-//			"min_guest_num":          accommodation.MinGuestNum,
-//			"max_guest_num":          accommodation.MaxGuestNum,
-//			"address":                accommodation.Address,
-//			"automatic_confirmation": accommodation.AutomaticConfirmation,
-//			"photo":                  accommodation.Photo,
-//			"benefits":               accommodation.Benefits,
-//			"appointments":           accommodation.Appointments,
-//		},
-//	}
-//	_, err := store.accommodations.UpdateOne(context.Background(), filter, update)
-//	if err != nil {
-//		return err
-//	}
-//	return nil
-//}
-
 func (store *AccommodationMongoDBStore) AddAppointment(accommodationID primitive.ObjectID, appointment *model.Appointment) error {
 	// Check if there is an overlap with an existing appointment
 	filter := bson.M{

@@ -18,6 +18,17 @@ type ReservationMongoDBStore struct {
 	reservations *mongo.Collection
 }
 
+func (store *ReservationMongoDBStore) ChangeReservationStatus(id primitive.ObjectID, status model.ReservationStatus) error {
+	filter := bson.M{"_id": id}
+	update := bson.M{"$set": bson.M{"reservation_status": status}}
+
+	_, err := store.reservations.UpdateOne(context.TODO(), filter, update)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 func NewReservationMongoDBStore(client *mongo.Client) domain.ReservationStore {
 	reservations := client.Database(DATABASE).Collection(COLLECTION)
 	return &ReservationMongoDBStore{
@@ -25,7 +36,7 @@ func NewReservationMongoDBStore(client *mongo.Client) domain.ReservationStore {
 	}
 }
 
-func (store ReservationMongoDBStore) GetAllByUserID(id primitive.ObjectID) ([]*model.Reservation, error) {
+func (store *ReservationMongoDBStore) GetAllByUserID(id primitive.ObjectID) ([]*model.Reservation, error) {
 	filter := bson.M{"user_id": id}
 	return store.filter(filter)
 }

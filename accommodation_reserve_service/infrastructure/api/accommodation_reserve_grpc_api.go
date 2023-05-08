@@ -55,7 +55,7 @@ func (handler *AccommodationReserveHandler) GetAllForConfirmation(ctx context.Co
 	return response, nil
 }
 
-func (handler *AccommodationReserveHandler) GetReservationsByUserID(ctx context.Context, request *pb.GetReservationsByUserIDRequest) (*pb.GetReservationsByUserIDResponse, error) {
+func (handler *AccommodationReserveHandler) GetReservationsByUserID(ctx context.Context, request *pb.IdMessageRequest) (*pb.GetReservationsByUserIDResponse, error) {
 	id := request.Id
 	objectId, err := primitive.ObjectIDFromHex(id)
 	if err != nil {
@@ -74,5 +74,18 @@ func (handler *AccommodationReserveHandler) GetReservationsByUserID(ctx context.
 		current := mapReservationPb(reservation)
 		response.Reservations = append(response.Reservations, current)
 	}
+	return response, nil
+}
+
+func (handler *AccommodationReserveHandler) CancelReservation(ctx context.Context, request *pb.IdMessageRequest) (*pb.CancelReservationResponse, error) {
+	id := request.Id
+	objectId, err := primitive.ObjectIDFromHex(id)
+	err = handler.service.CancelReservation(objectId)
+	if err != nil {
+		return nil, err
+	}
+
+	response := &pb.CancelReservationResponse{}
+
 	return response, nil
 }
