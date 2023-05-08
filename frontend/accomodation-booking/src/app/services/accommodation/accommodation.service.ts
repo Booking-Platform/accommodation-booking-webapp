@@ -21,19 +21,19 @@ export class AccommodationService {
   }
 
   search(searchParams: any): Observable<Accommodation[]> {
-    return this.http.post<any>(
-      this.apiHost + 'accommodations/search',
-      JSON.stringify(searchParams),
-      {
-        headers: this.headers,
-      }
+    let params = new URLSearchParams();
+    params.set('from', searchParams.from);
+    params.set('to', searchParams.to);
+    params.set('numOfGuests', searchParams.numOfGuests);
+    params.set('city', searchParams.city);
+
+    return this.http.get<Accommodation[]>(
+      `${this.apiHost}reservation/getAllByParams?${params.toString()}`
     );
   }
 
   createAccommodation(accommodation: any) {
     const { id, ...newAccommodation } = accommodation;
-    console.log(newAccommodation);
-
     return this.http.post<any>(
       this.apiHost + 'accommodation/create',
       JSON.stringify(newAccommodation),
@@ -46,5 +46,15 @@ export class AccommodationService {
   getAccommodationByID(id: string): Observable<any[]> {
     const url = `${this.apiHost}accommodations/${id}`;
     return this.http.get<any[]>(url, { headers: this.headers });
+  }
+
+  addAppointment(appointment: any) {
+    return this.http.post<any>(
+      this.apiHost + 'accommodation/appointment',
+      JSON.stringify(appointment),
+      {
+        headers: this.headers,
+      }
+    );
   }
 }

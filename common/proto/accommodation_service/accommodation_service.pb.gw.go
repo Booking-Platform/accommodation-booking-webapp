@@ -250,7 +250,7 @@ func RegisterAccommodationServiceHandlerServer(ctx context.Context, mux *runtime
 
 	})
 
-	mux.Handle("PUT", pattern_AccommodationService_CreateAppointment_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("POST", pattern_AccommodationService_CreateAppointment_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		var stream runtime.ServerTransportStream
@@ -382,7 +382,7 @@ func RegisterAccommodationServiceHandlerClient(ctx context.Context, mux *runtime
 
 	})
 
-	mux.Handle("PUT", pattern_AccommodationService_CreateAppointment_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("POST", pattern_AccommodationService_CreateAppointment_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)

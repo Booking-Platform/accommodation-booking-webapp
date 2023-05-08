@@ -4,6 +4,7 @@ import (
 	"accommodation_service/domain"
 	"accommodation_service/domain/model"
 	"context"
+	"fmt"
 	pb "github.com/Booking-Platform/accommodation-booking-webapp/common/proto/accommodation_service"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -104,11 +105,15 @@ func (store *AccommodationMongoDBStore) GetAllAccommodationsByParams(searchParam
 		return nil, status.Errorf(codes.InvalidArgument, "Number of guests must be greater than 0")
 	}
 
+	regexPattern := fmt.Sprintf(".*%s.*", searchParams.City)
 	filter := bson.M{
 		"_id": bson.M{
 			"$nin": accommodationIds,
 		},
-		"address.city": searchParams.City,
+		"address.city": bson.M{
+			"$regex":   regexPattern,
+			"$options": "i",
+		},
 	}
 
 	if searchParams.NumOfGuests > 0 {

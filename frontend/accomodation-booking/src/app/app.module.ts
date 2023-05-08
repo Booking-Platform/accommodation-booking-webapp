@@ -18,6 +18,7 @@ import { MyReservationsComponent } from './modules/my-reservations/my-reservatio
 import { CreateAccommodationComponent } from './modules/create-accommodation/create-accommodation.component';
 import { RegisterComponent } from './modules/register/register.component';
 import { LoginComponent } from './modules/login/login.component';
+import { AddAppointmentComponent } from './modules/add-appointment/add-appointment.component';
 
 @NgModule({
   declarations: [
@@ -30,6 +31,7 @@ import { LoginComponent } from './modules/login/login.component';
     CreateAccommodationComponent,
     RegisterComponent,
     LoginComponent,
+    AddAppointmentComponent,
   ],
   imports: [
     BrowserAnimationsModule,

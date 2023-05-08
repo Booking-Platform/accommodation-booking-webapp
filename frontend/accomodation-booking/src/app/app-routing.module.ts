@@ -7,6 +7,7 @@ import { MyReservationsComponent } from './modules/my-reservations/my-reservatio
 import { CreateAccommodationComponent } from './modules/create-accommodation/create-accommodation.component';
 import { RegisterComponent } from './modules/register/register.component';
 import { LoginComponent } from './modules/login/login.component';
+import { AddAppointmentComponent } from './modules/add-appointment/add-appointment.component';
 
 const routes: Routes = [
   { path: 'view', component: ViewComponent },
@@ -16,6 +17,7 @@ const routes: Routes = [
   { path: 'createAccommodation', component: CreateAccommodationComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'login', component: LoginComponent },
+  { path: 'addAppointment', component: AddAppointmentComponent },
 ];
 
 @NgModule({

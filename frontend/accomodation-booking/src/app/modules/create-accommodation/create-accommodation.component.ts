@@ -1,10 +1,7 @@
-import { Accommodation } from 'src/app/model/accommodation';
 import { Component } from '@angular/core';
-import { Benefit } from 'src/app/model/benefit';
 import { AccommodationService } from 'src/app/services/accommodation/accommodation.service';
 import { Router } from '@angular/router';
-import { NgForm } from '@angular/forms';
-import { min } from 'rxjs';
+import { Accommodation } from 'src/app/model/accommodation';
 
 @Component({
   selector: 'app-create-accommodation',
@@ -12,15 +9,7 @@ import { min } from 'rxjs';
   styleUrls: ['./create-accommodation.component.css'],
 })
 export class CreateAccommodationComponent {
-  public accommodation: Accommodation = new Accommodation(
-    '',
-    '',
-    '',
-    '',
-    { country: '', city: '', street: '', number: '' },
-    [],
-    []
-  );
+  public accommodation: Accommodation = new Accommodation();
 
   public benefits: string = '';
   public photos: string = '';
@@ -38,8 +27,6 @@ export class CreateAccommodationComponent {
 
     const splitPhotos = this.photos.split(',').map((b) => b.trim());
     this.accommodation.photos = splitPhotos;
-
-    //this.accommodation.minGuestNum = min
 
     this.accommodationService
       .createAccommodation(this.accommodation)

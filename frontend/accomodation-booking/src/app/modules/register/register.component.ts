@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
-import { User } from 'src/app/model/user';
 import { UserService } from 'src/app/services/user/user.service';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
+import { User } from 'src/app/model/user';
 
 @Component({
   selector: 'app-register',

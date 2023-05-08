@@ -5,12 +5,12 @@
     <input type="text" id="name" name="name" required [(ngModel)]="accommodation.name">
 
     <label for="min-guest-num">Minimum Guest Number:</label>
-    <input type="number" id="min-guest-num" name="minGuestNum" required [(ngModel)]="accommodation.minGuestNum" min="0"
-      max="10">
+    <input type="number" id="min-guest-num" name="minGuestNum" required [(ngModel)]="accommodation.min_guest_num"
+      min="0" max="10">
 
     <label for="max-guest-num">Maximum Guest Number:</label>
-    <input type="number" id="max-guest-num" name="maxGuestNum" required [(ngModel)]="accommodation.maxGuestNum" min="0"
-      max="10">
+    <input type="number" id="max-guest-num" name="maxGuestNum" required [(ngModel)]="accommodation.max_guest_num"
+      min="0" max="10">
 
     <label for="country">Country:</label>
     <input type="text" id="country" name="country" required [(ngModel)]="accommodation.address.country">

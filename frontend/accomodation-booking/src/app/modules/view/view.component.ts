@@ -1,11 +1,8 @@
-import { AfterViewInit, Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { Accommodation } from 'src/app/model/accommodation';
-import { Address } from 'src/app/model/address';
-import { Benefit } from 'src/app/model/benefit';
+import { Component, OnInit } from '@angular/core';
 import { AccommodationService } from 'src/app/services/accommodation/accommodation.service';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
+import { Accommodation } from 'src/app/model/accommodation';
 
 @Component({
   selector: 'app-view',
@@ -25,11 +22,7 @@ export class ViewComponent implements OnInit {
     private router: Router
   ) {}
 
-  ngOnInit() {
-    this.accommodationService.getAccommodations().subscribe((res: any) => {
-      this.accommodations = res.accommodations;
-    });
-  }
+  ngOnInit() {}
 
   reserveAccommodation(acc: Accommodation) {
     this.router.navigate(['/accommodation-details'], {
