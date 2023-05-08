@@ -6,24 +6,36 @@ package auth;
 
 import "google/api/annotations.proto";
 
-service user_info_service{
-  rpc LoginUser(LoginUserRequest) returns(LoginUserResponse) {
+service auth_service{
+
+
+  rpc CreateUser(CreateUserRequest) returns(CreateUserResponse) {
     option (google.api.http) = {
-      post: "/api/auth/login";
-      body: "user"
+      post: "/api/user/create"
+      body: "newUser"
     };
   }
 }
 
-message LoginUserRequest {
+message CreateUserRequest {
+  NewUser newUser = 1;
+}
+
+message CreateUserResponse {
   User user = 1;
 }
 
-message LoginUserResponse {
-  string status = 1;
+message NewUser {
+  string name = 1;
+  string surname = 2;
+  string email = 3;
+  string password = 4;
 }
 
 message User {
-  string email = 1;
-  string password = 2;
+  string id = 1;
+  string name = 2;
+  string surname = 3;
+  string email = 4;
+  string password = 5;
 }

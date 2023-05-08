@@ -8,6 +8,8 @@ type Config struct {
 	AccommodationPort        string
 	UserInfoHost             string
 	UserInfoPort             string
+	AuthHost                 string
+	AuthPort                 string
 	AllowedCorsOrigin        string
 }
 
@@ -20,6 +22,8 @@ func NewConfig() *Config {
 		AccommodationPort:        "8002",
 		UserInfoHost:             "localhost",
 		UserInfoPort:             "8003",
+		AuthHost:                 "localhost",
+		AuthPort:                 "8004",
 
 		AllowedCorsOrigin: "http://localhost:4200",
 	}
