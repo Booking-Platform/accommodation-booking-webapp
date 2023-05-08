@@ -35,7 +35,7 @@ func (store *AccommodationMongoDBStore) GetAllAccommodations() ([]*model.Accommo
 	return store.filter(filter)
 }
 
-func (store AccommodationMongoDBStore) GetAccomodationByID(id primitive.ObjectID) (*model.Accommodation, error) {
+func (store *AccommodationMongoDBStore) GetAccomodationByID(id primitive.ObjectID) (*model.Accommodation, error) {
 	filter := bson.M{"_id": id}
 	return store.filterOne(filter)
 }

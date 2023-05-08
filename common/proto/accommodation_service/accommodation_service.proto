@@ -86,9 +86,9 @@ message GetAccommodationsByParamsResponse {
 
 
 message SearchParams{
-    int64 num_of_guests = 3;
-    string city = 4;
     repeated string id = 1;
+    int64 num_of_guests = 2;
+    string city = 3;
 }
 
 
