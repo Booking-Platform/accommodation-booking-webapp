@@ -6,7 +6,11 @@ import { Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class ReservationService {
+
+  
   apiHost: string = 'http://localhost:8000/api/reservation/';
+  apiGateway: string = 'http://localhost:8000/reservation/';
+
   headers: HttpHeaders = new HttpHeaders({
     'Content-Type': 'application/json',
   });
@@ -23,9 +27,21 @@ export class ReservationService {
     );
   }
 
-
   getAllReservationsByUserID(userID: string): Observable<any[]> {
-    const url = `${this.apiHost}getReservationsByUserID/${userID}`;
+    const url = `${this.apiGateway}getReservationsByUserID/${userID}`;
     return this.http.get<any[]>(url, { headers: this.headers });
   }
+
+  changeReservationStatus(reservationID: any, status: string) {
+    const headers = new HttpHeaders().set('Content-Type', 'application/json');
+    const body = { id: reservationID, status: status };
+
+    return this.http.post(this.apiHost + "changeStatus", body, { headers: headers });
+  }
+
+  getReservationsForConfirmation(): Observable<any[]> {
+    const url = `${this.apiGateway}getAllForConfirmation`;
+    return this.http.get<any[]>(url, { headers: this.headers });
+  }
+
 }

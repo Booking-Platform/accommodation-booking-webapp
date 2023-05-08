@@ -7,8 +7,6 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
-	"go.mongodb.org/mongo-driver/mongo/options"
-	"time"
 )
 
 const (
@@ -20,6 +18,17 @@ type ReservationMongoDBStore struct {
 	reservations *mongo.Collection
 }
 
+func (store *ReservationMongoDBStore) ChangeReservationStatus(id primitive.ObjectID, status model.ReservationStatus) error {
+	filter := bson.M{"_id": id}
+	update := bson.M{"$set": bson.M{"reservation_status": status}}
+
+	_, err := store.reservations.UpdateOne(context.TODO(), filter, update)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 func NewReservationMongoDBStore(client *mongo.Client) domain.ReservationStore {
 	reservations := client.Database(DATABASE).Collection(COLLECTION)
 	return &ReservationMongoDBStore{
@@ -27,7 +36,7 @@ func NewReservationMongoDBStore(client *mongo.Client) domain.ReservationStore {
 	}
 }
 
-func (store ReservationMongoDBStore) GetAllByUserID(id primitive.ObjectID) ([]*model.Reservation, error) {
+func (store *ReservationMongoDBStore) GetAllByUserID(id primitive.ObjectID) ([]*model.Reservation, error) {
 	filter := bson.M{"user_id": id}
 	return store.filter(filter)
 }
@@ -51,48 +60,49 @@ func (store *ReservationMongoDBStore) GetByStatus(status model.ReservationStatus
 }
 
 func (store *ReservationMongoDBStore) GetReservedAccommodationsIds(from string, to string) ([]*primitive.ObjectID, error) {
-	fromDate, err := time.Parse("2006-01-02", from)
-	if err != nil {
-		return nil, err
-	}
-	toDate, err := time.Parse("2006-01-02", to)
-	if err != nil {
-		return nil, err
-	}
-	filter := bson.M{
-		"$or": []bson.M{
-			bson.M{"start": bson.M{"$lt": toDate}, "end": bson.M{"$gt": fromDate}},
-			bson.M{"start": bson.M{"$gte": fromDate}, "end": bson.M{"$lte": toDate}},
-			bson.M{"start": bson.M{"$lte": fromDate}, "end": bson.M{"$gte": toDate}},
-		},
-	}
-
-	// definiramo projekciju koja će vratiti samo accommodation_id polje
-	projection := bson.M{"accommodation_id": 1}
-
-	// filtriramo rezervacije koristeći filter i projekciju
-	cursor, err := store.reservations.Find(context.Background(), filter, options.Find().SetProjection(projection))
-	if err != nil {
-		return nil, err
-	}
-	defer cursor.Close(context.Background())
-
-	// iteriramo kroz sve pronađene dokumente i izvlačimo accommodation_id vrijednosti
-	var accommodationIds []*primitive.ObjectID
-	for cursor.Next(context.Background()) {
-		var reservation model.Reservation
-		if err := cursor.Decode(&reservation); err != nil {
-			return nil, err
-		}
-
-		objectId, err := primitive.ObjectIDFromHex(reservation.AccommodationID)
-		if err != nil {
-			return nil, err
-		}
-
-		accommodationIds = append(accommodationIds, &objectId)
-	}
-	return accommodationIds, nil
+	//fromDate, err := time.Parse("2006-01-02", from)
+	//if err != nil {
+	//	return nil, err
+	//}
+	//toDate, err := time.Parse("2006-01-02", to)
+	//if err != nil {
+	//	return nil, err
+	//}
+	//filter := bson.M{
+	//	"$or": []bson.M{
+	//		bson.M{"start": bson.M{"$lt": toDate}, "end": bson.M{"$gt": fromDate}},
+	//		bson.M{"start": bson.M{"$gte": fromDate}, "end": bson.M{"$lte": toDate}},
+	//		bson.M{"start": bson.M{"$lte": fromDate}, "end": bson.M{"$gte": toDate}},
+	//	},
+	//}
+	//
+	//// definiramo projekciju koja će vratiti samo accommodation_id polje
+	//projection := bson.M{"accommodation_id": 1}
+	//
+	//// filtriramo rezervacije koristeći filter i projekciju
+	//cursor, err := store.reservations.Find(context.Background(), filter, options.Find().SetProjection(projection))
+	//if err != nil {
+	//	return nil, err
+	//}
+	//defer cursor.Close(context.Background())
+	//
+	//// iteriramo kroz sve pronađene dokumente i izvlačimo accommodation_id vrijednosti
+	//var accommodationIds []*primitive.ObjectID
+	//for cursor.Next(context.Background()) {
+	//	var reservation model.Reservation
+	//	if err := cursor.Decode(&reservation); err != nil {
+	//		return nil, err
+	//	}
+	//
+	//	objectId, err := primitive.ObjectIDFromHex(reservation.AccommodationID)
+	//	if err != nil {
+	//		return nil, err
+	//	}
+	//
+	//	accommodationIds = append(accommodationIds, &objectId)
+	//}
+	//return accommodationIds, nil
+	return nil, nil
 }
 
 func (store *ReservationMongoDBStore) filter(filter interface{}) ([]*model.Reservation, error) {

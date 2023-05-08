@@ -21,9 +21,16 @@ service accommodation_reserve_service{
     };
   }
 
-  rpc GetReservationsByUserID(GetReservationsByUserIDRequest) returns(GetReservationsByUserIDResponse) {
+  rpc GetReservationsByUserID(IdMessageRequest) returns(GetReservationsByUserIDResponse) {
     option (google.api.http) = {
       get: "/api/reservation/getReservationsByUserID/{id}"
+    };
+  }
+
+  rpc ChangeReservationStatus(ChangeReservationStatusRequest) returns(ChangeReservationStatusResponse) {
+    option (google.api.http) = {
+      post: "/api/reservation/changeStatus"
+      body: "reservationWithIdAndStatus"
     };
   }
 
@@ -36,7 +43,18 @@ service accommodation_reserve_service{
 
 }
 
-message GetReservationsByUserIDRequest {
+
+message ChangeReservationStatusRequest {
+  ReservationWithIdAndStatus reservationWithIdAndStatus = 1;
+
+}
+
+message ReservationWithIdAndStatus {
+  string id = 1;
+  string status = 2;
+}
+
+message IdMessageRequest {
   string id = 1;
 }
 
@@ -60,6 +78,10 @@ message CreateReservationResponse {
   Reservation reservation = 1;
 }
 
+message ChangeReservationStatusResponse {
+
+}
+
 message GetReservedAccommodationIdsRequest {
   SearchParams searchParams = 1;
 }
@@ -72,8 +94,6 @@ message SearchParams{
   string from = 1;
   string to = 2;
 }
-
-
 
 message NewReservation {
   string startDate = 1;
@@ -90,4 +110,5 @@ message Reservation {
   string accommodationID = 4;
   string guestNum = 5;
   string userID = 6;
+  string status = 7;
 }

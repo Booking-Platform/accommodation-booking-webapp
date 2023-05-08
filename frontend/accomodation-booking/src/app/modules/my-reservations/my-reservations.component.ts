@@ -15,13 +15,14 @@ export class MyReservationsComponent implements OnInit {
   ngOnInit(): void {
     this.userID = "6457aa1726a4e9026520c831"
     this.reservationService.getAllReservationsByUserID(this.userID).subscribe((res: any) => {
-      this.reservations = res.reservations;
-    
+      this.reservations = res;
     });
   }
 
   cancelReservation(reservation: any): void {
-
+    this.reservationService.changeReservationStatus(reservation.Id, "3").subscribe()
+    location.reload();
+   
   }
 
 }
