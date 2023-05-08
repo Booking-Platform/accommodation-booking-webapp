@@ -34,6 +34,13 @@ service accommodation_reserve_service{
     };
   }
 
+  rpc GetReservedAccommodationIds(GetReservedAccommodationIdsRequest) returns(GetReservedAccommodationIdsResponse){
+    option (google.api.http) = {
+      post: "/accommodations/search"
+      body: "searchParams"
+    };
+  }
+
 }
 
 
@@ -73,6 +80,19 @@ message CreateReservationResponse {
 
 message ChangeReservationStatusResponse {
 
+}
+
+message GetReservedAccommodationIdsRequest {
+  SearchParams searchParams = 1;
+}
+
+message GetReservedAccommodationIdsResponse{
+  repeated string id = 1;
+}
+
+message SearchParams{
+  string from = 1;
+  string to = 2;
 }
 
 message NewReservation {

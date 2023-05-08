@@ -4,6 +4,7 @@ import (
 	"accommodation_service/domain"
 	"accommodation_service/domain/model"
 	"context"
+	pb "github.com/Booking-Platform/accommodation-booking-webapp/common/proto/accommodation_service"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -96,6 +97,27 @@ func (store *AccommodationMongoDBStore) AddAppointment(accommodationID primitive
 		)
 	}
 	return nil
+}
+
+func (store *AccommodationMongoDBStore) GetAllAccommodationsByParams(searchParams *pb.SearchParams, accommodationIds []primitive.ObjectID) ([]*model.Accommodation, error) {
+	if searchParams.NumOfGuests < 0 {
+		return nil, status.Errorf(codes.InvalidArgument, "Number of guests must be greater than 0")
+	}
+
+	filter := bson.M{
+		"_id": bson.M{
+			"$nin": accommodationIds,
+		},
+		"address.city": searchParams.City,
+	}
+
+	if searchParams.NumOfGuests > 0 {
+		filter["max_guest_num"] = bson.M{
+			"$gte": searchParams.NumOfGuests,
+		}
+	}
+
+	return store.filter(filter)
 }
 
 func (store *AccommodationMongoDBStore) filter(filter interface{}) ([]*model.Accommodation, error) {

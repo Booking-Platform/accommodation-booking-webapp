@@ -68,6 +68,9 @@ func (server *Server) initCustomHandlers() {
 
 	reservationHandler := api.NewReservationHandler(accommodationReserveEndpoint, userInfoEndpoint, accommodationEndpoint)
 	reservationHandler.Init(server.mux)
+
+	accommodationHandler := api.NewAccommodationHandler(accommodationReserveEndpoint, accommodationEndpoint)
+	accommodationHandler.Init(server.mux)
 }
 
 func (server *Server) getHandlerCORSWrapped() http.Handler {

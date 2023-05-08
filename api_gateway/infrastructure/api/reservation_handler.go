@@ -33,11 +33,11 @@ func (handler *ReservationHandler) Init(mux *runtime.ServeMux) {
 	if err != nil {
 		panic(err)
 	}
+
 	err = mux.HandlePath("GET", "/reservation/getReservationsByUserID/{id}", handler.GetReservationsByUserID)
 	if err != nil {
 		panic(err)
 	}
-
 }
 
 func (handler *ReservationHandler) GetAllForConfirmation(w http.ResponseWriter, r *http.Request, pathParams map[string]string) {

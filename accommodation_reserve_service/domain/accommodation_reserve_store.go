@@ -10,4 +10,5 @@ type ReservationStore interface {
 	GetByStatus(status model.ReservationStatus) ([]*model.Reservation, error)
 	GetAllByUserID(id primitive.ObjectID) ([]*model.Reservation, error)
 	ChangeReservationStatus(id primitive.ObjectID, canceled model.ReservationStatus) error
+	GetReservedAccommodationsIds(from string, to string) ([]*primitive.ObjectID, error)
 }
