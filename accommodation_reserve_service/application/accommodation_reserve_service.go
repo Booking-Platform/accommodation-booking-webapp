@@ -33,6 +33,6 @@ func (service *AccommodationReserveService) GetAllByUserID(id primitive.ObjectID
 	return service.store.GetAllByUserID(id)
 }
 
-func (service *AccommodationReserveService) CancelReservation(reservationID primitive.ObjectID) error {
-	return service.store.ChangeReservationStatus(reservationID, model.CANCELED)
+func (service *AccommodationReserveService) ChangeReservationStatus(reservationID primitive.ObjectID, status model.ReservationStatus) error {
+	return service.store.ChangeReservationStatus(reservationID, status)
 }

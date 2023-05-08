@@ -6,26 +6,34 @@ import { ReservationService } from 'src/app/services/reservation/reservation.ser
 @Component({
   selector: 'app-reservation-confirmation',
   templateUrl: './reservation-confirmation.component.html',
-  styleUrls: ['./reservation-confirmation.component.css']
+  styleUrls: ['./reservation-confirmation.component.css'],
 })
 export class ReservationConfirmationComponent implements OnInit {
-
   public reservations: any[] = [];
-  
-  constructor(
-    private reservationService: ReservationService,
-  
-    ) {}
+
+  constructor(private reservationService: ReservationService) {}
 
   ngOnInit(): void {
-    this.reservationService.getReservationsForConfirmation().subscribe((res: any) => {
-      this.reservations = res;
-      console.log(this.reservations);
-    });
-   }
-
-   confirm(reservation: any) {
-    window.alert(reservation.Id)
+    this.reservationService
+      .getReservationsForConfirmation()
+      .subscribe((res: any) => {
+        this.reservations = res;
+        console.log(this.reservations);
+      });
   }
-    
+
+  confirm(reservation: any) {
+    this.reservationService
+      .changeReservationStatus(reservation.Id, '0')
+      .subscribe();
+    location.reload();
+  }
+
+  reject(reservation: any) {
+    window.alert(reservation.Id)
+    this.reservationService
+      .changeReservationStatus(reservation.Id, '2')
+      .subscribe();
+    location.reload();
+  }
 }

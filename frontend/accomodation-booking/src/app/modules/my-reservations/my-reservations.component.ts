@@ -20,8 +20,9 @@ export class MyReservationsComponent implements OnInit {
   }
 
   cancelReservation(reservation: any): void {
-    window.alert(reservation.Id)
-    this.reservationService.cancelReservation(reservation.Id).subscribe()
+    this.reservationService.changeReservationStatus(reservation.Id, "3").subscribe()
+    location.reload();
+   
   }
 
 }

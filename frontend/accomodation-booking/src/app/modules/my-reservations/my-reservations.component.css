@@ -1,13 +1,14 @@
 .reservation-list {
-  margin-left: 2%;
+  margin-left: 1%;
+  margin-right: 1%;
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between;
-  margin-top: 20px;
+  margin-top: 30px;
 }
 
 .reservation-card {
-  width: calc(33.33% - 10px);
+  margin-right: 3%;
+  width: calc(30.33% - 10px);
   margin-bottom: 20px;
   background-color: #fff;
   border: 1px solid #ccc;
@@ -54,6 +55,7 @@
   margin-top: 10px;
   text-align: right;
 }
+
 
 button {
   background-color: #f44336;

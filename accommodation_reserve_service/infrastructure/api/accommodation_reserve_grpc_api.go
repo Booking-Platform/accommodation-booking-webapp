@@ -2,7 +2,10 @@ package api
 
 import (
 	"context"
+	"fmt"
+	"github.com/Booking-Platform/accommodation-booking-webapp/accommodation_reserve_service/domain/model"
 	"go.mongodb.org/mongo-driver/bson/primitive"
+	"strconv"
 
 	"github.com/Booking-Platform/accommodation-booking-webapp/accommodation_reserve_service/application"
 
@@ -77,16 +80,22 @@ func (handler *AccommodationReserveHandler) GetReservationsByUserID(ctx context.
 	return response, nil
 }
 
-func (handler *AccommodationReserveHandler) CancelReservation(ctx context.Context, req *pb.CancelReservationRequest) (*pb.CancelReservationResponse, error) {
-	id := req.ReservationID.Id
+func (handler *AccommodationReserveHandler) ChangeReservationStatus(ctx context.Context, req *pb.ChangeReservationStatusRequest) (*pb.ChangeReservationStatusResponse, error) {
+	id := req.ReservationWithIdAndStatus.Id
 
 	objectId, err := primitive.ObjectIDFromHex(id)
-	err = handler.service.CancelReservation(objectId)
+	statusNum, err := strconv.Atoi(req.ReservationWithIdAndStatus.Status)
+
+	if err != nil {
+		fmt.Println("Error:", err)
+	}
+
+	err = handler.service.ChangeReservationStatus(objectId, model.ReservationStatus(statusNum))
 	if err != nil {
 		return nil, err
 	}
 
-	response := &pb.CancelReservationResponse{}
+	response := &pb.ChangeReservationStatusResponse{}
 
 	return response, nil
 }

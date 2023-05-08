@@ -32,11 +32,11 @@ export class ReservationService {
     return this.http.get<any[]>(url, { headers: this.headers });
   }
 
-  cancelReservation(reservationID: any) {
+  changeReservationStatus(reservationID: any, status: string) {
     const headers = new HttpHeaders().set('Content-Type', 'application/json');
-    const body = { id: reservationID };
+    const body = { id: reservationID, status: status };
 
-    return this.http.post(this.apiHost + "cancel", body, { headers: headers });
+    return this.http.post(this.apiHost + "changeStatus", body, { headers: headers });
   }
 
   getReservationsForConfirmation(): Observable<any[]> {

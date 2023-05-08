@@ -7,10 +7,10 @@ import (
 
 type Reservation struct {
 	Id                primitive.ObjectID `bson:"_id"`
-	AccommodationID   string             `bson:"accommodation_id"`
+	AccommodationID   primitive.ObjectID `bson:"accommodation_id"`
 	GuestNum          uint               `bson:"guest_num"`
 	Start             date.Date          `bson:"start"`
 	End               date.Date          `bson:"end"`
 	ReservationStatus ReservationStatus  `bson:"reservation_status"`
-	UserID            string             `bson:"user_id"`
+	UserID            primitive.ObjectID `bson:"user_id"`
 }
