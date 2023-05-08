@@ -4,8 +4,8 @@ import (
 	"accommodation_service/domain/model"
 	pb "github.com/Booking-Platform/accommodation-booking-webapp/common/proto/accommodation_service"
 	"go.mongodb.org/mongo-driver/bson/primitive"
-	"google.golang.org/protobuf/types/known/timestamppb"
 	"strconv"
+	"time"
 )
 
 func mapNewAccommodation(accommodationPb *pb.NewAccommodation) (*model.Accommodation, error) {
@@ -68,6 +68,11 @@ func mapAccommodationDTOPb(accommodation *model.Accommodation) *pb.Accommodation
 		pbBenefits = append(pbBenefits, mapBenefitPb(benefit))
 	}
 
+	var pbAppointments []*pb.Appointment
+	for _, appointment := range accommodation.Appointments {
+		pbAppointments = append(pbAppointments, mapAppointmentPb(appointment))
+	}
+
 	accommodationPb := &pb.AccommodationDTO{
 		Id:                    accommodation.ID.Hex(),
 		Name:                  accommodation.Name,
@@ -77,6 +82,7 @@ func mapAccommodationDTOPb(accommodation *model.Accommodation) *pb.Accommodation
 		AutomaticConfirmation: accommodation.AutomaticConfirmation,
 		Photos:                accommodation.Photos,
 		Benefits:              pbBenefits,
+		Appointments:          pbAppointments,
 	}
 	return accommodationPb
 }
@@ -91,25 +97,26 @@ func mapBenefitPb(benefit *model.Benefit) *pb.Benefit {
 func mapAppointmentPb(appointment *model.Appointment) *pb.Appointment {
 	return &pb.Appointment{
 		Id:       appointment.ID.Hex(),
-		From:     timestamppb.New(appointment.From),
-		To:       timestamppb.New(appointment.To),
+		From:     appointment.From.Format("2006-01-02"),
+		To:       appointment.To.Format("2006-01-02"),
 		Status:   pb.AppointmentStatus(appointment.Status),
 		Price:    appointment.Price,
-		PerGuest: appointment.PerGuest,
+		PerGuest: strconv.FormatBool(appointment.PerGuest),
 	}
 }
 
 func mapPbAppointment(appointmentPb *pb.Appointment) *model.Appointment {
-	from := appointmentPb.From.AsTime()
-	to := appointmentPb.To.AsTime()
+	from, _ := time.Parse("2006-01-02", appointmentPb.From)
+	to, _ := time.Parse("2006-01-02", appointmentPb.To)
 
+	perGuest, _ := strconv.ParseBool(appointmentPb.PerGuest)
 	return &model.Appointment{
 		ID:       primitive.NewObjectID(),
 		From:     from,
 		To:       to,
 		Status:   model.AppointmentStatus(appointmentPb.Status),
 		Price:    appointmentPb.Price,
-		PerGuest: appointmentPb.PerGuest,
+		PerGuest: perGuest,
 	}
 }
 

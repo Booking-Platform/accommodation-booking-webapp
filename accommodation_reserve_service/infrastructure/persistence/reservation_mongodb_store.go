@@ -7,6 +7,9 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
+	"google.golang.org/genproto/googleapis/type/date"
+	"time"
 )
 
 const (
@@ -60,49 +63,64 @@ func (store *ReservationMongoDBStore) GetByStatus(status model.ReservationStatus
 }
 
 func (store *ReservationMongoDBStore) GetReservedAccommodationsIds(from string, to string) ([]*primitive.ObjectID, error) {
-	//fromDate, err := time.Parse("2006-01-02", from)
-	//if err != nil {
-	//	return nil, err
-	//}
-	//toDate, err := time.Parse("2006-01-02", to)
-	//if err != nil {
-	//	return nil, err
-	//}
-	//filter := bson.M{
-	//	"$or": []bson.M{
-	//		bson.M{"start": bson.M{"$lt": toDate}, "end": bson.M{"$gt": fromDate}},
-	//		bson.M{"start": bson.M{"$gte": fromDate}, "end": bson.M{"$lte": toDate}},
-	//		bson.M{"start": bson.M{"$lte": fromDate}, "end": bson.M{"$gte": toDate}},
-	//	},
-	//}
-	//
-	//// definiramo projekciju koja će vratiti samo accommodation_id polje
-	//projection := bson.M{"accommodation_id": 1}
-	//
-	//// filtriramo rezervacije koristeći filter i projekciju
-	//cursor, err := store.reservations.Find(context.Background(), filter, options.Find().SetProjection(projection))
-	//if err != nil {
-	//	return nil, err
-	//}
-	//defer cursor.Close(context.Background())
-	//
-	//// iteriramo kroz sve pronađene dokumente i izvlačimo accommodation_id vrijednosti
-	//var accommodationIds []*primitive.ObjectID
-	//for cursor.Next(context.Background()) {
-	//	var reservation model.Reservation
-	//	if err := cursor.Decode(&reservation); err != nil {
-	//		return nil, err
-	//	}
-	//
-	//	objectId, err := primitive.ObjectIDFromHex(reservation.AccommodationID)
-	//	if err != nil {
-	//		return nil, err
-	//	}
-	//
-	//	accommodationIds = append(accommodationIds, &objectId)
-	//}
-	//return accommodationIds, nil
-	return nil, nil
+	fromDate, err := time.Parse("2006-01-02", from)
+	if err != nil {
+		return nil, err
+	}
+	toDate, err := time.Parse("2006-01-02", to)
+	if err != nil {
+		return nil, err
+	}
+
+	fromParsedDate := date.Date{Year: int32(fromDate.Year()), Month: int32(fromDate.Month()), Day: int32(fromDate.Day())}
+	toParsedDate := date.Date{Year: int32(toDate.Year()), Month: int32(toDate.Month()), Day: int32(toDate.Day())}
+
+	filter := bson.M{
+		"$or": []bson.M{
+			bson.M{
+				"$and": []bson.M{
+					bson.M{"start": bson.M{"$lte": fromParsedDate}},
+					bson.M{"end": bson.M{"$gte": fromParsedDate}},
+				},
+			},
+			bson.M{
+				"$and": []bson.M{
+					bson.M{"start": bson.M{"$lte": toParsedDate}},
+					bson.M{"end": bson.M{"$gte": toParsedDate}},
+				},
+			},
+			bson.M{
+				"$and": []bson.M{
+					bson.M{"start": bson.M{"$gte": fromParsedDate}},
+					bson.M{"end": bson.M{"$lte": toParsedDate}},
+				},
+			},
+		},
+		"reservation_status": bson.M{
+			"$eq": 0,
+		},
+	}
+	// definiramo projekciju koja će vratiti samo accommodation_id polje
+	projection := bson.M{"accommodation_id": 1}
+
+	// filtriramo rezervacije koristeći filter i projekciju
+	cursor, err := store.reservations.Find(context.Background(), filter, options.Find().SetProjection(projection))
+	if err != nil {
+		return nil, err
+	}
+	defer cursor.Close(context.Background())
+
+	// iteriramo kroz sve pronađene dokumente i izvlačimo accommodation_id vrijednosti
+	var accommodationIds []*primitive.ObjectID
+	for cursor.Next(context.Background()) {
+		var reservation model.Reservation
+		if err := cursor.Decode(&reservation); err != nil {
+			return nil, err
+		}
+
+		accommodationIds = append(accommodationIds, &reservation.AccommodationID)
+	}
+	return accommodationIds, nil
 }
 
 func (store *ReservationMongoDBStore) filter(filter interface{}) ([]*model.Reservation, error) {

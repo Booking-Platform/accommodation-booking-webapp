@@ -5,7 +5,6 @@ option go_package = "github.com/Booking-Platform/accommodation-booking-webapp/co
 package accommodation;
 
 import "google/api/annotations.proto";
-import "google/protobuf/timestamp.proto";
 
 service AccommodationService{
 
@@ -36,7 +35,7 @@ service AccommodationService{
 
   rpc CreateAppointment(CreateAppointmentRequest) returns(CreateAppointmentResponse) {
     option (google.api.http) = {
-      put: "/accommodation/appointment"
+      post: "/accommodation/appointment"
       body: "appointment"
     };
   }
@@ -86,9 +85,9 @@ message GetAccommodationsByParamsResponse {
 
 
 message SearchParams{
-    int64 num_of_guests = 3;
-    string city = 4;
     repeated string id = 1;
+    int64 num_of_guests = 2;
+    string city = 3;
 }
 
 
@@ -135,6 +134,7 @@ message AccommodationDTO {
   bool automatic_confirmation = 6;
   repeated string photos = 7;
   repeated Benefit benefits = 8;
+  repeated Appointment appointments = 9;
 }
 
 message Address {
@@ -147,11 +147,11 @@ message Address {
 
 message Appointment {
   string id = 1;
-  google.protobuf.Timestamp from = 2;
-  google.protobuf.Timestamp to = 3;
+  string from = 2;
+  string to = 3;
   AppointmentStatus status = 4;
   double price = 5;
-  bool per_guest = 6;
+  string per_guest = 6;
 }
 
 enum AppointmentStatus {

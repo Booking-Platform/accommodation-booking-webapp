@@ -3,7 +3,6 @@ package api
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"github.com/Booking-Platform/accommodation-booking-webapp/api_gateway/infrastructure/services"
 	reservation "github.com/Booking-Platform/accommodation-booking-webapp/common/proto/accommodation_reserve_service"
 	accommodation "github.com/Booking-Platform/accommodation-booking-webapp/common/proto/accommodation_service"
@@ -36,19 +35,13 @@ func (handler *AccommodationHandler) GetAllByParams(w http.ResponseWriter, r *ht
 	to := r.URL.Query().Get("to")
 	numOfGuests := r.URL.Query().Get("numOfGuests")
 	city := r.URL.Query().Get("city")
-	fmt.Println(numOfGuests)
-	fmt.Println(city)
 	accommodationIds, err := handler.getReservedAccommodationIds(from, to)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
-	fmt.Println(accommodationIds)
-	stringSlice := []string{"6457a727e794f9761fcb1645", "6457a9b1eb960318f9d133a4"}
-	//OVDE TREBA IZMENITI STRINGSLICE DA BUDE accommodationIds kad se popravi funkcija getReservedAccommodationIds
-	accommodations, err := handler.getAccommodations(numOfGuests, city, stringSlice)
+	accommodations, err := handler.getAccommodations(numOfGuests, city, accommodationIds.Id)
 
-	// Marshal the slice into JSON
 	response, err := json.Marshal(accommodations)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
