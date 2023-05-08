@@ -9,6 +9,7 @@ import (
 	cfg "github.com/Booking-Platform/accommodation-booking-webapp/api_gateway/startup/config"
 	accommodation_reserve_Gw "github.com/Booking-Platform/accommodation-booking-webapp/common/proto/accommodation_reserve_service"
 	accommodation_Gw "github.com/Booking-Platform/accommodation-booking-webapp/common/proto/accommodation_service"
+	auth_Gw "github.com/Booking-Platform/accommodation-booking-webapp/common/proto/auth_service"
 	user_info_Gw "github.com/Booking-Platform/accommodation-booking-webapp/common/proto/user_info_service"
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"github.com/rs/cors"
@@ -48,6 +49,12 @@ func (server *Server) initHandlers() {
 
 	userInfoEndpoint := fmt.Sprintf("%s:%s", server.config.UserInfoHost, server.config.UserInfoPort)
 	err = user_info_Gw.RegisterUserInfoServiceHandlerFromEndpoint(context.TODO(), server.mux, userInfoEndpoint, opts)
+	if err != nil {
+		panic(err)
+	}
+
+	authEndpoint := fmt.Sprintf("%s:%s", server.config.AuthHost, server.config.AuthPort)
+	err = auth_Gw.RegisterAuthServiceHandlerFromEndpoint(context.TODO(), server.mux, authEndpoint, opts)
 	if err != nil {
 		panic(err)
 	}

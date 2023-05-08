@@ -19,7 +19,3 @@ func NewUserService(store domain.UserStore) *UserService {
 func (service *UserService) GetByID(id primitive.ObjectID) (*model.User, error) {
 	return service.store.GetUserByID(id)
 }
-
-func (service *UserService) Create(user *model.User) error {
-	return service.store.CreateUser(user)
-}
