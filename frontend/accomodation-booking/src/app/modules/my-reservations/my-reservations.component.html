@@ -21,7 +21,7 @@
 
       </div>
       <div class="button-container">
-        <button *ngIf="reservation.Status !== 'CANCELED'" (click)="cancelReservation(reservation)">Cancel Reservation</button>
+        <button *ngIf="reservation.Status !== 'CANCELED' && reservation.Status !== 'UNCONFIRMED' " (click)="cancelReservation(reservation)">Cancel Reservation</button>
       </div>
     </div>
   </div>

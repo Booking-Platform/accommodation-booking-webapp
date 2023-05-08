@@ -77,8 +77,9 @@ func (handler *AccommodationReserveHandler) GetReservationsByUserID(ctx context.
 	return response, nil
 }
 
-func (handler *AccommodationReserveHandler) CancelReservation(ctx context.Context, request *pb.IdMessageRequest) (*pb.CancelReservationResponse, error) {
-	id := request.Id
+func (handler *AccommodationReserveHandler) CancelReservation(ctx context.Context, req *pb.CancelReservationRequest) (*pb.CancelReservationResponse, error) {
+	id := req.ReservationID.Id
+
 	objectId, err := primitive.ObjectIDFromHex(id)
 	err = handler.service.CancelReservation(objectId)
 	if err != nil {

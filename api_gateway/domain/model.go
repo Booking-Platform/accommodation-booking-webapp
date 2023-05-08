@@ -1,6 +1,7 @@
 package domain
 
 type Reservation struct {
+	Id            string
 	Start         string
 	End           string
 	Status        string

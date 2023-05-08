@@ -43,7 +43,7 @@ func mapReservationPb(reservation *model.Reservation) *pb.Reservation {
 		GuestNum:        strconv.FormatUint(uint64(reservation.GuestNum), 10),
 		AccommodationID: reservation.AccommodationID,
 		Status:          mapStatus(reservation.ReservationStatus),
-		Id:              reservation.Id.String(),
+		Id:              reservation.Id.Hex(),
 	}
 	return reservationPb
 }

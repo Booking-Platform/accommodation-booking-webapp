@@ -11,7 +11,7 @@ import { LoginComponent } from './modules/login/login.component';
 const routes: Routes = [
   { path: 'view', component: ViewComponent },
   { path: 'accommodation-details', component: ReservationDetailsComponent },
-  { path: 'reservations', component: ReservationConfirmationComponent },
+  { path: 'confirmReservations', component: ReservationConfirmationComponent },
   { path: 'myReservations', component: MyReservationsComponent },
   { path: 'createAccommodation', component: CreateAccommodationComponent },
   { path: 'register', component: RegisterComponent },

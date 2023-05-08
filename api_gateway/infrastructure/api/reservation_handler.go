@@ -63,6 +63,7 @@ func (handler *ReservationHandler) GetAllForConfirmation(w http.ResponseWriter, 
 		}
 
 		response[i] = &domain.Reservation{
+			Id:       res.Id,
 			Status:   res.Status,
 			Start:    res.StartDate,
 			End:      res.EndDate,
@@ -111,6 +112,7 @@ func (handler *ReservationHandler) GetReservationsByUserID(w http.ResponseWriter
 		}
 
 		response[i] = &domain.Reservation{
+			Id:       res.Id,
 			Status:   res.Status,
 			Start:    res.StartDate,
 			End:      res.EndDate,

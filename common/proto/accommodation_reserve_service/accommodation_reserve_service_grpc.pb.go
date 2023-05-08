@@ -32,7 +32,7 @@ type AccommodationReserveServiceClient interface {
 	CreateReservation(ctx context.Context, in *CreateReservationRequest, opts ...grpc.CallOption) (*CreateReservationResponse, error)
 	GetAllForConfirmation(ctx context.Context, in *GetAllForConfirmationRequest, opts ...grpc.CallOption) (*GetAllForConfirmationResponse, error)
 	GetReservationsByUserID(ctx context.Context, in *IdMessageRequest, opts ...grpc.CallOption) (*GetReservationsByUserIDResponse, error)
-	CancelReservation(ctx context.Context, in *IdMessageRequest, opts ...grpc.CallOption) (*CancelReservationResponse, error)
+	CancelReservation(ctx context.Context, in *CancelReservationRequest, opts ...grpc.CallOption) (*CancelReservationResponse, error)
 }
 
 type accommodationReserveServiceClient struct {
@@ -70,7 +70,7 @@ func (c *accommodationReserveServiceClient) GetReservationsByUserID(ctx context.
 	return out, nil
 }
 
-func (c *accommodationReserveServiceClient) CancelReservation(ctx context.Context, in *IdMessageRequest, opts ...grpc.CallOption) (*CancelReservationResponse, error) {
+func (c *accommodationReserveServiceClient) CancelReservation(ctx context.Context, in *CancelReservationRequest, opts ...grpc.CallOption) (*CancelReservationResponse, error) {
 	out := new(CancelReservationResponse)
 	err := c.cc.Invoke(ctx, AccommodationReserveService_CancelReservation_FullMethodName, in, out, opts...)
 	if err != nil {
@@ -86,7 +86,7 @@ type AccommodationReserveServiceServer interface {
 	CreateReservation(context.Context, *CreateReservationRequest) (*CreateReservationResponse, error)
 	GetAllForConfirmation(context.Context, *GetAllForConfirmationRequest) (*GetAllForConfirmationResponse, error)
 	GetReservationsByUserID(context.Context, *IdMessageRequest) (*GetReservationsByUserIDResponse, error)
-	CancelReservation(context.Context, *IdMessageRequest) (*CancelReservationResponse, error)
+	CancelReservation(context.Context, *CancelReservationRequest) (*CancelReservationResponse, error)
 	mustEmbedUnimplementedAccommodationReserveServiceServer()
 }
 
@@ -103,7 +103,7 @@ func (UnimplementedAccommodationReserveServiceServer) GetAllForConfirmation(cont
 func (UnimplementedAccommodationReserveServiceServer) GetReservationsByUserID(context.Context, *IdMessageRequest) (*GetReservationsByUserIDResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetReservationsByUserID not implemented")
 }
-func (UnimplementedAccommodationReserveServiceServer) CancelReservation(context.Context, *IdMessageRequest) (*CancelReservationResponse, error) {
+func (UnimplementedAccommodationReserveServiceServer) CancelReservation(context.Context, *CancelReservationRequest) (*CancelReservationResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CancelReservation not implemented")
 }
 func (UnimplementedAccommodationReserveServiceServer) mustEmbedUnimplementedAccommodationReserveServiceServer() {
@@ -175,7 +175,7 @@ func _AccommodationReserveService_GetReservationsByUserID_Handler(srv interface{
 }
 
 func _AccommodationReserveService_CancelReservation_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(IdMessageRequest)
+	in := new(CancelReservationRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -187,7 +187,7 @@ func _AccommodationReserveService_CancelReservation_Handler(srv interface{}, ctx
 		FullMethod: AccommodationReserveService_CancelReservation_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AccommodationReserveServiceServer).CancelReservation(ctx, req.(*IdMessageRequest))
+		return srv.(AccommodationReserveServiceServer).CancelReservation(ctx, req.(*CancelReservationRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }

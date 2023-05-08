@@ -27,14 +27,23 @@ service accommodation_reserve_service{
     };
   }
 
-  rpc CancelReservation(IdMessageRequest) returns(CancelReservationResponse) {
+  rpc CancelReservation(CancelReservationRequest) returns(CancelReservationResponse) {
     option (google.api.http) = {
-      get: "/api/reservation/cancel/{id}"
+      post: "/api/reservation/cancel"
+      body: "reservationID"
     };
   }
 
 }
 
+
+message CancelReservationRequest {
+  reservationID reservationID = 1;
+}
+
+message reservationID {
+  string id = 1;
+}
 message IdMessageRequest {
   string id = 1;
 }
