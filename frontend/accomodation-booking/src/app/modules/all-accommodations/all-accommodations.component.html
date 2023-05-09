@@ -11,6 +11,16 @@
         Num of guests: {{ acc.minGuestNum }} - {{ acc.maxGuestNum }}
       </p>
 
+      <p class="card-text">Benefits:</p>
+      <p class="card-text" *ngFor="let benefit of acc.benefits">
+        -{{ benefit.name }}
+      </p>
+
+      <p class="card-text">Appointments:</p>
+      <p class="card-text" *ngFor="let appointment of acc.appointments">
+        {{ appointment.from }} - {{appointment.to}}
+      </p>
+
     </div>
     <div class="card-footer">
       <mat-slide-toggle name="automaticConfirmation" (change)="changedAutomaticConfirmation(acc.id)"

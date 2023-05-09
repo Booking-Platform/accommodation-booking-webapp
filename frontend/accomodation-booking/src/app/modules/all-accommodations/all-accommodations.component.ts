@@ -9,6 +9,7 @@ import { AccommodationService } from 'src/app/services/accommodation/accommodati
 })
 export class AllAccommodationsComponent implements OnInit {
   public accommodations: any[] = [];
+  public benefits: string[] = [];
 
   constructor(
     private accommodationService: AccommodationService,
