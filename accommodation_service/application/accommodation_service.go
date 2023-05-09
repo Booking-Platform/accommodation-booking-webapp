@@ -64,3 +64,7 @@ func (service *AccommodationService) GetAllAccommodationsByParams(searchParams *
 	}
 	return accommodations, nil
 }
+
+func (service *AccommodationService) ChangeAutomaticConfirmationStatus(id primitive.ObjectID) error {
+	return service.store.ChangeAutomaticConfirmationStatusByAccommodationID(id)
+}

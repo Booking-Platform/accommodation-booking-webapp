@@ -10,6 +10,7 @@ import { ReservationService } from 'src/app/services/reservation/reservation.ser
 })
 export class ReservationConfirmationComponent implements OnInit {
   public reservations: any[] = [];
+  public isSwitchOn = true;
 
   constructor(private reservationService: ReservationService) {}
 
@@ -30,7 +31,6 @@ export class ReservationConfirmationComponent implements OnInit {
   }
 
   reject(reservation: any) {
-    window.alert(reservation.Id)
     this.reservationService
       .changeReservationStatus(reservation.Id, '2')
       .subscribe();

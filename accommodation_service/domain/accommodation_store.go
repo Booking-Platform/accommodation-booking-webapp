@@ -12,4 +12,5 @@ type AccommodationStore interface {
 	Insert(accommodation *model.Accommodation) error
 	AddAppointment(accommodationID primitive.ObjectID, appointment *model.Appointment) error
 	GetAllAccommodationsByParams(searchParams *pb.SearchParams, accommodationIds []primitive.ObjectID) ([]*model.Accommodation, error)
+	ChangeAutomaticConfirmationStatusByAccommodationID(id primitive.ObjectID) error
 }

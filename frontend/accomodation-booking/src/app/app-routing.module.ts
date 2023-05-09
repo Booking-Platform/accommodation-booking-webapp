@@ -8,6 +8,7 @@ import { CreateAccommodationComponent } from './modules/create-accommodation/cre
 import { RegisterComponent } from './modules/register/register.component';
 import { LoginComponent } from './modules/login/login.component';
 import { AddAppointmentComponent } from './modules/add-appointment/add-appointment.component';
+import { AllAccommodationsComponent } from './modules/all-accommodations/all-accommodations.component';
 
 const routes: Routes = [
   { path: 'view', component: ViewComponent },
@@ -18,6 +19,8 @@ const routes: Routes = [
   { path: 'register', component: RegisterComponent },
   { path: 'login', component: LoginComponent },
   { path: 'addAppointment', component: AddAppointmentComponent },
+  { path: 'allAccommodations', component: AllAccommodationsComponent },
+  
 ];
 
 @NgModule({

@@ -19,6 +19,8 @@ import { CreateAccommodationComponent } from './modules/create-accommodation/cre
 import { RegisterComponent } from './modules/register/register.component';
 import { LoginComponent } from './modules/login/login.component';
 import { AddAppointmentComponent } from './modules/add-appointment/add-appointment.component';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { AllAccommodationsComponent } from './modules/all-accommodations/all-accommodations.component';
 
 @NgModule({
   declarations: [
@@ -32,8 +34,10 @@ import { AddAppointmentComponent } from './modules/add-appointment/add-appointme
     RegisterComponent,
     LoginComponent,
     AddAppointmentComponent,
+    AllAccommodationsComponent,
   ],
   imports: [
+    MatSlideToggleModule,
     BrowserAnimationsModule,
     ToastrModule.forRoot({
       positionClass: 'toast-top-right',

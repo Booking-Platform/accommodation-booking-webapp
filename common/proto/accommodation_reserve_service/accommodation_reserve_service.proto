@@ -101,6 +101,7 @@ message NewReservation {
   string accommodationID = 3;
   string guestNum = 4;
   string userID = 5;
+  string automaticConfirmation = 6;
 }
 
 message Reservation {
