@@ -23,14 +23,6 @@ export class ReservationConfirmationComponent implements OnInit {
       });
   }
 
-  onSwitchChange() {
-    if (this.isSwitchOn) {
-      // Do something when the switch is turned on
-    } else {
-      // Do something when the switch is turned off
-    }
-  }
-
   confirm(reservation: any) {
     this.reservationService
       .changeReservationStatus(reservation.Id, '0')
@@ -39,7 +31,6 @@ export class ReservationConfirmationComponent implements OnInit {
   }
 
   reject(reservation: any) {
-    window.alert(reservation.Id)
     this.reservationService
       .changeReservationStatus(reservation.Id, '2')
       .subscribe();

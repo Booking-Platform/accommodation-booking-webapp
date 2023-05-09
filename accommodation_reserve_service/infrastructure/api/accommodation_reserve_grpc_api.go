@@ -30,7 +30,12 @@ func (handler *AccommodationReserveHandler) CreateReservation(ctx context.Contex
 		return nil, err
 	}
 
-	err = handler.service.Create(reservation)
+	automaticConfirmation, parsingErr := strconv.ParseBool(request.NewReservation.AutomaticConfirmation)
+	if parsingErr != nil {
+		return nil, err
+	}
+
+	err = handler.service.Create(reservation, automaticConfirmation)
 
 	if err != nil {
 		return nil, err

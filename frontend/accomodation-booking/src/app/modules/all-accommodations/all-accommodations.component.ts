@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { Accommodation } from 'src/app/model/accommodation';
 import { AccommodationService } from 'src/app/services/accommodation/accommodation.service';
 
 @Component({
@@ -16,8 +15,11 @@ export class AllAccommodationsComponent implements OnInit {
   ngOnInit(): void {
     this.accommodationService.getAccommodations().subscribe((res: any) => {
       this.accommodations = res.accommodations;
-      window.alert(JSON.stringify(this.accommodations))
   
     });
+  }
+
+  changedAutomaticConfirmation(accommodationID: any) {
+    this.accommodationService.changeAutomaticConfirmation(accommodationID).subscribe()
   }
 }

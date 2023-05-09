@@ -7,6 +7,7 @@ import { Accommodation } from 'src/app/model/accommodation';
   providedIn: 'root',
 })
 export class AccommodationService {
+
   apiHost: string = 'http://localhost:8000/';
   headers: HttpHeaders = new HttpHeaders({
     'Content-Type': 'application/json',
@@ -52,6 +53,16 @@ export class AccommodationService {
     return this.http.post<any>(
       this.apiHost + 'accommodation/appointment',
       JSON.stringify(appointment),
+      {
+        headers: this.headers,
+      }
+    );
+  }
+
+  changeAutomaticConfirmation(accommodationID: any) {
+    return this.http.post<any>(
+      this.apiHost + 'accommodation/confirmationStatus',
+      JSON.stringify(accommodationID),
       {
         headers: this.headers,
       }

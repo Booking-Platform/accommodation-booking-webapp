@@ -20,14 +20,9 @@ func (service *AccommodationReserveService) Get() error {
 	panic("implement me")
 }
 
-func (service *AccommodationReserveService) Create(reservation *model.Reservation) error {
-	confirmationFlag, err := service.store.GetConfirmationFlag()
+func (service *AccommodationReserveService) Create(reservation *model.Reservation, automaticConfirmation bool) error {
 
-	if err != nil {
-		return err
-	}
-
-	if confirmationFlag == true {
+	if automaticConfirmation == true {
 		reservation.ReservationStatus = model.CONFIRMED
 	} else {
 		reservation.ReservationStatus = model.WAITING

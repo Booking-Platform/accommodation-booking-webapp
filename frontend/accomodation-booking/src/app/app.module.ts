@@ -20,6 +20,7 @@ import { RegisterComponent } from './modules/register/register.component';
 import { LoginComponent } from './modules/login/login.component';
 import { AddAppointmentComponent } from './modules/add-appointment/add-appointment.component';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { AllAccommodationsComponent } from './modules/all-accommodations/all-accommodations.component';
 
 @NgModule({
   declarations: [
@@ -33,6 +34,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
     RegisterComponent,
     LoginComponent,
     AddAppointmentComponent,
+    AllAccommodationsComponent,
   ],
   imports: [
     MatSlideToggleModule,

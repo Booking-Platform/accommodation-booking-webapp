@@ -9,9 +9,9 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
-
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
+	"log"
 	"time"
 )
 
@@ -152,4 +152,31 @@ func decode(cursor *mongo.Cursor) (products []*model.Accommodation, err error) {
 	}
 	err = cursor.Err()
 	return
+}
+
+func (store *AccommodationMongoDBStore) ChangeAutomaticConfirmationStatusByAccommodationID(id primitive.ObjectID) error {
+	filter := bson.M{"_id": id}
+	var accommodation model.Accommodation
+	err := store.accommodations.FindOne(context.Background(), filter).Decode(&accommodation)
+	if err != nil {
+		if err == mongo.ErrNoDocuments {
+			return status.Errorf(codes.NotFound, fmt.Sprintf("accommodation with id %s not found", id.Hex()))
+		}
+		log.Printf("Error finding accommodation: %v", err)
+		return err
+	}
+
+	accommodation.AutomaticConfirmation = !accommodation.AutomaticConfirmation
+
+	result, err := store.accommodations.ReplaceOne(context.TODO(), filter, accommodation)
+	if err != nil {
+		log.Printf("Error updating accommodation: %v", err)
+		return err
+	}
+
+	if result.ModifiedCount == 0 {
+		return status.Errorf(codes.NotFound, fmt.Sprintf("accommodation with id %s not found", id.Hex()))
+	}
+
+	return nil
 }

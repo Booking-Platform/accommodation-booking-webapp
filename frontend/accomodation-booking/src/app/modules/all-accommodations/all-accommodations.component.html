@@ -14,9 +14,9 @@
   
       </div>
       <div class="card-footer">
-        <!-- <button class="btn btn-primary" (click)="reserveAccommodation(acc)">
-          Reserve
-        </button> -->
+        <mat-slide-toggle name="automaticConfirmation" (change)="changedAutomaticConfirmation(acc.id)" [(ngModel)]="acc.automaticConfirmation">
+            Automatic reservation
+          </mat-slide-toggle>
       </div>
     </div>
   </div>

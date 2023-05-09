@@ -13,35 +13,19 @@ import (
 )
 
 const (
-	DATABASE     = "reservation"
-	COLLECTION   = "reservation"
-	CONFORMATION = "confirmation"
+	DATABASE   = "reservation"
+	COLLECTION = "reservation"
 )
 
 type ReservationMongoDBStore struct {
-	reservations     *mongo.Collection
-	confirmationFlag *mongo.Collection
+	reservations *mongo.Collection
 }
 
 func NewReservationMongoDBStore(client *mongo.Client) domain.ReservationStore {
 	reservations := client.Database(DATABASE).Collection(COLLECTION)
-	confirmation := client.Database(DATABASE).Collection(CONFORMATION)
 	return &ReservationMongoDBStore{
-		reservations:     reservations,
-		confirmationFlag: confirmation,
+		reservations: reservations,
 	}
-}
-
-func (store *ReservationMongoDBStore) GetConfirmationFlag() (bool, error) {
-	var confirmation model.Confirmation
-	err := store.confirmationFlag.FindOne(context.Background(), bson.M{}).Decode(&confirmation)
-	if err != nil {
-		if err == mongo.ErrNoDocuments {
-			return false, nil
-		}
-		return false, err
-	}
-	return confirmation.AutomaticConfirmation, nil
 }
 
 func (store *ReservationMongoDBStore) ChangeReservationStatus(id primitive.ObjectID, status model.ReservationStatus) error {
