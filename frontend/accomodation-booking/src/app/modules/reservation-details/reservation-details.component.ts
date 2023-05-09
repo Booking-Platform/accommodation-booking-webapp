@@ -40,24 +40,17 @@ export class ReservationDetailsComponent implements OnInit {
   }
 
   createReservation(): void {
-    window.alert(JSON.stringify(this.accommodation))
-    window.alert(this.accommodation.automaticConfirmation.toString())
+    window.alert(JSON.stringify(this.accommodation));
+    window.alert(this.accommodation.automaticConfirmation.toString());
     var newReservation = {
       startDate: this.startDate,
       endDate: this.endDate,
       accommodationID: this.accommodationID,
       userID: this.userID,
-      automaticConfirmation: this.accommodation.automaticConfirmation.toString()
+      automaticConfirmation:
+        this.accommodation.automaticConfirmation.toString(),
     };
     this.reservationService.createReservation(newReservation).subscribe();
     this.router.navigate(['/myReservations']);
-  }
-
-  addAppointment(): void {
-    this.router.navigate(['/addAppointment'], {
-      queryParams: {
-        accommodationID: this.accommodationID,
-      },
-    });
   }
 }
