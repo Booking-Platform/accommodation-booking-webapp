@@ -1,5 +1,11 @@
 <div class="container">
+  <br>
+  <div class="switch-container">
+    <mat-slide-toggle [(ngModel)]="isSwitchOn" (change)="onSwitchChange()" class="my-slide-toggle">
+     <b> Automatic confirmation </b>
+    </mat-slide-toggle>
   </div>
+  
   <div class="reservation-list">
     <div *ngFor="let reservation of reservations" class="reservation-card">
       <div class="card-header">

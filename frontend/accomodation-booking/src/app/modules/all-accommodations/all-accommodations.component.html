@@ -1,0 +1,22 @@
+
+<div class="card-deck">
+    <div class="card" *ngFor="let acc of accommodations">
+      <img class="card-img-top" src="{{ acc.photos[0] }}" alt="{{ acc.name }} image" />
+      <div class="card-body">
+        <h5 class="card-title">{{ acc.name }}</h5>
+        <p class="card-text">
+          {{ acc.address.street }} {{ acc.address.number }},
+          {{ acc.address.city }}, {{ acc.address.country }}
+        </p>
+        <p class="card-text">
+          Num of guests: {{ acc.minGuestNum }} - {{ acc.maxGuestNum }}
+        </p>
+  
+      </div>
+      <div class="card-footer">
+        <!-- <button class="btn btn-primary" (click)="reserveAccommodation(acc)">
+          Reserve
+        </button> -->
+      </div>
+    </div>
+  </div>

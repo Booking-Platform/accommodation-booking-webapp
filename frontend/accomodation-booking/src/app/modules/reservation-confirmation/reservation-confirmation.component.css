@@ -70,3 +70,32 @@
     background-color: #2ecc71;
   }
   
+
+  .switch-container {
+    display: flex;
+    align-items: left;
+    justify-content: left;
+  }
+  
+  .mat-slide-toggle {
+    background-color: #757575;
+  }
+  
+  .mat-slide-toggle-thumb {
+    background-color: #fff;
+  }
+  
+  .mat-slide-toggle-bar {
+    background-color: #757575;
+  }
+  
+  .my-slide-toggle .mat-slide-toggle-bar {
+    height: 20px; /* set the height of the bar */
+    width: 40px; /* set the width of the bar */
+  }
+  
+  .my-slide-toggle .mat-slide-toggle-thumb {
+    height: 28px; /* set the height of the thumb */
+    width: 28px; /* set the width of the thumb */
+  }
+  

@@ -21,7 +21,18 @@ func (service *AccommodationReserveService) Get() error {
 }
 
 func (service *AccommodationReserveService) Create(reservation *model.Reservation) error {
-	reservation.ReservationStatus = model.ReservationStatus(1)
+	confirmationFlag, err := service.store.GetConfirmationFlag()
+
+	if err != nil {
+		return err
+	}
+
+	if confirmationFlag == true {
+		reservation.ReservationStatus = model.CONFIRMED
+	} else {
+		reservation.ReservationStatus = model.WAITING
+	}
+
 	return service.store.Insert(reservation)
 }
 

@@ -40,6 +40,13 @@ service AccommodationService{
     };
   }
 
+  rpc ChangeAutomaticConfirmation(ChangeAutomaticConfirmationRequest) returns (ChangeAutomaticConfirmationResponse) {
+    option (google.api.http) = {
+      post: "/accommodation/confirmationStatus"
+      body: "accommodationID"
+    };
+  }
+
 }
 
 message GetAllAccommodationsRequest {
@@ -162,4 +169,12 @@ enum AppointmentStatus {
 message Benefit {
   string id = 1;
   string name = 2;
+}
+
+message ChangeAutomaticConfirmationRequest {
+  string accommodationID = 1;
+}
+
+message ChangeAutomaticConfirmationResponse {
+  Accommodation accommodation = 1;
 }

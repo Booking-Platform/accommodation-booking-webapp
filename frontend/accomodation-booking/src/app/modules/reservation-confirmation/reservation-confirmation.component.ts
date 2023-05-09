@@ -10,6 +10,7 @@ import { ReservationService } from 'src/app/services/reservation/reservation.ser
 })
 export class ReservationConfirmationComponent implements OnInit {
   public reservations: any[] = [];
+  public isSwitchOn = true;
 
   constructor(private reservationService: ReservationService) {}
 
@@ -20,6 +21,14 @@ export class ReservationConfirmationComponent implements OnInit {
         this.reservations = res;
         console.log(this.reservations);
       });
+  }
+
+  onSwitchChange() {
+    if (this.isSwitchOn) {
+      // Do something when the switch is turned on
+    } else {
+      // Do something when the switch is turned off
+    }
   }
 
   confirm(reservation: any) {
