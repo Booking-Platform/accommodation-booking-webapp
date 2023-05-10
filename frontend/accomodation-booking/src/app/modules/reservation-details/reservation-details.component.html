@@ -11,12 +11,23 @@
         {{ accommodation?.address?.city }}, {{ accommodation?.address?.country }}
       </p>
       <p class="card-text">
-        <small class="text-muted">Num of guests: {{ accommodation?.minGuestNum }} -
+        <small class="text-muted">Capacity: {{ accommodation?.minGuestNum }} -
           {{ accommodation?.maxGuestNum }}</small>
+      </p>
+      <p class="card-text">
+        <small class="text-muted">Number of guests: {{ numOfGuests}}</small>
       </p>
       <br />
       <p class="card-text">from: {{ startDate }} | to: {{ endDate }}</p>
+      <br>
+      <br>
+    
+      <p class="card-text">per guest: {{perGuest}}</p>
+      <p class="card-text">price per night: {{pricePerNight}}</p>
+      <p class="card-text">total price: {{totalPrice}} $</p>
+   
     </div>
+
   </div>
 
   <div class="row mt-3">

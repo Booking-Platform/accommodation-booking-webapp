@@ -30,6 +30,7 @@ export class ViewComponent implements OnInit {
         accommodationID: acc.id,
         startDate: this.from,
         endDate: this.to,
+        numOfGuests: this.numOfGuests
       },
     });
   }
