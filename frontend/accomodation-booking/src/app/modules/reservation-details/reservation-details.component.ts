@@ -36,12 +36,12 @@ export class ReservationDetailsComponent implements OnInit {
         .subscribe((res: any) => {
           this.accommodation = res.accommodation;
         });
+
     });
+
   }
 
   createReservation(): void {
-    window.alert(JSON.stringify(this.accommodation))
-    window.alert(this.accommodation.automaticConfirmation.toString())
     var newReservation = {
       startDate: this.startDate,
       endDate: this.endDate,

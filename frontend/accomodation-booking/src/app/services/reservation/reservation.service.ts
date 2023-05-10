@@ -18,7 +18,6 @@ export class ReservationService {
   constructor(private http: HttpClient) {}
 
   createReservation(newReservation: any) {
-    window.alert(    JSON.stringify(newReservation))
       return this.http.post<any>(
       this.apiHost + 'create',
       JSON.stringify(newReservation),
