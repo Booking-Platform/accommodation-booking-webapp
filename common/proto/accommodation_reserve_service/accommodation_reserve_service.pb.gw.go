@@ -217,7 +217,7 @@ func RegisterAccommodationReserveServiceHandlerServer(ctx context.Context, mux *
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/accommodation_reserve.AccommodationReserveService/CreateReservation", runtime.WithHTTPPathPattern("/api/reservation/create"))
+		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/accommodation_reserve.AccommodationReserveService/CreateReservation", runtime.WithHTTPPathPattern("/api/reservation"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -381,7 +381,7 @@ func RegisterAccommodationReserveServiceHandlerClient(ctx context.Context, mux *
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/accommodation_reserve.AccommodationReserveService/CreateReservation", runtime.WithHTTPPathPattern("/api/reservation/create"))
+		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/accommodation_reserve.AccommodationReserveService/CreateReservation", runtime.WithHTTPPathPattern("/api/reservation"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -489,7 +489,7 @@ func RegisterAccommodationReserveServiceHandlerClient(ctx context.Context, mux *
 }
 
 var (
-	pattern_AccommodationReserveService_CreateReservation_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"api", "reservation", "create"}, ""))
+	pattern_AccommodationReserveService_CreateReservation_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"api", "reservation"}, ""))
 
 	pattern_AccommodationReserveService_GetAllForConfirmation_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"api", "reservation", "getAllForConfirmation"}, ""))
 

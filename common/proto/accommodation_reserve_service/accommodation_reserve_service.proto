@@ -10,7 +10,7 @@ service accommodation_reserve_service{
 
   rpc CreateReservation(CreateReservationRequest) returns(CreateReservationResponse) {
     option (google.api.http) = {
-      post: "/api/reservation/create"
+      post: "/api/reservation"
       body: "newReservation"
     };
   }
