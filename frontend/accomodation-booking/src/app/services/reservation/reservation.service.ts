@@ -19,7 +19,6 @@ export class ReservationService {
 
   createReservation(newReservation: any) {
       return this.http.post<any>(
-      this.apiHost + 'create',
       JSON.stringify(newReservation),
       {
         headers: this.headers,
