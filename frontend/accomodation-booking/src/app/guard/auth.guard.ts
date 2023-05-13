@@ -23,7 +23,9 @@ export class AuthGuard implements CanActivate {
     | Promise<boolean | UrlTree>
     | boolean
     | UrlTree {
-    if (this.authService.isLoggedIn()) {
+    const userRole = this.authService.getUserRole();
+    const requiredRole = route.data['requiredRole'] as string;
+    if (this.authService.isLoggedIn() && requiredRole === userRole) {
       return true;
     }
     this.router.navigate(['/login']);

@@ -78,7 +78,6 @@ services:
       GATEWAY_PORT: ${GATEWAY_PORT}
       ACCOMMODATION_RESERVE_SERVICE_HOST: ${ACCOMMODATION_RESERVE_SERVICE_HOST}
       ACCOMMODATION_RESERVE_SERVICE_PORT: ${ACCOMMODATION_RESERVE_SERVICE_PORT}
-
     networks:
       - network
 
@@ -144,10 +143,10 @@ services:
       ports:
         - 8081:8081
       environment:
-        - ME_CONFIG_MONGODB_SERVER=accommodation_reserve_db
+        - ME_CONFIG_MONGODB_SERVER= accommodation_reserve_db
         - ME_CONFIG_MONGODB_SERVER= accommodation_db
-        - ME_CONFIG_MONGODB_SERVER=user_info_db
-        - ME_CONFIG_MONGODB_SERVER=auth_db
+        - ME_CONFIG_MONGODB_SERVER= user_info_db
+        - ME_CONFIG_MONGODB_SERVER= auth_db
 
 volumes:
   accommodation_reserve_db-data:
