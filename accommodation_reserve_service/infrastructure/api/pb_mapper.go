@@ -35,10 +35,17 @@ func mapReservation(reservationPb *pb.NewReservation) (*model.Reservation, error
 		return nil, err
 	}
 
+	guestNum, err := strconv.ParseUint(reservationPb.GuestNum, 10, 64)
+	if err != nil {
+		fmt.Println("Error:", err)
+		return nil, err
+	}
+
 	reservation := &model.Reservation{
 		AccommodationID: accommodationID,
 		Start:           startDate,
 		End:             endDate,
+		GuestNum:        uint(guestNum),
 		UserID:          reservationID,
 	}
 
