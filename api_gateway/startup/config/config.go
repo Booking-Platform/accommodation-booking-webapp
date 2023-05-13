@@ -16,14 +16,14 @@ type Config struct {
 func NewConfig() *Config {
 	return &Config{
 		Port:                     "8000",
-		AccommodationReserveHost: "localhost",
-		AccommodationReservePort: "8001",
-		AccommodationHost:        "localhost",
-		AccommodationPort:        "8002",
-		UserInfoHost:             "localhost",
-		UserInfoPort:             "8003",
-		AuthHost:                 "localhost",
-		AuthPort:                 "8004",
+		AccommodationReserveHost: "accommodation_reserve_service",
+		AccommodationReservePort: "8000",
+		AccommodationHost:        "accommodation_service",
+		AccommodationPort:        "8000",
+		UserInfoHost:             "user_info_service",
+		UserInfoPort:             "8000",
+		AuthHost:                 "auth_service",
+		AuthPort:                 "8000",
 
 		AllowedCorsOrigin: "http://localhost:4200",
 	}
