@@ -1,3 +1,4 @@
+import { Address } from './../../model/address';
 import { Component } from '@angular/core';
 import { AccommodationService } from 'src/app/services/accommodation/accommodation.service';
 import { Router } from '@angular/router';
@@ -11,6 +12,10 @@ import { Accommodation } from 'src/app/model/accommodation';
 export class CreateAccommodationComponent {
   public accommodation: Accommodation = new Accommodation();
 
+  public city: string = '';
+  public country: string = '';
+  public street: string = '';
+  public number: string = '';
   public benefits: string = '';
   public photos: string = '';
   public min_guest_num: string = '';
@@ -28,8 +33,14 @@ export class CreateAccommodationComponent {
     const splitPhotos = this.photos.split(',').map((b) => b.trim());
     this.accommodation.photos = splitPhotos;
 
+    this.accommodation.address.country = this.country;
+    this.accommodation.address.city = this.city;
+    this.accommodation.address.number = this.number;
+    this.accommodation.address.street = this.street;
+
     this.accommodationService
       .createAccommodation(this.accommodation)
-      .subscribe(() => this.router.navigate(['/accommodations']));
+      .subscribe(() => this.router.navigate(['/allAccommodations']));
+    this.router.navigate(['/allAccommodations']);
   }
 }
