@@ -38,6 +38,21 @@ func (u *UserMongoDBStore) CreateUser(user *model.User) error {
 	return nil
 }
 
+func (u *UserMongoDBStore) Login(user *model.User) (*model.User, error) {
+	filter := bson.M{
+		"email":    user.Email,
+		"password": user.Password,
+	}
+
+	var result model.User
+	err := u.users.FindOne(context.Background(), filter).Decode(&result)
+	if err != nil {
+		return nil, err
+	}
+
+	return &result, nil
+}
+
 func NewUserMongoDBStore(client *mongo.Client) domain.UserStore {
 	users := client.Database(DATABASE).Collection(COLLECTION)
 	return &UserMongoDBStore{

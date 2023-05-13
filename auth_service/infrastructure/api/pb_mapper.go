@@ -6,10 +6,10 @@ import (
 )
 
 func mapUser(userPb *pb.NewUser) (*model.User, error) {
-	return &model.User{Name: userPb.Name, Surname: userPb.Surname, Email: userPb.Email}, nil
+	return &model.User{Email: userPb.Email, Password: userPb.Password}, nil
 }
 
 func mapUserPb(user *model.User) *pb.User {
-	userPb := &pb.User{Id: user.Id.String(), Name: user.Name, Surname: user.Surname, Email: user.Email}
+	userPb := &pb.User{Id: user.Id.Hex(), Email: user.Email}
 	return userPb
 }

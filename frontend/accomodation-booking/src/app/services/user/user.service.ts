@@ -7,7 +7,7 @@ import { User } from 'src/app/model/user';
   providedIn: 'root',
 })
 export class UserService {
-  apiHost: string = 'http://localhost:8000/api/user/';
+  apiHost: string = 'http://localhost:8000/auth/';
   headers: HttpHeaders = new HttpHeaders({
     'Content-Type': 'application/json',
   });
@@ -15,7 +15,13 @@ export class UserService {
   constructor(private http: HttpClient) {}
 
   createUser(newUser: User): Observable<any> {
-    return this.http.post<User>(this.apiHost + 'create', newUser, {
+    return this.http.post<User>(this.apiHost + 'Register', newUser, {
+      headers: this.headers,
+    });
+  }
+
+  loginUser(user: User): Observable<any> {
+    return this.http.post<User>(this.apiHost + 'login', user, {
       headers: this.headers,
     });
   }

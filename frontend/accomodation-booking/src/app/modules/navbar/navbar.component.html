@@ -1,11 +1,31 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-success">
   <a class="navbar-brand" href="#">Accommodation Booking</a>
   <a class="nav-item nav-link" [routerLink]="['/allAccommodations']" routerLinkActive="active">All accommodations</a>
-  <a class="nav-item nav-link" [routerLink]="['/view']" routerLinkActive="active">Make reservation</a>
-  <a class="nav-item nav-link" [routerLink]="['/confirmReservations']" routerLinkActive="active">Confirm reservations</a>
-  <a class="nav-item nav-link" [routerLink]="['/myReservations']" routerLinkActive="active">My reservations</a>
+  <a class="nav-item nav-link" [routerLink]="['/view']" routerLinkActive="active" *ngIf="isLoggedIn">Make reservation</a>
+  <a class="nav-item nav-link" [routerLink]="['/confirmReservations']" routerLinkActive="active" *ngIf="isLoggedIn">Confirm reservations</a>
+  <a class="nav-item nav-link" [routerLink]="['/myReservations']" routerLinkActive="active" *ngIf="isLoggedIn">My reservations</a>
   <div class="nav-right">
-    <a class="nav-item nav-link" [routerLink]="['/login']" routerLinkActive="active">Login</a>
-    <a class="nav-item nav-link" [routerLink]="['/register']" routerLinkActive="active">Register</a>
+    <a
+      class="nav-item nav-link"
+      [routerLink]="['/']"
+      routerLinkActive="active"
+      *ngIf="isLoggedIn"
+      (click)="logout()"
+      >Logout</a
+    >
+    <a
+      class="nav-item nav-link"
+      [routerLink]="['/login']"
+      routerLinkActive="active"
+      *ngIf="!isLoggedIn"
+      >Login</a
+    >
+    <a
+      class="nav-item nav-link"
+      [routerLink]="['/register']"
+      routerLinkActive="active"
+      *ngIf="!isLoggedIn"
+      >Register</a
+    >
   </div>
 </nav>
