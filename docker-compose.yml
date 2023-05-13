@@ -17,6 +17,37 @@ services:
     networks:
       - network
 
+  user_info_service:
+    image: user_info_service
+    container_name: user_info_service
+    build:
+      context: .
+      dockerfile: ./user_info_service/Dockerfile
+    restart: on-failure
+    environment:
+      ACCOMMODATION_RESERVE_DB_HOST: ${USER_INFO_DB_HOST}
+      ACCOMMODATION_RESERVE_DB_PORT: ${USER_INFO_DB_PORT}
+      ACCOMMODATION_RESERVE_SERVICE_PORT: ${USER_INFO_SERVICE_PORT}
+    depends_on:
+      - user_info_db
+    networks:
+      - network
+
+  auth_service:
+    image: auth_service
+    container_name: auth_service
+    build:
+      context: .
+      dockerfile: ./auth_service/Dockerfile
+    restart: on-failure
+    environment:
+      ACCOMMODATION_RESERVE_DB_HOST: ${AUTH_DB_HOST}
+      ACCOMMODATION_RESERVE_DB_PORT: ${AUTH_DB_PORT}
+      ACCOMMODATION_RESERVE_SERVICE_PORT: ${AUTH_SERVICE_PORT}
+    depends_on:
+      - auth_db
+    networks:
+      - network
 
   accommodation_service:
     image: accommodation_service
@@ -64,6 +95,32 @@ services:
     volumes:
       - accommodation_reserve_db-data:/data/db
 
+  user_info_db:
+    image: mongo
+    container_name: user_info_db
+    restart: on-failure
+    networks:
+      - network
+    ports:
+      - 4003:27017
+    environment:
+      - MONGO_INITDB_DATABASE=xws
+    volumes:
+      - user_info_db-data:/data/db
+
+  auth_db:
+    image: mongo
+    container_name: auth_db
+    restart: on-failure
+    networks:
+      - network
+    ports:
+      - 4002:27017
+    environment:
+      - MONGO_INITDB_DATABASE=xws
+    volumes:
+      - auth_db-data:/data/db
+
   accommodation_db:
     image: mongo
     container_name: accommodation_db
@@ -89,11 +146,17 @@ services:
       environment:
         - ME_CONFIG_MONGODB_SERVER=accommodation_reserve_db
         - ME_CONFIG_MONGODB_SERVER= accommodation_db
+        - ME_CONFIG_MONGODB_SERVER=user_info_db
+        - ME_CONFIG_MONGODB_SERVER=auth_db
 
 volumes:
   accommodation_reserve_db-data:
     name: server-database
   accommodation_db-data:
+    name: server-database
+  user_info_db-data:
+    name: server-database
+  auth_db-data:
     name: server-database
 
 
