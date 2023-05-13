@@ -13,27 +13,44 @@ import { AllAccommodationsComponent } from './modules/all-accommodations/all-acc
 
 const routes: Routes = [
   { path: 'view', component: ViewComponent },
-  { path: 'accommodation-details', component: ReservationDetailsComponent },
+  {
+    path: 'accommodation-details',
+    component: ReservationDetailsComponent,
+    canActivate: [AuthGuard],
+    data: { requiredRole: 'Guest' },
+  },
   {
     path: 'confirmReservations',
     component: ReservationConfirmationComponent,
     canActivate: [AuthGuard],
+    data: { requiredRole: 'Host' },
   },
   {
     path: 'myReservations',
     component: MyReservationsComponent,
     canActivate: [AuthGuard],
+    data: { requiredRole: 'Guest' },
   },
   {
     path: 'createAccommodation',
     component: CreateAccommodationComponent,
     canActivate: [AuthGuard],
+    data: { requiredRole: 'Host' },
   },
   { path: 'register', component: RegisterComponent },
   { path: 'login', component: LoginComponent },
-  { path: 'addAppointment', component: AddAppointmentComponent, canActivate: [AuthGuard], },
-  { path: 'allAccommodations', component: AllAccommodationsComponent },
-  
+  {
+    path: 'addAppointment',
+    component: AddAppointmentComponent,
+    canActivate: [AuthGuard],
+    data: { requiredRole: 'Guest' },
+  },
+  {
+    path: 'allAccommodations',
+    component: AllAccommodationsComponent,
+    canActivate: [AuthGuard],
+    data: { requiredRole: 'Host' },
+  },
 ];
 
 @NgModule({

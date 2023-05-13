@@ -56,6 +56,7 @@ func (handler *UserInfoHandler) LoginUser(ctx context.Context, request *pb.Login
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"userId": user.Id.Hex(),
+		"role":   user.Role,
 		"exp":    time.Now().Add(time.Minute * 30).Unix(),
 	})
 
