@@ -18,6 +18,15 @@ type UserMongoDBStore struct {
 	users *mongo.Collection
 }
 
+func (u UserMongoDBStore) CreateUser(user *model.User) error {
+	_, err := u.users.InsertOne(context.Background(), user)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func (u UserMongoDBStore) GetUserByID(id primitive.ObjectID) (*model.User, error) {
 	filter := bson.M{"_id": id}
 

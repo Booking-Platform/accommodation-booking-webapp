@@ -72,12 +72,16 @@ func (server *Server) initCustomHandlers() {
 	accommodationReserveEndpoint := fmt.Sprintf("%s:%s", server.config.AccommodationReserveHost, server.config.AccommodationReservePort)
 	userInfoEndpoint := fmt.Sprintf("%s:%s", server.config.UserInfoHost, server.config.UserInfoPort)
 	accommodationEndpoint := fmt.Sprintf("%s:%s", server.config.AccommodationHost, server.config.AccommodationPort)
+	authEndpoint := fmt.Sprintf("%s:%s", server.config.AuthHost, server.config.AuthPort)
 
 	reservationHandler := api.NewReservationHandler(accommodationReserveEndpoint, userInfoEndpoint, accommodationEndpoint)
 	reservationHandler.Init(server.mux)
 
 	accommodationHandler := api.NewAccommodationHandler(accommodationReserveEndpoint, accommodationEndpoint)
 	accommodationHandler.Init(server.mux)
+
+	authHandler := api.NewAuthHandler(userInfoEndpoint, authEndpoint)
+	authHandler.Init(server.mux)
 }
 
 func (server *Server) getHandlerCORSWrapped() http.Handler {

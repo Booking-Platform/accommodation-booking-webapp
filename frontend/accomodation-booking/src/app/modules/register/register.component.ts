@@ -26,7 +26,7 @@ export class RegisterComponent {
 
   register() {
     this.userService.createUser(this.user).subscribe((res) => {
-      if (res.user.email === 'error') {
+      if (res.Email === 'error') {
         this.toastr.error('Email address already registered!');
       } else {
         this.toastr.success('Successfully registered! Please login.');

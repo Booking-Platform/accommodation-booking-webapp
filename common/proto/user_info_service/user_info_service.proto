@@ -12,6 +12,13 @@ service user_info_service{
       get: "/api/user/{id}"
     };
   }
+
+  rpc CreateUser(CreateUserRequest) returns(CreateUserResponse){
+    option (google.api.http) = {
+      post: "/api/user/register",
+      body: "newUser"
+    };
+  }
 }
 
 message GetUserByIDRequest {
@@ -21,4 +28,24 @@ message GetUserByIDRequest {
 message GetUserByIDResponse {
   string name = 1;
   string surname = 2;
+}
+
+message CreateUserRequest {
+  NewUser newUser = 1;
+}
+
+message CreateUserResponse {
+  User user = 1;
+}
+
+message NewUser {
+  string id = 1;
+  string name = 2;
+  string surname = 3;
+}
+
+message User {
+  string id = 1;
+  string name = 2;
+  string surname = 3;
 }

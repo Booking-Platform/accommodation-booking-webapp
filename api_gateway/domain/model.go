@@ -11,9 +11,11 @@ type Reservation struct {
 }
 
 type User struct {
-	Name    string
-	Surname string
-	Email   string
+	Id       string
+	Name     string
+	Surname  string
+	Email    string
+	Password string
 }
 
 type Accommodation struct {
