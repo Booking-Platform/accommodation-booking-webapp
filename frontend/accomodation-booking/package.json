@@ -26,6 +26,7 @@
     "@popperjs/core": "^2.11.7",
     "bootstrap": "^5.3.0-alpha2",
     "bootstrap-icons": "^1.10.3",
+    "jwt-decode": "^3.1.2",
     "ngx-toastr": "^16.1.0",
     "rxjs": "~7.5.0",
     "timepicker": "^1.14.0",
