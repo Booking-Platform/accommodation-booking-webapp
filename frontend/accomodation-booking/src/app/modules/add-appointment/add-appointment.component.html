@@ -1,0 +1,18 @@
+<div class="create-accommodation-form">
+  <h2>Add appointment to accommodation</h2>
+  <form>
+    <label for="from">From date:</label>
+    <input type="date" id="from" name="from" required [(ngModel)]="appointment.from">
+
+    <label for="to">To date:</label>
+    <input type="date" id="to" name="to" required [(ngModel)]="appointment.to">
+
+    <label for="price">Price:</label>
+    <input type="number" id="price" name="price" required [(ngModel)]="appointment.price" min="0">
+
+    <label for="per_guest">Per guest:</label>
+    <input type="checkbox" id="per_guest" name="autoConfirm" [(ngModel)]="appointment.per_guest">
+
+    <button class="btn-primary add-accommodation-button" (click)=" addAppointment()">Create Appointment</button>
+  </form>
+</div>

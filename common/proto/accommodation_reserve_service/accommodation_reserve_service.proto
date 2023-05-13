@@ -10,7 +10,7 @@ service accommodation_reserve_service{
 
   rpc CreateReservation(CreateReservationRequest) returns(CreateReservationResponse) {
     option (google.api.http) = {
-      post: "/api/reservation/create"
+      post: "/api/reservation"
       body: "newReservation"
     };
   }
@@ -101,6 +101,7 @@ message NewReservation {
   string accommodationID = 3;
   string guestNum = 4;
   string userID = 5;
+  string automaticConfirmation = 6;
 }
 
 message Reservation {

@@ -113,3 +113,15 @@ func (handler *AccommodationHandler) Search(ctx context.Context, request *pb.Get
 	}
 	return response, nil
 }
+
+func (handler *AccommodationHandler) ChangeAutomaticConfirmation(ctx context.Context, request *pb.ChangeAutomaticConfirmationRequest) (*pb.ChangeAutomaticConfirmationResponse, error) {
+	objectId, err := primitive.ObjectIDFromHex(request.AccommodationID)
+
+	err = handler.service.ChangeAutomaticConfirmationStatus(objectId)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return nil, nil
+}

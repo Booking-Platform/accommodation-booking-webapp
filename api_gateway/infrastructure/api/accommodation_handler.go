@@ -36,19 +36,13 @@ func (handler *AccommodationHandler) GetAllByParams(w http.ResponseWriter, r *ht
 	to := r.URL.Query().Get("to")
 	numOfGuests := r.URL.Query().Get("numOfGuests")
 	city := r.URL.Query().Get("city")
-	fmt.Println(numOfGuests)
-	fmt.Println(city)
 	accommodationIds, err := handler.getReservedAccommodationIds(from, to)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
-	fmt.Println(accommodationIds)
-	stringSlice := []string{"6457a727e794f9761fcb1645", "6457a9b1eb960318f9d133a4"}
-	//OVDE TREBA IZMENITI STRINGSLICE DA BUDE accommodationIds kad se popravi funkcija getReservedAccommodationIds
-	accommodations, err := handler.getAccommodations(numOfGuests, city, stringSlice)
+	accommodations, err := handler.getAccommodations(numOfGuests, city, accommodationIds.Id)
 
-	// Marshal the slice into JSON
 	response, err := json.Marshal(accommodations)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
@@ -82,4 +76,10 @@ func (handler *AccommodationHandler) getAccommodations(numOfGuests string, city 
 	}
 	accommodationClient := services.NewAccommodationClient(handler.accommodationClientAddress)
 	return accommodationClient.Search(context.TODO(), &accommodation.GetAccommodationsByParamsRequest{SearchParams: searchParams})
+}
+
+func (handler *AccommodationHandler) ChangeAutomaticConfirmation(request accommodation.ChangeAutomaticConfirmationRequest) (*accommodation.ChangeAutomaticConfirmationResponse, error) {
+
+	fmt.Println('s')
+	return nil, nil
 }

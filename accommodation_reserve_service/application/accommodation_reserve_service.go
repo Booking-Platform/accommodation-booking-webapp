@@ -20,8 +20,14 @@ func (service *AccommodationReserveService) Get() error {
 	panic("implement me")
 }
 
-func (service *AccommodationReserveService) Create(reservation *model.Reservation) error {
-	reservation.ReservationStatus = model.ReservationStatus(1)
+func (service *AccommodationReserveService) Create(reservation *model.Reservation, automaticConfirmation bool) error {
+
+	if automaticConfirmation == true {
+		reservation.ReservationStatus = model.CONFIRMED
+	} else {
+		reservation.ReservationStatus = model.WAITING
+	}
+
 	return service.store.Insert(reservation)
 }
 
