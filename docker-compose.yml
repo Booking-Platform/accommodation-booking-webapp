@@ -11,7 +11,7 @@ services:
     environment:
       ACCOMMODATION_RESERVE_DB_HOST: ${ACCOMMODATION_RESERVE_DB_HOST}
       ACCOMMODATION_RESERVE_DB_PORT: ${ACCOMMODATION_RESERVE_DB_PORT}
-      ACCOMMODATION_RESERVE_SERVICE_PORT: ${ACCOMMODATION_RESERVE_SERVICE_PORT}
+      ACCOMMODATION_RESERVE_SERVICE_PORT: 8000
     depends_on:
       - accommodation_reserve_db
     networks:
@@ -26,9 +26,9 @@ services:
       dockerfile: ./accommodation_service/Dockerfile
     restart: on-failure
     environment:
-      ACCOMMODATION_RESERVE_DB_HOST: ${ACCOMMODATION_DB_HOST}
-      ACCOMMODATION_RESERVE_DB_PORT: ${ACCOMMODATION_DB_PORT}
-      ACCOMMODATION_RESERVE_SERVICE_PORT: ${ACCOMMODATION_SERVICE_PORT}
+      ACCOMMODATION_DB_HOST: ${ACCOMMODATION_DB_HOST}
+      ACCOMMODATION_DB_PORT: ${ACCOMMODATION_DB_PORT}
+      ACCOMMODATION_SERVICE_PORT: ${ACCOMMODATION_SERVICE_PORT}
     depends_on:
       - accommodation_db
     networks:
@@ -47,6 +47,8 @@ services:
       GATEWAY_PORT: ${GATEWAY_PORT}
       ACCOMMODATION_RESERVE_SERVICE_HOST: ${ACCOMMODATION_RESERVE_SERVICE_HOST}
       ACCOMMODATION_RESERVE_SERVICE_PORT: ${ACCOMMODATION_RESERVE_SERVICE_PORT}
+      ACCOMMODATION_SERVICE_HOST: ${ACCOMMODATION_SERVICE_HOST}
+      ACCOMMODATION_SERVICE_PORT: ${ACCOMMODATION_SERVICE_PORT}
 
     networks:
       - network
@@ -57,12 +59,7 @@ services:
     restart: on-failure
     networks:
       - network
-    ports:
-      - 4000:27017
-    environment:
-      - MONGO_INITDB_DATABASE=xws
-    volumes:
-      - accommodation_reserve_db-data:/data/db
+
 
   accommodation_db:
     image: mongo
@@ -70,31 +67,18 @@ services:
     restart: on-failure
     networks:
       - network
-    ports:
-      - 4001:27017
+
+  mongo_express:
+    image: mongo-express
+    container_name: mongo_express
+    restart: on-failure
     environment:
-      - MONGO_INITDB_DATABASE=xws
-    volumes:
-      - accommodation_db-data:/data/db
-
-
-  mongo-express:
-      image: mongo-express
-      container_name: accommodation-booking-webapp-mongo-express
-      restart: always
-      networks:
-        - network
-      ports:
-        - 8081:8081
-      environment:
-        - ME_CONFIG_MONGODB_SERVER=accommodation_reserve_db
-        - ME_CONFIG_MONGODB_SERVER= accommodation_db
-
-volumes:
-  accommodation_reserve_db-data:
-    name: server-database
-  accommodation_db-data:
-    name: server-database
+      ME_CONFIG_MONGODB_SERVER: accommodation_reserve_db
+      ME_CONFIG_MONGODB_PORT: 27017
+    ports:
+      - 8081:8081
+    networks:
+      - network
 
 
 networks:
