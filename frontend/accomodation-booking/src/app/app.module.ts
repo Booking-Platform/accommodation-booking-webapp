@@ -6,7 +6,7 @@ import { AppComponent } from './app.component';
 import { NavbarComponent } from './modules/navbar/navbar.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { MatCardModule } from '@angular/material/card';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
@@ -21,6 +21,8 @@ import { LoginComponent } from './modules/login/login.component';
 import { AddAppointmentComponent } from './modules/add-appointment/add-appointment.component';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { AllAccommodationsComponent } from './modules/all-accommodations/all-accommodations.component';
+
+import { JwtInterceptor, JwtModule } from '@auth0/angular-jwt';
 
 @NgModule({
   declarations: [
@@ -50,8 +52,19 @@ import { AllAccommodationsComponent } from './modules/all-accommodations/all-acc
     MatCardModule,
     MatDialogModule,
     HttpClientModule,
+    JwtModule.forRoot({
+      config: {
+        tokenGetter: () => localStorage.getItem('jwt-token'),
+      },
+    }),
   ],
-  providers: [],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: JwtInterceptor,
+      multi: true,
+    },
+  ],
 
   bootstrap: [AppComponent],
 })

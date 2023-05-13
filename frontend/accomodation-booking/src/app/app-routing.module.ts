@@ -7,18 +7,31 @@ import { MyReservationsComponent } from './modules/my-reservations/my-reservatio
 import { CreateAccommodationComponent } from './modules/create-accommodation/create-accommodation.component';
 import { RegisterComponent } from './modules/register/register.component';
 import { LoginComponent } from './modules/login/login.component';
+import { AuthGuard } from './guard/auth.guard';
 import { AddAppointmentComponent } from './modules/add-appointment/add-appointment.component';
 import { AllAccommodationsComponent } from './modules/all-accommodations/all-accommodations.component';
 
 const routes: Routes = [
   { path: 'view', component: ViewComponent },
   { path: 'accommodation-details', component: ReservationDetailsComponent },
-  { path: 'confirmReservations', component: ReservationConfirmationComponent },
-  { path: 'myReservations', component: MyReservationsComponent },
-  { path: 'createAccommodation', component: CreateAccommodationComponent },
+  {
+    path: 'confirmReservations',
+    component: ReservationConfirmationComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'myReservations',
+    component: MyReservationsComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'createAccommodation',
+    component: CreateAccommodationComponent,
+    canActivate: [AuthGuard],
+  },
   { path: 'register', component: RegisterComponent },
   { path: 'login', component: LoginComponent },
-  { path: 'addAppointment', component: AddAppointmentComponent },
+  { path: 'addAppointment', component: AddAppointmentComponent, canActivate: [AuthGuard], },
   { path: 'allAccommodations', component: AllAccommodationsComponent },
   
 ];

@@ -7,14 +7,27 @@ package auth;
 import "google/api/annotations.proto";
 
 service auth_service{
-
-
   rpc CreateUser(CreateUserRequest) returns(CreateUserResponse) {
     option (google.api.http) = {
       post: "/api/user/create"
       body: "newUser"
     };
   }
+
+  rpc LoginUser(LoginUserRequest) returns(LoginUserResponse) {
+    option (google.api.http) = {
+      post: "/auth/login"
+      body: "newUser"
+    };
+  }
+}
+
+message LoginUserRequest {
+  NewUser newUser = 1;
+}
+
+message LoginUserResponse {
+  string tokenString = 1;
 }
 
 message CreateUserRequest {
@@ -26,16 +39,11 @@ message CreateUserResponse {
 }
 
 message NewUser {
-  string name = 1;
-  string surname = 2;
-  string email = 3;
-  string password = 4;
+  string email = 1;
+  string password = 2;
 }
 
 message User {
   string id = 1;
-  string name = 2;
-  string surname = 3;
-  string email = 4;
-  string password = 5;
+  string email = 2;
 }

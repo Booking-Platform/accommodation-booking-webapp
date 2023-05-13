@@ -8,8 +8,8 @@ type Config struct {
 
 func NewConfig() *Config {
 	return &Config{
-		Port:                "8000",
-		AccommodationDBHost: "accommodation_db",
+		Port:                "8002",
+		AccommodationDBHost: "localhost",
 		AccommodationDBPort: "27017",
 	}
 }

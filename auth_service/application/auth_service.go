@@ -18,3 +18,7 @@ func NewUserService(store domain.UserStore) *UserService {
 func (service *UserService) Create(user *model.User) error {
 	return service.store.CreateUser(user)
 }
+
+func (service *UserService) Login(user *model.User) (*model.User, error) {
+	return service.store.Login(user)
+}

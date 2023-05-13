@@ -33,3 +33,21 @@ func (handler *UserInfoHandler) GetUserByID(ctx context.Context, request *pb.Get
 
 	return response, nil
 }
+
+func (handler *UserInfoHandler) CreateUser(ctx context.Context, request *pb.CreateUserRequest) (*pb.CreateUserResponse, error) {
+
+	user, err := mapUser(request.NewUser)
+	if err != nil {
+		return nil, err
+	}
+
+	err = handler.service.Create(user)
+
+	if err != nil {
+		return nil, err
+	}
+
+	response := &pb.CreateUserResponse{User: mapUserPb(user)}
+
+	return response, nil
+}
