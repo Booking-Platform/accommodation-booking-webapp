@@ -1,5 +1,11 @@
 package config
 
+import (
+	"github.com/joho/godotenv"
+	"log"
+	"os"
+)
+
 type Config struct {
 	Port              string
 	ReservationDBHost string
@@ -7,9 +13,14 @@ type Config struct {
 }
 
 func NewConfig() *Config {
+	err := godotenv.Load(".env")
+	if err != nil {
+		log.Fatal("Error loading .env file:", err)
+	}
+
 	return &Config{
-		Port:              "8000",
-		ReservationDBHost: "accommodation_reserve_db",
-		ReservationDBPort: "27017",
+		Port:              os.Getenv("ACCOMMODATION_RESERVE_SERVICE_PORT"),
+		ReservationDBHost: os.Getenv("ACCOMMODATION_RESERVE_DB_HOST"),
+		ReservationDBPort: os.Getenv("ACCOMMODATION_RESERVE_DB_PORT"),
 	}
 }

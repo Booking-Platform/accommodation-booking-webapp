@@ -7,6 +7,7 @@ replace github.com/Booking-Platform/accommodation-booking-webapp/common => ../co
 require (
 	github.com/Booking-Platform/accommodation-booking-webapp/common v0.0.0-00010101000000-000000000000
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
+	github.com/joho/godotenv v1.5.1
 	go.mongodb.org/mongo-driver v1.11.4
 	google.golang.org/grpc v1.55.0
 )
