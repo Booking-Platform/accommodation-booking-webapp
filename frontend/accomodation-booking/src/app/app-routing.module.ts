@@ -43,7 +43,7 @@ const routes: Routes = [
     path: 'addAppointment',
     component: AddAppointmentComponent,
     canActivate: [AuthGuard],
-    data: { requiredRole: 'Guest' },
+    data: { requiredRole: 'Host' },
   },
   {
     path: 'allAccommodations',
