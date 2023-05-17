@@ -123,7 +123,7 @@ services:
     container_name: mongo_express
     restart: on-failure
     environment:
-      ME_CONFIG_MONGODB_SERVER: user_info_db
+      ME_CONFIG_MONGODB_SERVER: auth_db
       ME_CONFIG_MONGODB_PORT: 27017
     ports:
       - 8081:8081

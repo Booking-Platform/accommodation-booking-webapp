@@ -16,6 +16,7 @@ type User struct {
 	Surname  string
 	Email    string
 	Password string
+	Role     string
 }
 
 type Accommodation struct {

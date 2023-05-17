@@ -1,0 +1,50 @@
+.user-profile {
+  width: 400px;
+  margin: 50px auto;
+  background-color: #fff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  padding: 30px;
+  border-radius: 5px;
+}
+
+.user-profile h2 {
+  text-align: center;
+  margin-bottom: 30px;
+  color: #333;
+}
+
+.user-profile label {
+  display: block;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.user-profile input[type="text"],
+.user-profile input[type="email"],
+.user-profile input[type="password"] {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 20px;
+  border-radius: 5px;
+  border: none;
+  background-color: #f2f2f2;
+  color: #333;
+  font-size: 16px;
+}
+
+.user-profile button[type="button"] {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  margin-top: 20px;
+  border-radius: 5px;
+  border: none;
+  background-color: rgb(25, 135, 84);
+  color: #fff;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.user-profile button[type="button"]:hover {
+  background-color: #1e7f53;
+}

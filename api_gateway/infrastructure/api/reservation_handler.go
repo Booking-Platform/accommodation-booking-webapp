@@ -38,6 +38,14 @@ func (handler *ReservationHandler) Init(mux *runtime.ServeMux) {
 	if err != nil {
 		panic(err)
 	}
+
+	err = mux.HandlePath("POST", "/reservation/changeReservationStatus", handler.ChangeReservationStatus)
+	if err != nil {
+		panic(err)
+	}
+}
+
+func (handler *ReservationHandler) ChangeReservationStatus(w http.ResponseWriter, r *http.Request, pathParams map[string]string) {
 }
 
 func (handler *ReservationHandler) GetAllForConfirmation(w http.ResponseWriter, r *http.Request, pathParams map[string]string) {

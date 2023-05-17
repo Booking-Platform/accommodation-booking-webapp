@@ -32,5 +32,18 @@
     required
     [(ngModel)]="user.password"
   />
+  <label for="address-line-1">Address:</label>
+  <input type="text" id="address-line-1" name="address-line-1" />
+
+  <label for="city">City:</label>
+  <input type="text" id="city" name="city" />
+
+  <label for="state">State:</label>
+  <input type="text" id="state" name="state" required />
+  <label for="role">Role:</label>
+  <select name="role" id="role" [(ngModel)]="user.role" required>
+    <option value="Host">Host</option>
+    <option value="Guest">Guest</option>
+  </select>
   <button type="submit" (click)="register()">Register</button>
 </form>

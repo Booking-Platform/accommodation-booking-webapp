@@ -1,19 +1,68 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-success">
   <a class="navbar-brand" href="#">Accommodation Booking</a>
-  <a class="nav-item nav-link" [routerLink]="['/allAccommodations']" routerLinkActive="active"
-    *ngIf="isLoggedIn && role === 'Host'">All accommodations</a>
-  <a class="nav-item nav-link" [routerLink]="['/view']" routerLinkActive="active"
-    *ngIf="isLoggedIn && role === 'Guest'">Make reservation</a>
-  <a class="nav-item nav-link" [routerLink]="['/confirmReservations']" routerLinkActive="active"
-    *ngIf="isLoggedIn && role === 'Host'">Confirm reservations</a>
-  <a class="nav-item nav-link" [routerLink]="['/createAccommodation']" routerLinkActive="active"
-    *ngIf="isLoggedIn && role === 'Host'">Create accommodation</a>
-  <a class="nav-item nav-link" [routerLink]="['/myReservations']" routerLinkActive="active"
-    *ngIf="isLoggedIn && role === 'Guest'">My reservations</a>
+  <a
+    class="nav-item nav-link"
+    [routerLink]="['/allAccommodations']"
+    routerLinkActive="active"
+    *ngIf="isLoggedIn && role === 'Host'"
+    >All accommodations</a
+  >
+  <a
+    class="nav-item nav-link"
+    [routerLink]="['/view']"
+    routerLinkActive="active"
+    *ngIf="isLoggedIn && role === 'Guest'"
+    >Make reservation</a
+  >
+  <a
+    class="nav-item nav-link"
+    [routerLink]="['/confirmReservations']"
+    routerLinkActive="active"
+    *ngIf="isLoggedIn && role === 'Host'"
+    >Confirm reservations</a
+  >
+  <a
+    class="nav-item nav-link"
+    [routerLink]="['/createAccommodation']"
+    routerLinkActive="active"
+    *ngIf="isLoggedIn && role === 'Host'"
+    >Create accommodation</a
+  >
+  <a
+    class="nav-item nav-link"
+    [routerLink]="['/myReservations']"
+    routerLinkActive="active"
+    *ngIf="isLoggedIn && role === 'Guest'"
+    >My reservations</a
+  >
   <div class="nav-right">
-    <a class="nav-item nav-link" [routerLink]="['/']" routerLinkActive="active" *ngIf="isLoggedIn"
-      (click)="logout()">Logout</a>
-    <a class="nav-item nav-link" [routerLink]="['/login']" routerLinkActive="active" *ngIf="!isLoggedIn">Login</a>
-    <a class="nav-item nav-link" [routerLink]="['/register']" routerLinkActive="active" *ngIf="!isLoggedIn">Register</a>
+    <a
+      class="nav-item nav-link"
+      [routerLink]="['/profile']"
+      routerLinkActive="active"
+      *ngIf="isLoggedIn"
+      >Profile</a
+    >
+    <a
+      class="nav-item nav-link"
+      routerLinkActive="active"
+      *ngIf="isLoggedIn"
+      (click)="logout()"
+      >Logout</a
+    >
+    <a
+      class="nav-item nav-link"
+      [routerLink]="['/login']"
+      routerLinkActive="active"
+      *ngIf="!isLoggedIn"
+      >Login</a
+    >
+    <a
+      class="nav-item nav-link"
+      [routerLink]="['/register']"
+      routerLinkActive="active"
+      *ngIf="!isLoggedIn"
+      >Register</a
+    >
   </div>
 </nav>

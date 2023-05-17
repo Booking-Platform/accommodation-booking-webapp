@@ -23,6 +23,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { AllAccommodationsComponent } from './modules/all-accommodations/all-accommodations.component';
 
 import { JwtInterceptor, JwtModule } from '@auth0/angular-jwt';
+import { ProfileComponent } from './modules/profile/profile.component';
 
 @NgModule({
   declarations: [
@@ -37,6 +38,7 @@ import { JwtInterceptor, JwtModule } from '@auth0/angular-jwt';
     LoginComponent,
     AddAppointmentComponent,
     AllAccommodationsComponent,
+    ProfileComponent,
   ],
   imports: [
     MatSlideToggleModule,

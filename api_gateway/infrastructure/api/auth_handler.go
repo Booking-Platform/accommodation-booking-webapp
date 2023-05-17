@@ -87,6 +87,7 @@ func (handler *AuthHandler) saveCredentials(user *domain.User) (*auth.CreateUser
 	newUser := &auth.NewUser{
 		Email:    user.Email,
 		Password: user.Password,
+		Role:     user.Role,
 	}
 	response, err := authClient.CreateUser(context.TODO(), &auth.CreateUserRequest{NewUser: newUser})
 	if err != nil {

@@ -20,7 +20,6 @@ type UserMongoDBStore struct {
 }
 
 func (u *UserMongoDBStore) CreateUser(user *model.User) error {
-	user.Role = "Guest"
 	user.Id = primitive.NewObjectID()
 	indexModel := mongo.IndexModel{
 		Keys:    bson.M{"email": 1},

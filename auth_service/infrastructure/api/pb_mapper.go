@@ -6,7 +6,7 @@ import (
 )
 
 func mapUser(userPb *pb.NewUser) (*model.User, error) {
-	return &model.User{Email: userPb.Email, Password: userPb.Password}, nil
+	return &model.User{Email: userPb.Email, Password: userPb.Password, Role: userPb.Role}, nil
 }
 
 func mapUserPb(user *model.User) *pb.User {
