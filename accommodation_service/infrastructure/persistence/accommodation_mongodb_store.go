@@ -42,10 +42,7 @@ func (store *AccommodationMongoDBStore) GetAccomodationByID(id primitive.ObjectI
 }
 
 func (store *AccommodationMongoDBStore) Insert(accommodation *model.Accommodation) error {
-	if accommodation.ID.IsZero() {
-		accommodation.ID = primitive.NewObjectID()
-	}
-
+	accommodation.ID = primitive.NewObjectID()
 	result, err := store.accommodations.InsertOne(context.TODO(), accommodation)
 	if err != nil {
 		return err
