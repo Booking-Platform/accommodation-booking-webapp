@@ -1,0 +1,180 @@
+syntax = "proto3";
+
+option go_package = "github.com/Booking-Platform/accommodation-booking-webapp/common/accommodation";
+
+package accommodation;
+
+import "google/api/annotations.proto";
+
+service AccommodationService{
+
+
+  rpc GetAll(GetAllAccommodationsRequest) returns(GetAllAccommodationsResponse) {
+    option (google.api.http) = {
+      get: "/accommodations"
+    };
+  }
+
+
+  rpc GetById(GetAccommodationByIdRequest) returns (GetAccommodationByIdResponse) {
+    option (google.api.http) = {
+      get: "/accommodations/{id}"
+    };
+  }
+
+  rpc Search(GetAccommodationsByParamsRequest) returns (GetAccommodationsByParamsResponse) {
+  }
+
+  rpc CreateAccommodation(CreateAccommodationRequest) returns(CreateAccommodationResponse) {
+    option (google.api.http) = {
+      post: "/accommodation/create"
+      body: "newAccommodation"
+    };
+  }
+
+
+  rpc CreateAppointment(CreateAppointmentRequest) returns(CreateAppointmentResponse) {
+    option (google.api.http) = {
+      post: "/accommodation/appointment"
+      body: "appointment"
+    };
+  }
+
+  rpc ChangeAutomaticConfirmation(ChangeAutomaticConfirmationRequest) returns (ChangeAutomaticConfirmationResponse) {
+    option (google.api.http) = {
+      post: "/accommodation/confirmationStatus"
+      body: "accommodationID"
+    };
+  }
+
+}
+
+message GetAllAccommodationsRequest {
+}
+
+message GetAllAccommodationsResponse {
+  repeated AccommodationDTO accommodations = 1;
+}
+
+message GetAccommodationByIdRequest {
+  string id = 1;
+}
+
+message GetAccommodationByIdResponse {
+  Accommodation accommodation = 1;
+}
+
+message CreateAccommodationRequest{
+  NewAccommodation newAccommodation = 1;
+}
+
+message CreateAccommodationResponse{
+  Accommodation accommodation = 1;
+}
+
+message CreateAppointmentRequest{
+  Appointment appointment = 1;
+}
+
+
+message CreateAppointmentResponse{
+  Accommodation accommodation = 1;
+}
+
+
+message GetAccommodationsByParamsRequest {
+  SearchParams searchParams = 1;
+}
+
+message GetAccommodationsByParamsResponse {
+  repeated AccommodationDTO accommodations = 1;
+}
+
+
+message SearchParams{
+    repeated string id = 1;
+    int64 num_of_guests = 2;
+    string city = 3;
+}
+
+
+message AddressDTO {
+  string street = 1;
+  string city = 2;
+  string country = 3;
+  int64 number = 4;
+}
+
+message BenefitDTO {
+  string name = 1;
+}
+
+message NewAccommodation {
+  string name = 1;
+  int64 min_guest_num = 2;
+  int64 max_guest_num = 3;
+  AddressDTO address = 4;
+  bool automatic_confirmation = 5;
+  repeated string photos = 6;
+  repeated string benefits = 7;
+}
+
+
+message Accommodation {
+  string id = 1;
+  string name = 2;
+  int32 min_guest_num = 3;
+  int32 max_guest_num = 4;
+  Address address = 5;
+  bool automatic_confirmation = 6;
+  repeated string photo = 7;
+  repeated Benefit benefits = 8;
+  repeated Appointment appointments = 9;
+}
+
+message AccommodationDTO {
+  string id = 1;
+  string name = 2;
+  string min_guest_num = 3;
+  string max_guest_num = 4;
+  Address address = 5;
+  bool automatic_confirmation = 6;
+  repeated string photos = 7;
+  repeated Benefit benefits = 8;
+  repeated Appointment appointments = 9;
+}
+
+message Address {
+  string id = 1;
+  string country = 2;
+  string city = 3;
+  string street = 4;
+  string number = 5;
+}
+
+message Appointment {
+  string id = 1;
+  string from = 2;
+  string to = 3;
+  AppointmentStatus status = 4;
+  double price = 5;
+  string per_guest = 6;
+}
+
+enum AppointmentStatus {
+  AVAILABLE = 0;
+  RESERVED = 1;
+}
+
+message Benefit {
+  string id = 1;
+  string name = 2;
+}
+
+message ChangeAutomaticConfirmationRequest {
+  string accommodationID = 1;
+}
+
+message ChangeAutomaticConfirmationResponse {
+  Accommodation accommodation = 1;
+}

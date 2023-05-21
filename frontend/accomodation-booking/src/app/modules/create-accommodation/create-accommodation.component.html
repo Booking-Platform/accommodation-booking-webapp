@@ -1,0 +1,37 @@
+<div class="create-accommodation-form">
+  <h2>Create New Accommodation</h2>
+  <form>
+    <label for="name">Name:</label>
+    <input type="text" id="name" name="name" required [(ngModel)]="accommodation.name">
+
+    <label for="min-guest-num">Minimum Guest Number:</label>
+    <input type="number" id="min-guest-num" name="minGuestNum" required [(ngModel)]="accommodation.min_guest_num"
+      min="0" max="10">
+
+    <label for="max-guest-num">Maximum Guest Number:</label>
+    <input type="number" id="max-guest-num" name="maxGuestNum" required [(ngModel)]="accommodation.max_guest_num"
+      min="0" max="10">
+
+    <label for="country">Country:</label>
+    <input type="text" id="country" name="country" required [(ngModel)]="country">
+
+    <label for="city">City:</label>
+    <input type="text" id="city" name="city" required [(ngModel)]="city">
+
+    <label for="street">Street:</label>
+    <input type="text" id="street" name="street" required [(ngModel)]="street">
+
+    <label for="number">Number:</label>
+    <input type="number" id="number" name="number" required [(ngModel)]="number">
+
+    <label for="photo">Photo URLs (separated by commas):</label>
+    <textarea id="photo" name="photo" required [(ngModel)]="photos"></textarea>
+
+    <label for="benefit">Benefit (separated by commas):</label>
+    <textarea id="benefit" name="benefit" required [(ngModel)]="benefits"></textarea>
+
+    <label for="auto-confirm">Automatic Confirmation:</label>
+    <input type="checkbox" id="auto-confirm" name="autoConfirm" [(ngModel)]="accommodation.automatic_confirmation">
+    <button class="btn-primary add-accommodation-button" (click)=" createAccommodation()">Create Accommodation</button>
+  </form>
+</div>
