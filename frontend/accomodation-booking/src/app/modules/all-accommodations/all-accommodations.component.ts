@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { JwtHelperService } from '@auth0/angular-jwt';
 import { AccommodationService } from 'src/app/services/accommodation/accommodation.service';
 
 @Component({
@@ -13,11 +14,15 @@ export class AllAccommodationsComponent implements OnInit {
 
   constructor(
     private accommodationService: AccommodationService,
-    private router: Router
+    private router: Router,
+    private jwtHelper: JwtHelperService
   ) {}
 
   ngOnInit(): void {
-    this.accommodationService.getAccommodations().subscribe((res: any) => {
+    var userID = this.jwtHelper.decodeToken().userId;
+
+  
+    this.accommodationService.getAccommodationsByHostID(userID).subscribe((res: any) => {
       this.accommodations = res.accommodations;
     });
   }

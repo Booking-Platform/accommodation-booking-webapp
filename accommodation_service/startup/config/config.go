@@ -1,5 +1,10 @@
 package config
 
+import (
+	"github.com/Booking-Platform/accommodation-booking-webapp/common/utils"
+	"os"
+)
+
 type Config struct {
 	Port                string
 	AccommodationDBHost string
@@ -7,9 +12,11 @@ type Config struct {
 }
 
 func NewConfig() *Config {
+	utils.LoadEnv()
+
 	return &Config{
-		Port:                "8000",
-		AccommodationDBHost: "accommodation_db",
-		AccommodationDBPort: "27017",
+		Port:                os.Getenv("ACCOMMODATION_SERVICE_PORT"),
+		AccommodationDBHost: os.Getenv("ACCOMMODATION_DB_HOST"),
+		AccommodationDBPort: os.Getenv("ACCOMMODATION_DB_PORT"),
 	}
 }

@@ -125,3 +125,26 @@ func (handler *AccommodationHandler) ChangeAutomaticConfirmation(ctx context.Con
 
 	return nil, nil
 }
+
+func (handler *AccommodationHandler) GetAllAccommodationsByHostID(ctx context.Context, request *pb.GetAllAccommodationsByHostIDRequest) (*pb.GetAllAccommodationsByHostIDResponse, error) {
+
+	objectId, err := primitive.ObjectIDFromHex(request.Id)
+	if err != nil {
+		return nil, err
+	}
+
+	accommodations, err := handler.service.GetAllAccommodationsByHostID(objectId)
+	if err != nil {
+		return nil, err
+	}
+
+	response := &pb.GetAllAccommodationsByHostIDResponse{
+		Accommodations: []*pb.AccommodationDTO{},
+	}
+	for _, accommodation := range accommodations {
+		current := mapAccommodationDTOPb(accommodation)
+		response.Accommodations = append(response.Accommodations, current)
+	}
+	return response, nil
+
+}

@@ -13,4 +13,5 @@ type AccommodationStore interface {
 	AddAppointment(accommodationID primitive.ObjectID, appointment *model.Appointment) error
 	GetAllAccommodationsByParams(searchParams *pb.SearchParams, accommodationIds []primitive.ObjectID) ([]*model.Accommodation, error)
 	ChangeAutomaticConfirmationStatusByAccommodationID(id primitive.ObjectID) error
+	FindAllAccommodationsByHostID(id primitive.ObjectID) ([]*model.Accommodation, error)
 }

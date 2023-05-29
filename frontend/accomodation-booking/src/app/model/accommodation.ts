@@ -11,4 +11,5 @@ export class Accommodation {
   benefits: string[] = [];
   automatic_confirmation: boolean = false;
   appointments!: Appointment;
+  host_id: string ='';
 }
