@@ -21,9 +21,9 @@ import { LoginComponent } from './modules/login/login.component';
 import { AddAppointmentComponent } from './modules/add-appointment/add-appointment.component';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { AllAccommodationsComponent } from './modules/all-accommodations/all-accommodations.component';
-
 import { JwtInterceptor, JwtModule } from '@auth0/angular-jwt';
 import { ProfileComponent } from './modules/profile/profile.component';
+import { RateHostComponent } from './modules/rate-host/rate-host.component';
 
 @NgModule({
   declarations: [
@@ -39,6 +39,7 @@ import { ProfileComponent } from './modules/profile/profile.component';
     AddAppointmentComponent,
     AllAccommodationsComponent,
     ProfileComponent,
+    RateHostComponent,
   ],
   imports: [
     MatSlideToggleModule,

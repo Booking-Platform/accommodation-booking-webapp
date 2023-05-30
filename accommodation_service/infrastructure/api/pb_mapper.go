@@ -63,6 +63,7 @@ func mapAccommodationPb(accommodation *model.Accommodation) *pb.Accommodation {
 		AutomaticConfirmation: accommodation.AutomaticConfirmation,
 		Photo:                 accommodation.Photos,
 		Benefits:              pbBenefits,
+		HostId:                accommodation.HostID.Hex(),
 		Appointments:          pbAppointments,
 	}
 	return accommodationPb

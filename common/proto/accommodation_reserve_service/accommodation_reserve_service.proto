@@ -41,7 +41,12 @@ service accommodation_reserve_service{
     };
   }
 
+  rpc GetAllReservationsThatPassed(IdMessageRequest) returns(GetAllReservationsThatPassedResponse) {
+
+  }
+
 }
+
 
 
 message ChangeReservationStatusRequest {
@@ -67,6 +72,10 @@ message GetAllForConfirmationRequest {
 }
 
 message GetAllForConfirmationResponse {
+  repeated Reservation reservations = 1;
+}
+
+message  GetAllReservationsThatPassedResponse {
   repeated Reservation reservations = 1;
 }
 

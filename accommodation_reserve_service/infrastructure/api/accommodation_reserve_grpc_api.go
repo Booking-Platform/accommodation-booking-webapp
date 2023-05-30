@@ -123,3 +123,25 @@ func (handler *AccommodationReserveHandler) ChangeReservationStatus(ctx context.
 
 	return response, nil
 }
+
+func (handler *AccommodationReserveHandler) GetAllReservationsThatPassed(ctx context.Context, request *pb.IdMessageRequest) (*pb.GetAllReservationsThatPassedResponse, error) {
+	id := request.Id
+	objectId, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		return nil, err
+	}
+
+	reservations, err := handler.service.GetAllReservationsThatPassed(objectId)
+	if err != nil {
+		return nil, err
+	}
+
+	response := &pb.GetAllReservationsThatPassedResponse{
+		Reservations: []*pb.Reservation{},
+	}
+	for _, reservation := range reservations {
+		current := mapReservationPb(reservation)
+		response.Reservations = append(response.Reservations, current)
+	}
+	return response, nil
+}

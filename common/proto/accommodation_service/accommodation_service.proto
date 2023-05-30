@@ -145,6 +145,7 @@ message Accommodation {
   repeated string photo = 7;
   repeated Benefit benefits = 8;
   repeated Appointment appointments = 9;
+  string host_id=10;
 }
 
 message AccommodationDTO {

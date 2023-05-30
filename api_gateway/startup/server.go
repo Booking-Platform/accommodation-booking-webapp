@@ -82,6 +82,9 @@ func (server *Server) initCustomHandlers() {
 
 	authHandler := api.NewAuthHandler(userInfoEndpoint, authEndpoint)
 	authHandler.Init(server.mux)
+
+	userInfoHandler := api.NewUserInfoHandler(accommodationReserveEndpoint, userInfoEndpoint, accommodationEndpoint)
+	userInfoHandler.Init(server.mux)
 }
 
 func (server *Server) getHandlerCORSWrapped() http.Handler {
