@@ -26,10 +26,4 @@ export class UserService {
     });
   }
 
-
-  getHostsForRatingByUserID(id: string): Observable<any[]> {
-    const url = `${this.apiHost}getReservationsByUserID/${id}`;
-    return this.http.get<any[]>(url, { headers: this.headers });
-  }
-
 }

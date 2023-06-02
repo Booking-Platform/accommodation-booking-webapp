@@ -2,7 +2,9 @@ package api
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
+	"github.com/Booking-Platform/accommodation-booking-webapp/api_gateway/domain"
 	"github.com/Booking-Platform/accommodation-booking-webapp/api_gateway/infrastructure/services"
 	"github.com/Booking-Platform/accommodation-booking-webapp/common/proto/accommodation_reserve_service"
 	accommodation "github.com/Booking-Platform/accommodation-booking-webapp/common/proto/accommodation_service"
@@ -43,17 +45,31 @@ func (handler *UserInfoHandler) GetHostsForRatingByUserID(w http.ResponseWriter,
 	}
 
 	reservations, err := handler.getAllReservationsThatPassed(id)
+	hosts := []domain.HostInfo{}
 
 	for _, reservation := range reservations.Reservations {
 		accommodation, _ := handler.getAccommodationForReservation(reservation.AccommodationID)
 		host, _ := handler.getHostInfo(accommodation.Accommodation.HostId)
-		
+		hostInfo := domain.HostInfo{
+			Id:                  accommodation.Accommodation.HostId,
+			Surname:             host.Surname,
+			Name:                host.Name,
+			AccommodationName:   accommodation.Accommodation.Name,
+			AccommodationStreet: accommodation.Accommodation.Address.Street + ", " + accommodation.Accommodation.Address.City,
+		}
+
+		hosts = append(hosts, hostInfo)
 	}
 
+	response, err := json.Marshal(hosts)
 	if err != nil {
-		writeErrorResponse(w, http.StatusInternalServerError, err)
+		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	w.Write(response)
 
 }
 

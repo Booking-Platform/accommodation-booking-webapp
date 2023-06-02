@@ -11,7 +11,9 @@ import (
 	accommodation_reserve_Gw "github.com/Booking-Platform/accommodation-booking-webapp/common/proto/accommodation_reserve_service"
 	accommodation_Gw "github.com/Booking-Platform/accommodation-booking-webapp/common/proto/accommodation_service"
 	auth_Gw "github.com/Booking-Platform/accommodation-booking-webapp/common/proto/auth_service"
+	rating_Gw "github.com/Booking-Platform/accommodation-booking-webapp/common/proto/rating_service"
 	user_info_Gw "github.com/Booking-Platform/accommodation-booking-webapp/common/proto/user_info_service"
+
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"github.com/rs/cors"
 	"google.golang.org/grpc"
@@ -60,6 +62,12 @@ func (server *Server) initHandlers() {
 		panic(err)
 	}
 
+	ratingEndpoint := fmt.Sprintf("%s:%s", server.config.RatingHost, server.config.RatingPort)
+	err = rating_Gw.RegisterRatingServiceHandlerFromEndpoint(context.TODO(), server.mux, ratingEndpoint, opts)
+	if err != nil {
+		panic(err)
+	}
+
 }
 
 func (server *Server) Start() {
@@ -85,6 +93,7 @@ func (server *Server) initCustomHandlers() {
 
 	userInfoHandler := api.NewUserInfoHandler(accommodationReserveEndpoint, userInfoEndpoint, accommodationEndpoint)
 	userInfoHandler.Init(server.mux)
+
 }
 
 func (server *Server) getHandlerCORSWrapped() http.Handler {

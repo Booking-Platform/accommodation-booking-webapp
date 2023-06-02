@@ -15,6 +15,8 @@ type Config struct {
 	UserInfoPort             string
 	AuthHost                 string
 	AuthPort                 string
+	RatingHost               string
+	RatingPort               string
 	AllowedCorsOrigin        string
 }
 
@@ -32,6 +34,8 @@ func NewConfig() *Config {
 		UserInfoPort:             os.Getenv("USER_INFO_SERVICE_PORT"),
 		AuthHost:                 os.Getenv("AUTH_SERVICE_HOST"),
 		AuthPort:                 os.Getenv("AUTH_SERVICE_PORT"),
+		RatingHost:               os.Getenv("RATING_SERVICE_HOST"),
+		RatingPort:               os.Getenv("RATING_SERVICE_PORT"),
 
 		AllowedCorsOrigin: "http://localhost:4200",
 	}

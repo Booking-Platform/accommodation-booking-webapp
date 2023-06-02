@@ -13,7 +13,6 @@ type Config struct {
 
 func NewConfig() *Config {
 	utils.LoadEnv()
-
 	return &Config{
 		Port:       os.Getenv("AUTH_SERVICE_PORT"),
 		UserDBHost: os.Getenv("AUTH_DB_HOST"),
