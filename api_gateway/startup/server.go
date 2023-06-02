@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"github.com/Booking-Platform/accommodation-booking-webapp/api_gateway/infrastructure/api"
+	"github.com/dgrijalva/jwt-go"
 	"log"
 	"net/http"
 
@@ -101,5 +102,41 @@ func (server *Server) getHandlerCORSWrapped() http.Handler {
 		AllowedOrigins: []string{server.config.AllowedCorsOrigin},
 	})
 	handler := corsMiddleware.Handler(server.mux)
+	handler = validateToken(handler)
 	return handler
+}
+
+func validateToken(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		tokenString := extractTokenFromRequest(r)
+		if tokenString == "" {
+			// No token provided, return an error response
+			w.WriteHeader(http.StatusUnauthorized)
+			return
+		}
+
+		token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
+			// Define the secret key used for signing the token
+			secretKey := []byte("your-secret-key")
+			return secretKey, nil
+		})
+
+		if err != nil || !token.Valid {
+			// Token is invalid, return an error response
+			w.WriteHeader(http.StatusUnauthorized)
+			return
+		}
+
+		// Token is valid, continue to the next handler
+		next.ServeHTTP(w, r)
+	})
+}
+
+func extractTokenFromRequest(r *http.Request) string {
+	// Extract the token from the request headers, query parameters, cookies, or any other location where you expect to receive the token.
+	// Implement the logic to retrieve the token based on your specific requirements.
+	token := r.Header.Get("Authorization")
+	// Additional parsing or manipulation of the token string if needed
+
+	return token
 }

@@ -6,14 +6,15 @@ replace github.com/Booking-Platform/accommodation-booking-webapp/common => ../co
 
 require (
 	github.com/Booking-Platform/accommodation-booking-webapp/common v0.0.0-00010101000000-000000000000
+	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.15.2
-	github.com/joho/godotenv v1.5.1
 	github.com/rs/cors v1.9.0
 	google.golang.org/grpc v1.55.0
 )
 
 require (
 	github.com/golang/protobuf v1.5.3 // indirect
+	github.com/joho/godotenv v1.5.1 // indirect
 	golang.org/x/net v0.8.0 // indirect
 	golang.org/x/sys v0.6.0 // indirect
 	golang.org/x/text v0.8.0 // indirect
