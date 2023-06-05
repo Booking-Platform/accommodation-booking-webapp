@@ -27,8 +27,9 @@ func (handler *UserInfoHandler) GetUserByID(ctx context.Context, request *pb.Get
 	user, _ := handler.service.GetByID(id)
 
 	response := &pb.GetUserByIDResponse{
-		Surname: user.Surname,
-		Name:    user.Name,
+		Surname:   user.Surname,
+		Name:      user.Name,
+		AvgRating: 4.8,
 	}
 
 	return response, nil
