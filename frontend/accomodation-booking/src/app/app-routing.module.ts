@@ -12,6 +12,7 @@ import { AddAppointmentComponent } from './modules/add-appointment/add-appointme
 import { AllAccommodationsComponent } from './modules/all-accommodations/all-accommodations.component';
 import { ProfileComponent } from './modules/profile/profile.component';
 import { RateHostComponent } from './modules/rate-host/rate-host.component';
+import { RateAccommodationComponent } from './modules/rate-accommodation/rate-accommodation.component';
 
 const routes: Routes = [
   { path: 'view', component: ViewComponent },
@@ -56,6 +57,12 @@ const routes: Routes = [
   {
     path: 'rateHost',
     component: RateHostComponent,
+    canActivate: [AuthGuard],
+    data: { requiredRole: 'Guest' },
+  },
+  {
+    path: 'rateAccommodation',
+    component: RateAccommodationComponent,
     canActivate: [AuthGuard],
     data: { requiredRole: 'Guest' },
   },

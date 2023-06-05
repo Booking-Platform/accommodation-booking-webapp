@@ -1,12 +1,14 @@
 package api
 
 import (
+	"fmt"
 	pb "github.com/Booking-Platform/accommodation-booking-webapp/common/proto/rating_service"
 	"github.com/Booking-Platform/accommodation-booking-webapp/rating_service/domain/model"
 	"go.mongodb.org/mongo-driver/bson/primitive"
+	"strconv"
 )
 
-func mapRating(ratingPb *pb.NewRating) (*model.Rating, error) {
+func mapRating(ratingPb *pb.NewRating) (*model.HostRating, error) {
 	guestID, err := primitive.ObjectIDFromHex(ratingPb.GuestID)
 	if err != nil {
 		return nil, err
@@ -18,11 +20,39 @@ func mapRating(ratingPb *pb.NewRating) (*model.Rating, error) {
 		return nil, err
 	}
 
-	rating := &model.Rating{
+	ratingNumber, err := strconv.Atoi(ratingPb.Rating)
+	if err != nil {
+		fmt.Println("Error:", err)
+		return nil, err
+	}
 
-		Rating:  1,
+	rating := &model.HostRating{
+
+		Rating:  ratingNumber,
 		HostId:  hostID,
 		GuestId: guestID,
+	}
+
+	return rating, nil
+}
+
+func mapAccommodationRating(ratingPb *pb.NewAccommodationRating) (*model.AccommodationRating, error) {
+	guestID, err := primitive.ObjectIDFromHex(ratingPb.GuestID)
+	if err != nil {
+		return nil, err
+	}
+
+	ratingNumber, err := strconv.Atoi(ratingPb.Rating)
+	if err != nil {
+		fmt.Println("Error:", err)
+		return nil, err
+	}
+
+	rating := &model.AccommodationRating{
+
+		Rating:            ratingNumber,
+		AccommodationName: ratingPb.GetAccommodationName(),
+		GuestId:           guestID,
 	}
 
 	return rating, nil

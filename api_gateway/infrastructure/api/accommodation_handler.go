@@ -4,8 +4,10 @@ import (
 	"context"
 	"encoding/json"
 	"github.com/Booking-Platform/accommodation-booking-webapp/api_gateway/infrastructure/services"
+	"github.com/Booking-Platform/accommodation-booking-webapp/common/proto/accommodation_reserve_service"
 	reservation "github.com/Booking-Platform/accommodation-booking-webapp/common/proto/accommodation_reserve_service"
 	accommodation "github.com/Booking-Platform/accommodation-booking-webapp/common/proto/accommodation_service"
+
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"net/http"
 	"strconv"
@@ -75,4 +77,14 @@ func (handler *AccommodationHandler) getAccommodations(numOfGuests string, city 
 	}
 	accommodationClient := services.NewAccommodationClient(handler.accommodationClientAddress)
 	return accommodationClient.Search(context.TODO(), &accommodation.GetAccommodationsByParamsRequest{SearchParams: searchParams})
+}
+
+func (handler *AccommodationHandler) getAllReservationsThatPassed(id string) (*accommodation_reserve.GetAllReservationsThatPassedResponse, error) {
+	reservationClient := services.NewReservationClient(handler.accommodationReserveClientAddress)
+	return reservationClient.GetAllReservationsThatPassed(context.TODO(), &reservation.IdMessageRequest{Id: id})
+}
+
+func (handler *AccommodationHandler) getAccommodationForReservation(id string) (*accommodation.GetAccommodationByIdResponse, error) {
+	accommodationClient := services.NewAccommodationClient(handler.accommodationClientAddress)
+	return accommodationClient.GetById(context.TODO(), &accommodation.GetAccommodationByIdRequest{Id: id})
 }

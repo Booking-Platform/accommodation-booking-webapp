@@ -25,7 +25,25 @@ func (handler *RatingHandler) CreateRating(ctx context.Context, request *pb.Crea
 		return nil, err
 	}
 
-	err = handler.service.Create(rating)
+	err = handler.service.RateHost(rating)
+
+	if err != nil {
+		return nil, err
+	}
+
+	response := &pb.BlankResponse{}
+
+	return response, nil
+}
+
+func (handler *RatingHandler) CreateAccommodationRating(ctx context.Context, request *pb.CreateAccommodationRatingRequest) (*pb.BlankResponse, error) {
+
+	rating, err := mapAccommodationRating(request.NewAccommodationRating)
+	if err != nil {
+		return nil, err
+	}
+
+	err = handler.service.RateAccommodation(rating)
 
 	if err != nil {
 		return nil, err
