@@ -6,6 +6,7 @@ import (
 	"github.com/Booking-Platform/accommodation-booking-webapp/api_gateway/infrastructure/services"
 	reservation "github.com/Booking-Platform/accommodation-booking-webapp/common/proto/accommodation_reserve_service"
 	accommodation "github.com/Booking-Platform/accommodation-booking-webapp/common/proto/accommodation_service"
+	user_info "github.com/Booking-Platform/accommodation-booking-webapp/common/proto/user_info_service"
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"net/http"
 	"strconv"
@@ -14,12 +15,14 @@ import (
 type AccommodationHandler struct {
 	accommodationReserveClientAddress string
 	accommodationClientAddress        string
+	userInfoClientAddress             string
 }
 
-func NewAccommodationHandler(accommodationReserveClientAddress, accommodationClientAddress string) Handler {
+func NewAccommodationHandler(accommodationReserveClientAddress, userInfoClientAddress, accommodationClientAddress string) Handler {
 	return &AccommodationHandler{
 		accommodationReserveClientAddress: accommodationReserveClientAddress,
 		accommodationClientAddress:        accommodationClientAddress,
+		userInfoClientAddress:             userInfoClientAddress,
 	}
 }
 
@@ -42,6 +45,12 @@ func (handler *AccommodationHandler) GetAllByParams(w http.ResponseWriter, r *ht
 	}
 	accommodations, err := handler.getAccommodations(numOfGuests, city, accommodationIds.Id)
 
+	for _, accommodation := range accommodations.Accommodations {
+		user, _ := handler.getUserById(accommodation.HostId)
+		if user.AvgRating >= 4.7 {
+			accommodation.IsFeaturedHost = true
+		}
+	}
 	response, err := json.Marshal(accommodations)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
@@ -75,4 +84,9 @@ func (handler *AccommodationHandler) getAccommodations(numOfGuests string, city 
 	}
 	accommodationClient := services.NewAccommodationClient(handler.accommodationClientAddress)
 	return accommodationClient.Search(context.TODO(), &accommodation.GetAccommodationsByParamsRequest{SearchParams: searchParams})
+}
+
+func (handler *AccommodationHandler) getUserById(id string) (*user_info.GetUserByIDResponse, error) {
+	userClient := services.NewUserClient(handler.userInfoClientAddress)
+	return userClient.GetUserByID(context.TODO(), &user_info.GetUserByIDRequest{Id: id})
 }

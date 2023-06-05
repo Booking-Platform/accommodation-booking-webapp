@@ -85,7 +85,7 @@ func (server *Server) initCustomHandlers() {
 	reservationHandler := api.NewReservationHandler(accommodationReserveEndpoint, userInfoEndpoint, accommodationEndpoint)
 	reservationHandler.Init(server.mux)
 
-	accommodationHandler := api.NewAccommodationHandler(accommodationReserveEndpoint, accommodationEndpoint)
+	accommodationHandler := api.NewAccommodationHandler(accommodationReserveEndpoint, userInfoEndpoint, accommodationEndpoint)
 	accommodationHandler.Init(server.mux)
 
 	authHandler := api.NewAuthHandler(userInfoEndpoint, authEndpoint)
