@@ -41,6 +41,7 @@ message CreateUserResponse {
 message NewUser {
   string email = 1;
   string password = 2;
+  string role = 3;
 }
 
 message User {

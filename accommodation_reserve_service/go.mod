@@ -6,6 +6,7 @@ replace github.com/Booking-Platform/accommodation-booking-webapp/common => ../co
 
 require (
 	github.com/Booking-Platform/accommodation-booking-webapp/common v0.0.0-00010101000000-000000000000
+	github.com/joho/godotenv v1.5.1
 	go.mongodb.org/mongo-driver v1.11.4
 	google.golang.org/genproto v0.0.0-20230410155749-daa745c078e1
 	google.golang.org/grpc v1.55.0

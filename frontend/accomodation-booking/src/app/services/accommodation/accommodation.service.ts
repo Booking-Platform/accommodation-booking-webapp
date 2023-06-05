@@ -7,6 +7,7 @@ import { Accommodation } from 'src/app/model/accommodation';
   providedIn: 'root',
 })
 export class AccommodationService {
+  
 
   apiHost: string = 'http://localhost:8000/';
   headers: HttpHeaders = new HttpHeaders({
@@ -43,6 +44,12 @@ export class AccommodationService {
       }
     );
   }
+
+  getAccommodationsByHostID(id: string) {
+    window.alert(id)
+    const url = `${this.apiHost}accommodation/getAllAccommodationsByHostID/${id}`;
+    return this.http.get<any[]>(url, { headers: this.headers });
+   }
 
   getAccommodationByID(id: string): Observable<any[]> {
     const url = `${this.apiHost}accommodations/${id}`;

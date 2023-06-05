@@ -11,9 +11,25 @@ services:
     environment:
       ACCOMMODATION_RESERVE_DB_HOST: ${ACCOMMODATION_RESERVE_DB_HOST}
       ACCOMMODATION_RESERVE_DB_PORT: ${ACCOMMODATION_RESERVE_DB_PORT}
-      ACCOMMODATION_RESERVE_SERVICE_PORT: ${ACCOMMODATION_RESERVE_SERVICE_PORT}
+      ACCOMMODATION_RESERVE_SERVICE_PORT: 8000
     depends_on:
       - accommodation_reserve_db
+    networks:
+      - network
+
+  accommodation_service:
+    image: accommodation_service
+    container_name: accommodation_service
+    build:
+      context: .
+      dockerfile: ./accommodation_service/Dockerfile
+    restart: on-failure
+    environment:
+      ACCOMMODATION_DB_HOST: ${ACCOMMODATION_DB_HOST}
+      ACCOMMODATION_DB_PORT: ${ACCOMMODATION_DB_PORT}
+      ACCOMMODATION_SERVICE_PORT: ${ACCOMMODATION_SERVICE_PORT}
+    depends_on:
+      - accommodation_db
     networks:
       - network
 
@@ -25,9 +41,9 @@ services:
       dockerfile: ./user_info_service/Dockerfile
     restart: on-failure
     environment:
-      ACCOMMODATION_RESERVE_DB_HOST: ${USER_INFO_DB_HOST}
-      ACCOMMODATION_RESERVE_DB_PORT: ${USER_INFO_DB_PORT}
-      ACCOMMODATION_RESERVE_SERVICE_PORT: ${USER_INFO_SERVICE_PORT}
+      USER_INFO_DB_HOST: ${USER_INFO_DB_HOST}
+      USER_INFO_DB_PORT: ${USER_INFO_DB_PORT}
+      USER_INFO_SERVICE_PORT: ${USER_INFO_SERVICE_PORT}
     depends_on:
       - user_info_db
     networks:
@@ -41,27 +57,11 @@ services:
       dockerfile: ./auth_service/Dockerfile
     restart: on-failure
     environment:
-      ACCOMMODATION_RESERVE_DB_HOST: ${AUTH_DB_HOST}
-      ACCOMMODATION_RESERVE_DB_PORT: ${AUTH_DB_PORT}
-      ACCOMMODATION_RESERVE_SERVICE_PORT: ${AUTH_SERVICE_PORT}
+      AUTH_DB_HOST: ${AUTH_DB_HOST}
+      AUTH_DB_PORT: ${AUTH_DB_PORT}
+      AUTH_SERVICE_PORT: ${AUTH_SERVICE_PORT}
     depends_on:
       - auth_db
-    networks:
-      - network
-
-  accommodation_service:
-    image: accommodation_service
-    container_name: accommodation_service
-    build:
-      context: .
-      dockerfile: ./accommodation_service/Dockerfile
-    restart: on-failure
-    environment:
-      ACCOMMODATION_RESERVE_DB_HOST: ${ACCOMMODATION_DB_HOST}
-      ACCOMMODATION_RESERVE_DB_PORT: ${ACCOMMODATION_DB_PORT}
-      ACCOMMODATION_RESERVE_SERVICE_PORT: ${ACCOMMODATION_SERVICE_PORT}
-    depends_on:
-      - accommodation_db
     networks:
       - network
 
@@ -78,6 +78,12 @@ services:
       GATEWAY_PORT: ${GATEWAY_PORT}
       ACCOMMODATION_RESERVE_SERVICE_HOST: ${ACCOMMODATION_RESERVE_SERVICE_HOST}
       ACCOMMODATION_RESERVE_SERVICE_PORT: ${ACCOMMODATION_RESERVE_SERVICE_PORT}
+      ACCOMMODATION_SERVICE_HOST: ${ACCOMMODATION_SERVICE_HOST}
+      ACCOMMODATION_SERVICE_PORT: ${ACCOMMODATION_SERVICE_PORT}
+      USER_INFO_SERVICE_HOST: ${USER_INFO_SERVICE_HOST}
+      USER_INFO_SERVICE_PORT: ${USER_INFO_SERVICE_PORT}
+      AUTH_SERVICE_HOST: ${AUTH_SERVICE_HOST}
+      AUTH_SERVICE_PORT: ${AUTH_SERVICE_PORT}
 
     networks:
       - network
@@ -88,38 +94,7 @@ services:
     restart: on-failure
     networks:
       - network
-    ports:
-      - 4000:27017
-    environment:
-      - MONGO_INITDB_DATABASE=xws
-    volumes:
-      - accommodation_reserve_db-data:/data/db
 
-  user_info_db:
-    image: mongo
-    container_name: user_info_db
-    restart: on-failure
-    networks:
-      - network
-    ports:
-      - 4003:27017
-    environment:
-      - MONGO_INITDB_DATABASE=xws
-    volumes:
-      - user_info_db-data:/data/db
-
-  auth_db:
-    image: mongo
-    container_name: auth_db
-    restart: on-failure
-    networks:
-      - network
-    ports:
-      - 4002:27017
-    environment:
-      - MONGO_INITDB_DATABASE=xws
-    volumes:
-      - auth_db-data:/data/db
 
   accommodation_db:
     image: mongo
@@ -127,37 +102,69 @@ services:
     restart: on-failure
     networks:
       - network
-    ports:
-      - 4001:27017
+
+  user_info_db:
+    image: mongo
+    container_name: user_info_db
+    restart: on-failure
+    networks:
+      - network
+
+  auth_db:
+    image: mongo
+    container_name: auth_db
+    restart: on-failure
+    networks:
+      - network
+
+
+  mongo_express:
+    image: mongo-express
+    container_name: mongo_express
+    restart: on-failure
     environment:
-      - MONGO_INITDB_DATABASE=xws
-    volumes:
-      - accommodation_db-data:/data/db
+      ME_CONFIG_MONGODB_SERVER: auth_db
+      ME_CONFIG_MONGODB_PORT: 27017
+    ports:
+      - 8081:8081
+    networks:
+      - network
 
+  mongo_express_db2:
+    image: mongo-express
+    container_name: mongo_express_db2
+    restart: on-failure
+    environment:
+      ME_CONFIG_MONGODB_SERVER: user_info_db
+      ME_CONFIG_MONGODB_PORT: 27017
+    ports:
+      - 8082:8081
+    networks:
+      - network
 
-  mongo-express:
-      image: mongo-express
-      container_name: accommodation-booking-webapp-mongo-express
-      restart: always
-      networks:
-        - network
-      ports:
-        - 8081:8081
-      environment:
-        - ME_CONFIG_MONGODB_SERVER=accommodation_reserve_db
-        - ME_CONFIG_MONGODB_SERVER= accommodation_db
-        - ME_CONFIG_MONGODB_SERVER=user_info_db
-        - ME_CONFIG_MONGODB_SERVER=auth_db
+  mongo_express_db3:
+    image: mongo-express
+    container_name: mongo_express_db3
+    restart: on-failure
+    environment:
+      ME_CONFIG_MONGODB_SERVER: accommodation_reserve_db
+      ME_CONFIG_MONGODB_PORT: 27017
+    ports:
+      - 8083:8081
+    networks:
+      - network
 
-volumes:
-  accommodation_reserve_db-data:
-    name: server-database
-  accommodation_db-data:
-    name: server-database
-  user_info_db-data:
-    name: server-database
-  auth_db-data:
-    name: server-database
+  mongo_express_db4:
+    image: mongo-express
+    container_name: mongo_express_db4
+    restart: on-failure
+    environment:
+      ME_CONFIG_MONGODB_SERVER: accommodation_db
+      ME_CONFIG_MONGODB_PORT: 27017
+    ports:
+      - 8084:8081
+    networks:
+      - network
 
 
 networks:

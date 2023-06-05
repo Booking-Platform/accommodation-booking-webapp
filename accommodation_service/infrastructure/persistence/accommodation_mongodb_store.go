@@ -31,6 +31,11 @@ func NewAccommodationMongoDBStore(client *mongo.Client) domain.AccommodationStor
 	}
 }
 
+func (store *AccommodationMongoDBStore) FindAllAccommodationsByHostID(id primitive.ObjectID) ([]*model.Accommodation, error) {
+	filter := bson.M{"host_id": id}
+	return store.filter(filter)
+}
+
 func (store *AccommodationMongoDBStore) GetAllAccommodations() ([]*model.Accommodation, error) {
 	filter := bson.D{{}}
 	return store.filter(filter)
@@ -42,10 +47,7 @@ func (store *AccommodationMongoDBStore) GetAccomodationByID(id primitive.ObjectI
 }
 
 func (store *AccommodationMongoDBStore) Insert(accommodation *model.Accommodation) error {
-	if accommodation.ID.IsZero() {
-		accommodation.ID = primitive.NewObjectID()
-	}
-
+	accommodation.ID = primitive.NewObjectID()
 	result, err := store.accommodations.InsertOne(context.TODO(), accommodation)
 	if err != nil {
 		return err

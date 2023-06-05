@@ -13,16 +13,16 @@
       min="0" max="10">
 
     <label for="country">Country:</label>
-    <input type="text" id="country" name="country" required [(ngModel)]="accommodation.address.country">
+    <input type="text" id="country" name="country" required [(ngModel)]="country">
 
     <label for="city">City:</label>
-    <input type="text" id="city" name="city" required [(ngModel)]="accommodation.address.city">
+    <input type="text" id="city" name="city" required [(ngModel)]="city">
 
     <label for="street">Street:</label>
-    <input type="text" id="street" name="street" required [(ngModel)]="accommodation.address.street">
+    <input type="text" id="street" name="street" required [(ngModel)]="street">
 
     <label for="number">Number:</label>
-    <input type="number" id="number" name="number" required [(ngModel)]="accommodation.address.number">
+    <input type="number" id="number" name="number" required [(ngModel)]="number">
 
     <label for="photo">Photo URLs (separated by commas):</label>
     <textarea id="photo" name="photo" required [(ngModel)]="photos"></textarea>

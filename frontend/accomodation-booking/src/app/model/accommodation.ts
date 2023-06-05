@@ -6,9 +6,10 @@ export class Accommodation {
   name: string = '';
   min_guest_num: string = '';
   max_guest_num: string = '';
-  address!: Address;
+  address: Address = new Address();
   photos: string[] = [];
   benefits: string[] = [];
   automatic_confirmation: boolean = false;
   appointments!: Appointment;
+  host_id: string ='';
 }

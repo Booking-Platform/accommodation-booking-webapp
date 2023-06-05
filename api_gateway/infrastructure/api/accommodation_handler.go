@@ -3,7 +3,6 @@ package api
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"github.com/Booking-Platform/accommodation-booking-webapp/api_gateway/infrastructure/services"
 	reservation "github.com/Booking-Platform/accommodation-booking-webapp/common/proto/accommodation_reserve_service"
 	accommodation "github.com/Booking-Platform/accommodation-booking-webapp/common/proto/accommodation_service"
@@ -76,10 +75,4 @@ func (handler *AccommodationHandler) getAccommodations(numOfGuests string, city 
 	}
 	accommodationClient := services.NewAccommodationClient(handler.accommodationClientAddress)
 	return accommodationClient.Search(context.TODO(), &accommodation.GetAccommodationsByParamsRequest{SearchParams: searchParams})
-}
-
-func (handler *AccommodationHandler) ChangeAutomaticConfirmation(request accommodation.ChangeAutomaticConfirmationRequest) (*accommodation.ChangeAutomaticConfirmationResponse, error) {
-
-	fmt.Println('s')
-	return nil, nil
 }

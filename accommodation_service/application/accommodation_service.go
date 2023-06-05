@@ -68,3 +68,7 @@ func (service *AccommodationService) GetAllAccommodationsByParams(searchParams *
 func (service *AccommodationService) ChangeAutomaticConfirmationStatus(id primitive.ObjectID) error {
 	return service.store.ChangeAutomaticConfirmationStatusByAccommodationID(id)
 }
+
+func (service *AccommodationService) GetAllAccommodationsByHostID(id primitive.ObjectID) ([]*model.Accommodation, error) {
+	return service.store.FindAllAccommodationsByHostID(id)
+}

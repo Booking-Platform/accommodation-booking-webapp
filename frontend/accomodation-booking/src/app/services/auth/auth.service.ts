@@ -1,4 +1,5 @@
 import { EventEmitter, Injectable } from '@angular/core';
+import jwtDecode from 'jwt-decode';
 
 @Injectable({
   providedIn: 'root',
@@ -13,6 +14,16 @@ export class AuthService {
   setToken(token: string): void {
     localStorage.setItem(this.tokenKey, token);
     this.onLogin.emit();
+  }
+
+  getUserRole() {
+    var jwt;
+    if (this.getToken()) {
+      jwt = jwtDecode(this.getToken()!) as any;
+    } else {
+      return '';
+    }
+    return jwt.role;
   }
 
   getToken(): string | null {

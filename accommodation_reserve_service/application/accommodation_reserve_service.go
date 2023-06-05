@@ -46,3 +46,7 @@ func (service *AccommodationReserveService) ChangeReservationStatus(reservationI
 func (service *AccommodationReserveService) GetReservedAccommodationsIds(from string, to string) ([]*primitive.ObjectID, error) {
 	return service.store.GetReservedAccommodationsIds(from, to)
 }
+
+func (service *AccommodationReserveService) GetAllReservationsThatPassed(id primitive.ObjectID) ([]*model.Reservation, error) {
+	return service.store.GetAllReservationsThatPassed(id)
+}

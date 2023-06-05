@@ -19,6 +19,8 @@ type UserMongoDBStore struct {
 }
 
 func (u UserMongoDBStore) CreateUser(user *model.User) error {
+	user.TimesCanceled = 0
+
 	_, err := u.users.InsertOne(context.Background(), user)
 	if err != nil {
 		return err

@@ -38,6 +38,6 @@ export class AddAppointmentComponent implements OnInit {
 
     this.accommodationService
       .addAppointment(newAppointment)
-      .subscribe(() => this.router.navigate(['/view']));
+      .subscribe(() => this.router.navigate(['/allAccommodations']));
   }
 }

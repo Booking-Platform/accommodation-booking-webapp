@@ -11,11 +11,12 @@ import { User } from 'src/app/model/user';
 })
 export class RegisterComponent {
   user: User = {
-    id: null,
+    id: '',
     name: '',
     surname: '',
     email: '',
     password: '',
+    role: '',
   };
 
   constructor(
@@ -26,6 +27,7 @@ export class RegisterComponent {
 
   register() {
     this.userService.createUser(this.user).subscribe((res) => {
+      console.log(res);
       if (res.Email === 'error') {
         this.toastr.error('Email address already registered!');
       } else {

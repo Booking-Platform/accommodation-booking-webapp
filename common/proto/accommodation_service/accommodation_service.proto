@@ -47,6 +47,12 @@ service AccommodationService{
     };
   }
 
+  rpc GetAllAccommodationsByHostID(GetAllAccommodationsByHostIDRequest) returns (GetAllAccommodationsByHostIDResponse) {
+    option (google.api.http) = {
+      get: "/accommodation/getAllAccommodationsByHostID/{id}"
+    };
+  }
+
 }
 
 message GetAllAccommodationsRequest {
@@ -54,6 +60,14 @@ message GetAllAccommodationsRequest {
 
 message GetAllAccommodationsResponse {
   repeated AccommodationDTO accommodations = 1;
+}
+
+message GetAllAccommodationsByHostIDResponse {
+  repeated AccommodationDTO accommodations = 1;
+}
+
+message GetAllAccommodationsByHostIDRequest {
+  string id = 1;
 }
 
 message GetAccommodationByIdRequest {
@@ -117,6 +131,7 @@ message NewAccommodation {
   bool automatic_confirmation = 5;
   repeated string photos = 6;
   repeated string benefits = 7;
+  string host_id = 8;
 }
 
 
@@ -130,6 +145,7 @@ message Accommodation {
   repeated string photo = 7;
   repeated Benefit benefits = 8;
   repeated Appointment appointments = 9;
+  string host_id=10;
 }
 
 message AccommodationDTO {
