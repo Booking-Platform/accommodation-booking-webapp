@@ -6,8 +6,7 @@ import { Accommodation } from 'src/app/model/accommodation';
 @Injectable({
   providedIn: 'root',
 })
-export class AccommodationService {
-  
+export class AccommodationService {  
 
   apiHost: string = 'http://localhost:8000/';
   headers: HttpHeaders = new HttpHeaders({

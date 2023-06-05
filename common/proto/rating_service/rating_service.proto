@@ -14,6 +14,17 @@ service rating_service{
       body: "newRating"
     };
   }
+
+  rpc CreateAccommodationRating(CreateAccommodationRatingRequest) returns(BlankResponse) {
+    option (google.api.http) = {
+      post: "/api/rating/accommodation"
+      body: "newAccommodationRating"
+    };
+  }
+}
+
+message CreateAccommodationRatingRequest {
+  NewAccommodationRating newAccommodationRating = 1;
 }
 
 message CreateRatingRequest {
@@ -25,6 +36,12 @@ message BlankResponse {
 
 message NewRating {
   string hostID = 1;
+  string guestID = 2;
+  string rating = 3;
+}
+
+message NewAccommodationRating {
+  string accommodationName = 1;
   string guestID = 2;
   string rating = 3;
 }

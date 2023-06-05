@@ -25,6 +25,7 @@ import { JwtInterceptor, JwtModule } from '@auth0/angular-jwt';
 import { ProfileComponent } from './modules/profile/profile.component';
 import { RateHostComponent } from './modules/rate-host/rate-host.component';
 import { MyRatingsComponent } from './my-ratings/my-ratings.component';
+import { RateAccommodationComponent } from './modules/rate-accommodation/rate-accommodation.component';
 
 @NgModule({
   declarations: [
@@ -42,6 +43,7 @@ import { MyRatingsComponent } from './my-ratings/my-ratings.component';
     ProfileComponent,
     RateHostComponent,
     MyRatingsComponent,
+    RateAccommodationComponent,
   ],
   imports: [
     MatSlideToggleModule,
