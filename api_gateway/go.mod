@@ -9,6 +9,7 @@ require (
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.15.2
 	github.com/rs/cors v1.9.0
+	github.com/urfave/negroni v1.0.0
 	google.golang.org/grpc v1.55.0
 )
 
