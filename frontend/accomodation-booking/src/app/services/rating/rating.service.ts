@@ -20,7 +20,7 @@ export class RatingService {
   }
 
   createAccommodationRating(newAccommodationRating: any): Observable<any> {
-    const url = this.apiHost + '/accommodation';
+      const url = this.apiHost + '/accommodation';
     return this.http.post(url, JSON.stringify(newAccommodationRating), { headers: this.headers });
   }
   
