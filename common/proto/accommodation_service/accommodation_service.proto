@@ -158,6 +158,8 @@ message AccommodationDTO {
   repeated string photos = 7;
   repeated Benefit benefits = 8;
   repeated Appointment appointments = 9;
+  bool isFeaturedHost = 10;
+  string host_id = 11;
 }
 
 message Address {

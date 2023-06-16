@@ -90,6 +90,8 @@ func mapAccommodationDTOPb(accommodation *model.Accommodation) *pb.Accommodation
 		Photos:                accommodation.Photos,
 		Benefits:              pbBenefits,
 		Appointments:          pbAppointments,
+		IsFeaturedHost:        false,
+		HostId:                accommodation.HostID.Hex(),
 	}
 	return accommodationPb
 }

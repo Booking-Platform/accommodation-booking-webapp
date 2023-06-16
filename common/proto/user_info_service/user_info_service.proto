@@ -28,6 +28,7 @@ message GetUserByIDRequest {
 message GetUserByIDResponse {
   string name = 1;
   string surname = 2;
+  float avgRating = 3;
 }
 
 message CreateUserRequest {
