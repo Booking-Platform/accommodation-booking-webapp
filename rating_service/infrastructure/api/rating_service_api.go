@@ -4,6 +4,7 @@ import (
 	"context"
 	pb "github.com/Booking-Platform/accommodation-booking-webapp/common/proto/rating_service"
 	"github.com/Booking-Platform/accommodation-booking-webapp/rating_service/application"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 type RatingHandler struct {
@@ -52,4 +53,14 @@ func (handler *RatingHandler) CreateAccommodationRating(ctx context.Context, req
 	response := &pb.BlankResponse{}
 
 	return response, nil
+}
+
+func (handler *RatingHandler) GetAccommodationRatingsByAccommodationID(ctx context.Context, request *pb.IdMessageRequest) (*pb.RatingsResponse, error) {
+
+	_, err := primitive.ObjectIDFromHex(request.Id)
+	if err != nil {
+		return nil, err
+	}
+
+	return nil, nil
 }

@@ -8,4 +8,5 @@ import (
 type UserStore interface {
 	GetUserByID(id primitive.ObjectID) (*model.User, error)
 	CreateUser(user *model.User) error
+	Delete(id primitive.ObjectID) (bool, error)
 }

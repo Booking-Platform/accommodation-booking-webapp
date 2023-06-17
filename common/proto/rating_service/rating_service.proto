@@ -21,6 +21,25 @@ service rating_service{
       body: "newAccommodationRating"
     };
   }
+
+  rpc GetAccommodationRatingsByAccommodationID(IdMessageRequest) returns(RatingsResponse) {}
+
+}
+
+message RatingsResponse {
+  repeated Rating ratings = 1;
+}
+
+message Rating {
+  string hostID = 1;
+  string GuestID = 2;
+  string AccommodationName = 3;
+  string Rating = 4;
+  string Date = 5;
+}
+
+message IdMessageRequest {
+  string id = 1;
 }
 
 message CreateAccommodationRatingRequest {

@@ -7,5 +7,4 @@ type User struct {
 	Name          string             `bson:"name"`
 	Surname       string             `bson:"surname"`
 	TimesCanceled int                `bson:"timesCanceled"`
-	Is            int                `bson:"timesCanceled"`
 }

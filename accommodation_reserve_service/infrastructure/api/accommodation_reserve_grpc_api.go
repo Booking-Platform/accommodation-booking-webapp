@@ -145,3 +145,15 @@ func (handler *AccommodationReserveHandler) GetAllReservationsThatPassed(ctx con
 	}
 	return response, nil
 }
+
+func (handler *AccommodationReserveHandler) DeleteAllUserReservations(ctx context.Context, request *pb.DeleteAllUserReservationsRequest) (*pb.DeleteAllUserReservationsResponse, error) {
+	id := request.Id
+	objectId, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		return nil, err
+	}
+
+	result, _ := handler.service.DeleteAllUserReservations(objectId)
+
+	return &pb.DeleteAllUserReservationsResponse{Status: result}, nil
+}

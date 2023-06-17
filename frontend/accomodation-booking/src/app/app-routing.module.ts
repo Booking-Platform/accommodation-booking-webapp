@@ -13,6 +13,7 @@ import { AllAccommodationsComponent } from './modules/all-accommodations/all-acc
 import { ProfileComponent } from './modules/profile/profile.component';
 import { RateHostComponent } from './modules/rate-host/rate-host.component';
 import { RateAccommodationComponent } from './modules/rate-accommodation/rate-accommodation.component';
+import { RatingsComponent } from './modules/ratings/ratings.component';
 
 const routes: Routes = [
   { path: 'view', component: ViewComponent },
@@ -63,6 +64,10 @@ const routes: Routes = [
   {
     path: 'rateAccommodation',
     component: RateAccommodationComponent,
+  },
+  {
+    path: 'ratings',
+    component: RatingsComponent,
     canActivate: [AuthGuard],
     data: { requiredRole: 'Guest' },
   },

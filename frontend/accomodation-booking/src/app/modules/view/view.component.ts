@@ -27,7 +27,8 @@ export class ViewComponent implements OnInit {
     private router: Router
   ) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+  }
 
   reserveAccommodation(acc: Accommodation) {
     this.router.navigate(['/accommodation-details'], {
@@ -40,6 +41,18 @@ export class ViewComponent implements OnInit {
     });
   }
 
+  goToRatings(acc: Accommodation) {
+    this.router.navigate(['/ratings'], {
+      queryParams: {
+        accommodationID: acc.id,
+        startDate: this.from,
+        endDate: this.to,
+        numOfGuests: this.numOfGuests,
+      },
+    });
+  }
+
+
   search() {
     var searchParams = {
       from: this.from,
@@ -49,12 +62,8 @@ export class ViewComponent implements OnInit {
     };
     this.accommodationService.search(searchParams).subscribe((res: any) => {
       this.accommodations = res.accommodations;
-      window.alert(JSON.stringify(res))
       
       this.filterAccommodations();
-      window.alert(JSON.stringify(this.filterAccommodations))
-      window.alert("dsddsdsds")
-      window.alert(JSON.stringify(this.accommodations))
       
     });
   }

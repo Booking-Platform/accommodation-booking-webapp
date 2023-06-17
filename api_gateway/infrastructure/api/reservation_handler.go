@@ -10,6 +10,7 @@ import (
 	reservation "github.com/Booking-Platform/accommodation-booking-webapp/common/proto/accommodation_reserve_service"
 	accommodation "github.com/Booking-Platform/accommodation-booking-webapp/common/proto/accommodation_service"
 	user_info "github.com/Booking-Platform/accommodation-booking-webapp/common/proto/user_info_service"
+	"github.com/Booking-Platform/accommodation-booking-webapp/common/utils"
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"net/http"
 )
@@ -49,6 +50,11 @@ func (handler *ReservationHandler) ChangeReservationStatus(w http.ResponseWriter
 }
 
 func (handler *ReservationHandler) GetAllForConfirmation(w http.ResponseWriter, r *http.Request, pathParams map[string]string) {
+	err, done := utils.PreAuthorize(w, r)
+	if done {
+		return
+	}
+
 	reservations, err := handler.getReservationsWithStatusWAITING()
 	if err != nil {
 		writeErrorResponse(w, http.StatusInternalServerError, err)
@@ -92,6 +98,11 @@ func (handler *ReservationHandler) GetAllForConfirmation(w http.ResponseWriter, 
 }
 
 func (handler *ReservationHandler) GetReservationsByUserID(w http.ResponseWriter, r *http.Request, pathParams map[string]string) {
+	err, done := utils.PreAuthorize(w, r)
+	if done {
+		return
+	}
+
 	id := pathParams["id"]
 	if id == "" {
 		writeErrorResponse(w, http.StatusBadRequest, errors.New("invalid user id"))

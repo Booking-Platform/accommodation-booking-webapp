@@ -9,6 +9,7 @@ import (
 	accommodation "github.com/Booking-Platform/accommodation-booking-webapp/common/proto/accommodation_service"
 	user_info "github.com/Booking-Platform/accommodation-booking-webapp/common/proto/user_info_service"
 
+	"github.com/Booking-Platform/accommodation-booking-webapp/common/utils"
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"net/http"
 	"strconv"
@@ -30,12 +31,18 @@ func NewAccommodationHandler(accommodationReserveClientAddress, userInfoClientAd
 
 func (handler *AccommodationHandler) Init(mux *runtime.ServeMux) {
 	err := mux.HandlePath("GET", "/reservation/getAllByParams", handler.GetAllByParams)
+
 	if err != nil {
 		panic(err)
 	}
 }
 
 func (handler *AccommodationHandler) GetAllByParams(w http.ResponseWriter, r *http.Request, pathParams map[string]string) {
+	err, done := utils.PreAuthorize(w, r)
+	if done {
+		return
+	}
+
 	from := r.URL.Query().Get("from")
 	to := r.URL.Query().Get("to")
 	numOfGuests := r.URL.Query().Get("numOfGuests")
