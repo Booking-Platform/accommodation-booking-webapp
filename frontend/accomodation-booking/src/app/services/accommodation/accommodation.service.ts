@@ -45,7 +45,6 @@ export class AccommodationService {
   }
 
   getAccommodationsByHostID(id: string) {
-    window.alert(id)
     const url = `${this.apiHost}accommodation/getAllAccommodationsByHostID/${id}`;
     return this.http.get<any[]>(url, { headers: this.headers });
    }

@@ -48,10 +48,8 @@ func (handler *AccommodationHandler) GetAllByParams(w http.ResponseWriter, r *ht
 	accommodations, err := handler.getAccommodations(numOfGuests, city, accommodationIds.Id)
 
 	for _, accommodation := range accommodations.Accommodations {
-		user, _ := handler.getUserById(accommodation.HostId)
-		if user.AvgRating >= 4.7 {
-			accommodation.IsFeaturedHost = true
-		}
+		//user, _ := handler.getUserById(accommodation.HostId)
+		accommodation.IsFeaturedHost = true
 	}
 	response, err := json.Marshal(accommodations)
 	if err != nil {

@@ -1,7 +1,7 @@
 .card-deck {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  grid-column-gap: 10px; /* smanjena širina horizontalnih razmaka */
+  grid-column-gap: 10px; /* smanjena Å¡irina horizontalnih razmaka */
   grid-row-gap: 10px; /* smanjena visina vertikalnih razmaka */
   margin-top: 2%;
   margin-bottom: 2%;
@@ -146,5 +146,3 @@ button:active {
     width: 100%;
   }
 }
-
-

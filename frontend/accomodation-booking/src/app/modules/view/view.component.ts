@@ -49,7 +49,13 @@ export class ViewComponent implements OnInit {
     };
     this.accommodationService.search(searchParams).subscribe((res: any) => {
       this.accommodations = res.accommodations;
+      window.alert(JSON.stringify(res))
+      
       this.filterAccommodations();
+      window.alert(JSON.stringify(this.filterAccommodations))
+      window.alert("dsddsdsds")
+      window.alert(JSON.stringify(this.accommodations))
+      
     });
   }
 
@@ -60,7 +66,7 @@ export class ViewComponent implements OnInit {
       const toDate = new Date(this.to);
       const appointmentFromDate = new Date(acc.appointments[0].from);
       const appointmentToDate = new Date(acc.appointments[0].to);
-
+      
       const selectedBenefits = this.selectedBenefits;
 
       // Proveri da li accommodation sadrži sve selektovane benefite
@@ -76,6 +82,7 @@ export class ViewComponent implements OnInit {
         this.featuredOnly === acc.isFeaturedHost &&
         (selectedBenefits.length === 0 || hasSelectedBenefits)
       );
+
     });
   }
 
