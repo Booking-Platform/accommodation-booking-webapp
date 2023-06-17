@@ -4,17 +4,14 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
-	"fmt"
 	"github.com/Booking-Platform/accommodation-booking-webapp/api_gateway/domain"
 	"github.com/Booking-Platform/accommodation-booking-webapp/api_gateway/infrastructure/services"
 	"github.com/Booking-Platform/accommodation-booking-webapp/common/proto/accommodation_reserve_service"
-	accommodation "github.com/Booking-Platform/accommodation-booking-webapp/common/proto/accommodation_service"
-	user_info "github.com/Booking-Platform/accommodation-booking-webapp/common/proto/user_info_service"
-	"github.com/dgrijalva/jwt-go"
-	"strings"
-	"time"
-
 	reservation "github.com/Booking-Platform/accommodation-booking-webapp/common/proto/accommodation_reserve_service"
+	accommodation "github.com/Booking-Platform/accommodation-booking-webapp/common/proto/accommodation_service"
+	auth "github.com/Booking-Platform/accommodation-booking-webapp/common/proto/auth_service"
+	user_info "github.com/Booking-Platform/accommodation-booking-webapp/common/proto/user_info_service"
+	"github.com/Booking-Platform/accommodation-booking-webapp/common/utils"
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"net/http"
 )
@@ -23,36 +20,30 @@ type UserInfoHandler struct {
 	accommodationReserveClientAddress string
 	userInfoClientAddress             string
 	accommodationClientAddress        string
+	authClientAddress                 string
 }
 
 func (handler UserInfoHandler) Init(mux *runtime.ServeMux) {
 	err := mux.HandlePath("GET", "/host/getHostsForRating/{id}", handler.GetHostsForRatingByUserID)
+	err = mux.HandlePath("DELETE", "/host/deleteUser/{id}", handler.DeleteUser)
 	if err != nil {
 		panic(err)
 	}
 
 }
 
-func NewUserInfoHandler(accommodationReserveClientAddress, userInfoClientAddress, accommodationClientAddress string) Handler {
+func NewUserInfoHandler(accommodationReserveClientAddress, userInfoClientAddress, accommodationClientAddress, authClientAddress string) Handler {
 	return &UserInfoHandler{
 		accommodationReserveClientAddress: accommodationReserveClientAddress,
 		userInfoClientAddress:             userInfoClientAddress,
 		accommodationClientAddress:        accommodationClientAddress,
+		authClientAddress:                 authClientAddress,
 	}
 }
 
 func (handler *UserInfoHandler) GetHostsForRatingByUserID(w http.ResponseWriter, r *http.Request, pathParams map[string]string) {
-	tokenString := r.Header.Get("Authorization")
-	if tokenString == "" {
-		w.WriteHeader(http.StatusUnauthorized)
-		return
-	}
-
-	tokenString = strings.TrimPrefix(tokenString, "Bearer ")
-
-	token, err := handler.validateToken(tokenString)
-	if err != nil || !token.Valid {
-		w.WriteHeader(http.StatusUnauthorized)
+	err, done := utils.PreAuthorize(w, r)
+	if done {
 		return
 	}
 
@@ -91,6 +82,38 @@ func (handler *UserInfoHandler) GetHostsForRatingByUserID(w http.ResponseWriter,
 
 }
 
+func (handler *UserInfoHandler) DeleteUser(w http.ResponseWriter, r *http.Request, pathParams map[string]string) {
+	_, done := utils.PreAuthorize(w, r)
+	if done {
+		return
+	}
+
+	id := pathParams["id"]
+	if id == "" {
+		writeErrorResponse(w, http.StatusBadRequest, errors.New("invalid user id"))
+		return
+	}
+
+	_, err := handler.deleteAllUserReservations(id)
+	if err != nil {
+		writeErrorResponse(w, http.StatusBadRequest, errors.New(err.Error()))
+		return
+	}
+
+	_, err = handler.deleteUserInfo(id)
+	if err != nil {
+		writeErrorResponse(w, http.StatusBadRequest, errors.New(err.Error()))
+	}
+
+	_, err = handler.deleteUserCred(id)
+	if err != nil {
+		writeErrorResponse(w, http.StatusBadRequest, errors.New(err.Error()))
+	}
+
+	w.WriteHeader(http.StatusOK)
+	w.Write([]byte("true"))
+}
+
 func (handler *UserInfoHandler) getAllReservationsThatPassed(id string) (*accommodation_reserve.GetAllReservationsThatPassedResponse, error) {
 	reservationClient := services.NewReservationClient(handler.accommodationReserveClientAddress)
 	return reservationClient.GetAllReservationsThatPassed(context.TODO(), &reservation.IdMessageRequest{Id: id})
@@ -106,25 +129,17 @@ func (handler *UserInfoHandler) getAccommodationForReservation(id string) (*acco
 	return accommodationClient.GetById(context.TODO(), &accommodation.GetAccommodationByIdRequest{Id: id})
 }
 
-func (handler *UserInfoHandler) validateToken(tokenString string) (*jwt.Token, error) {
-	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
-		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
-			return nil, fmt.Errorf("invalid signing method")
-		}
+func (handler *UserInfoHandler) deleteAllUserReservations(id string) (*accommodation_reserve.DeleteAllUserReservationsResponse, error) {
+	reservationClient := services.NewReservationClient(handler.accommodationReserveClientAddress)
+	return reservationClient.DeleteAllUserReservations(context.TODO(), &reservation.DeleteAllUserReservationsRequest{Id: id})
+}
 
-		return []byte("yE54RkqqgahuNbMCPmlrqbcoDeUXadi4ibXdsKjssQTwSl3FZaJoNyvc05553OGA"), nil
-	})
+func (handler *UserInfoHandler) deleteUserInfo(id string) (*user_info.DeleteUserResponse, error) {
+	userClient := services.NewUserClient(handler.userInfoClientAddress)
+	return userClient.DeleteUser(context.TODO(), &user_info.DeleteUserRequest{Id: id})
+}
 
-	if err != nil {
-		return nil, err
-	}
-
-	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
-		expirationTime := time.Unix(int64(claims["exp"].(float64)), 0)
-		if time.Now().UTC().After(expirationTime) {
-			return nil, fmt.Errorf("token has expired")
-		}
-	}
-
-	return token, nil
+func (handler *UserInfoHandler) deleteUserCred(id string) (*auth.DeleteUserResponse, error) {
+	authClient := services.NewAuthClient(handler.authClientAddress)
+	return authClient.DeleteUser(context.TODO(), &auth.DeleteUserRequest{Id: id})
 }

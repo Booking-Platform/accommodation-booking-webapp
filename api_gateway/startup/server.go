@@ -91,17 +91,17 @@ func (server *Server) initCustomHandlers() {
 	authHandler := api.NewAuthHandler(userInfoEndpoint, authEndpoint)
 	authHandler.Init(server.mux)
 
-	userInfoHandler := api.NewUserInfoHandler(accommodationReserveEndpoint, userInfoEndpoint, accommodationEndpoint)
+	userInfoHandler := api.NewUserInfoHandler(accommodationReserveEndpoint, userInfoEndpoint, accommodationEndpoint, authEndpoint)
 	userInfoHandler.Init(server.mux)
 
 }
 
 func (server *Server) getHandlerCORSWrapped() http.Handler {
 	corsMiddleware := cors.New(cors.Options{
-		AllowedOrigins:   []string{server.config.AllowedCorsOrigin},
-		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
-		AllowedHeaders:   []string{"Authorization", "Access-Control-Allow-Origin", "Content-Type"},
-		AllowCredentials: true,
+		AllowedOrigins:   server.config.AllowedCorsOrigin,
+		AllowedMethods:   server.config.AllowedMethods,
+		AllowedHeaders:   server.config.AllowedHeaders,
+		AllowCredentials: server.config.AllowCredentials,
 	})
 	handler := corsMiddleware.Handler(server.mux)
 	return handler

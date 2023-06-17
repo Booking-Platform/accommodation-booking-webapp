@@ -30,11 +30,10 @@ export class ReservationService {
   }
 
   changeReservationStatus(reservationID: any, status: string) {
-    const headers = new HttpHeaders().set('Content-Type', 'application/json');
     const body = { id: reservationID, status: status };
 
     return this.http.post(this.apiHost + '/changeStatus', body, {
-      headers: headers,
+      headers: this.headers,
     });
   }
 

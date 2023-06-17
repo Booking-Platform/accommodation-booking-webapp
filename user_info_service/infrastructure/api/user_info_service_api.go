@@ -51,3 +51,14 @@ func (handler *UserInfoHandler) CreateUser(ctx context.Context, request *pb.Crea
 
 	return response, nil
 }
+
+func (handler *UserInfoHandler) DeleteUser(ctx context.Context, request *pb.DeleteUserRequest) (*pb.DeleteUserResponse, error) {
+	id := request.Id
+	objectId, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		return nil, err
+	}
+
+	result, _ := handler.service.Delete(objectId)
+	return &pb.DeleteUserResponse{Status: result}, nil
+}

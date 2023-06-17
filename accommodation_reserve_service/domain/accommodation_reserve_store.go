@@ -12,4 +12,5 @@ type ReservationStore interface {
 	ChangeReservationStatus(id primitive.ObjectID, canceled model.ReservationStatus) error
 	GetReservedAccommodationsIds(from string, to string) ([]*primitive.ObjectID, error)
 	GetAllReservationsThatPassed(id primitive.ObjectID) ([]*model.Reservation, error)
+	DeleteAllUserReservations(id primitive.ObjectID) (bool, error)
 }

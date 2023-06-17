@@ -21,6 +21,16 @@ type ReservationMongoDBStore struct {
 	reservations *mongo.Collection
 }
 
+func (store *ReservationMongoDBStore) DeleteAllUserReservations(id primitive.ObjectID) (bool, error) {
+	filter := bson.M{"user_id": id}
+
+	_, err := store.reservations.DeleteMany(context.Background(), filter)
+	if err != nil {
+		return false, err
+	}
+	return true, nil
+}
+
 func (store *ReservationMongoDBStore) GetAllReservationsThatPassed(id primitive.ObjectID) ([]*model.Reservation, error) {
 
 	time := time.Now()

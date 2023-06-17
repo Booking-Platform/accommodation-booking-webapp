@@ -18,6 +18,16 @@ type UserMongoDBStore struct {
 	users *mongo.Collection
 }
 
+func (u *UserMongoDBStore) Delete(id primitive.ObjectID) (bool, error) {
+	filter := bson.M{"_id": id}
+
+	_, err := u.users.DeleteMany(context.Background(), filter)
+	if err != nil {
+		return false, err
+	}
+	return true, nil
+}
+
 func (u UserMongoDBStore) CreateUser(user *model.User) error {
 	user.TimesCanceled = 0
 

@@ -203,6 +203,58 @@ func local_request_AccommodationReserveService_GetReservedAccommodationIds_0(ctx
 
 }
 
+func request_AccommodationReserveService_DeleteAllUserReservations_0(ctx context.Context, marshaler runtime.Marshaler, client AccommodationReserveServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var protoReq DeleteAllUserReservationsRequest
+	var metadata runtime.ServerMetadata
+
+	var (
+		val string
+		ok  bool
+		err error
+		_   = err
+	)
+
+	val, ok = pathParams["id"]
+	if !ok {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "id")
+	}
+
+	protoReq.Id, err = runtime.String(val)
+	if err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "id", err)
+	}
+
+	msg, err := client.DeleteAllUserReservations(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
+	return msg, metadata, err
+
+}
+
+func local_request_AccommodationReserveService_DeleteAllUserReservations_0(ctx context.Context, marshaler runtime.Marshaler, server AccommodationReserveServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var protoReq DeleteAllUserReservationsRequest
+	var metadata runtime.ServerMetadata
+
+	var (
+		val string
+		ok  bool
+		err error
+		_   = err
+	)
+
+	val, ok = pathParams["id"]
+	if !ok {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "id")
+	}
+
+	protoReq.Id, err = runtime.String(val)
+	if err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "id", err)
+	}
+
+	msg, err := server.DeleteAllUserReservations(ctx, &protoReq)
+	return msg, metadata, err
+
+}
+
 // RegisterAccommodationReserveServiceHandlerServer registers the http handlers for service AccommodationReserveService to "mux".
 // UnaryRPC     :call AccommodationReserveServiceServer directly.
 // StreamingRPC :currently unsupported pending https://github.com/grpc/grpc-go/issues/906.
@@ -331,6 +383,31 @@ func RegisterAccommodationReserveServiceHandlerServer(ctx context.Context, mux *
 		}
 
 		forward_AccommodationReserveService_GetReservedAccommodationIds_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+
+	})
+
+	mux.Handle("DELETE", pattern_AccommodationReserveService_DeleteAllUserReservations_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+		ctx, cancel := context.WithCancel(req.Context())
+		defer cancel()
+		var stream runtime.ServerTransportStream
+		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
+		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
+		var err error
+		var annotatedContext context.Context
+		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/accommodation_reserve.AccommodationReserveService/DeleteAllUserReservations", runtime.WithHTTPPathPattern("/api/reservation/deleteAll/{id}"))
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+		resp, md, err := local_request_AccommodationReserveService_DeleteAllUserReservations_0(annotatedContext, inboundMarshaler, server, req, pathParams)
+		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
+		annotatedContext = runtime.NewServerMetadataContext(annotatedContext, md)
+		if err != nil {
+			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
+			return
+		}
+
+		forward_AccommodationReserveService_DeleteAllUserReservations_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
@@ -485,6 +562,28 @@ func RegisterAccommodationReserveServiceHandlerClient(ctx context.Context, mux *
 
 	})
 
+	mux.Handle("DELETE", pattern_AccommodationReserveService_DeleteAllUserReservations_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+		ctx, cancel := context.WithCancel(req.Context())
+		defer cancel()
+		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
+		var err error
+		var annotatedContext context.Context
+		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/accommodation_reserve.AccommodationReserveService/DeleteAllUserReservations", runtime.WithHTTPPathPattern("/api/reservation/deleteAll/{id}"))
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+		resp, md, err := request_AccommodationReserveService_DeleteAllUserReservations_0(annotatedContext, inboundMarshaler, client, req, pathParams)
+		annotatedContext = runtime.NewServerMetadataContext(annotatedContext, md)
+		if err != nil {
+			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
+			return
+		}
+
+		forward_AccommodationReserveService_DeleteAllUserReservations_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+
+	})
+
 	return nil
 }
 
@@ -498,6 +597,8 @@ var (
 	pattern_AccommodationReserveService_ChangeReservationStatus_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"api", "reservation", "changeStatus"}, ""))
 
 	pattern_AccommodationReserveService_GetReservedAccommodationIds_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"accommodations", "search"}, ""))
+
+	pattern_AccommodationReserveService_DeleteAllUserReservations_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"api", "reservation", "deleteAll", "id"}, ""))
 )
 
 var (
@@ -510,4 +611,6 @@ var (
 	forward_AccommodationReserveService_ChangeReservationStatus_0 = runtime.ForwardResponseMessage
 
 	forward_AccommodationReserveService_GetReservedAccommodationIds_0 = runtime.ForwardResponseMessage
+
+	forward_AccommodationReserveService_DeleteAllUserReservations_0 = runtime.ForwardResponseMessage
 )

@@ -50,3 +50,7 @@ func (service *AccommodationReserveService) GetReservedAccommodationsIds(from st
 func (service *AccommodationReserveService) GetAllReservationsThatPassed(id primitive.ObjectID) ([]*model.Reservation, error) {
 	return service.store.GetAllReservationsThatPassed(id)
 }
+
+func (service *AccommodationReserveService) DeleteAllUserReservations(id primitive.ObjectID) (bool, error) {
+	return service.store.DeleteAllUserReservations(id)
+}
