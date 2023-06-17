@@ -67,7 +67,6 @@ func (store *RatingMongoDBStore) GetRatingByUserAndAccommodationName(accommodati
 
 func (store *RatingMongoDBStore) CreateRatingForHost(rating *model.HostRating) error {
 	rating.Id = primitive.NewObjectID()
-
 	_, err := store.host_ratings.InsertOne(context.TODO(), rating)
 	if err != nil {
 		fmt.Println(err)

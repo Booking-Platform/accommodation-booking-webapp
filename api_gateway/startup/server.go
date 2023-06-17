@@ -81,6 +81,7 @@ func (server *Server) initCustomHandlers() {
 	userInfoEndpoint := fmt.Sprintf("%s:%s", server.config.UserInfoHost, server.config.UserInfoPort)
 	accommodationEndpoint := fmt.Sprintf("%s:%s", server.config.AccommodationHost, server.config.AccommodationPort)
 	authEndpoint := fmt.Sprintf("%s:%s", server.config.AuthHost, server.config.AuthPort)
+	ratingEndpoint := fmt.Sprintf("%s:%s", server.config.RatingHost, server.config.RatingPort)
 
 	reservationHandler := api.NewReservationHandler(accommodationReserveEndpoint, userInfoEndpoint, accommodationEndpoint)
 	reservationHandler.Init(server.mux)
@@ -91,14 +92,20 @@ func (server *Server) initCustomHandlers() {
 	authHandler := api.NewAuthHandler(userInfoEndpoint, authEndpoint)
 	authHandler.Init(server.mux)
 
-	userInfoHandler := api.NewUserInfoHandler(accommodationReserveEndpoint, userInfoEndpoint, accommodationEndpoint)
+	userInfoHandler := api.NewUserInfoHandler(accommodationReserveEndpoint, userInfoEndpoint, accommodationEndpoint, authEndpoint)
 	userInfoHandler.Init(server.mux)
+
+	ratingHandler := api.NewRatingHandler(ratingEndpoint, accommodationReserveEndpoint, userInfoEndpoint, accommodationEndpoint)
+	ratingHandler.Init(server.mux)
 
 }
 
 func (server *Server) getHandlerCORSWrapped() http.Handler {
 	corsMiddleware := cors.New(cors.Options{
-		AllowedOrigins: []string{server.config.AllowedCorsOrigin},
+		AllowedOrigins:   server.config.AllowedCorsOrigin,
+		AllowedMethods:   server.config.AllowedMethods,
+		AllowedHeaders:   server.config.AllowedHeaders,
+		AllowCredentials: server.config.AllowCredentials,
 	})
 	handler := corsMiddleware.Handler(server.mux)
 	return handler

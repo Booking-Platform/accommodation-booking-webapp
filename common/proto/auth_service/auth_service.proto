@@ -20,6 +20,20 @@ service auth_service{
       body: "newUser"
     };
   }
+
+  rpc DeleteUser(DeleteUserRequest) returns(DeleteUserResponse) {
+    option (google.api.http) = {
+      delete: "/auth/delete/{id}"
+    };
+  }
+}
+
+message DeleteUserRequest{
+  string id = 1;
+}
+
+message DeleteUserResponse{
+  bool status = 1;
 }
 
 message LoginUserRequest {

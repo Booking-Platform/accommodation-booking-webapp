@@ -23,3 +23,7 @@ func (service *UserService) GetByID(id primitive.ObjectID) (*model.User, error) 
 func (service *UserService) Create(user *model.User) error {
 	return service.store.CreateUser(user)
 }
+
+func (service *UserService) Delete(id primitive.ObjectID) (bool, error) {
+	return service.store.Delete(id)
+}

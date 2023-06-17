@@ -24,8 +24,8 @@ import { AllAccommodationsComponent } from './modules/all-accommodations/all-acc
 import { JwtInterceptor, JwtModule } from '@auth0/angular-jwt';
 import { ProfileComponent } from './modules/profile/profile.component';
 import { RateHostComponent } from './modules/rate-host/rate-host.component';
-import { MyRatingsComponent } from './my-ratings/my-ratings.component';
 import { RateAccommodationComponent } from './modules/rate-accommodation/rate-accommodation.component';
+import { RatingsComponent } from './modules/ratings/ratings.component';
 
 @NgModule({
   declarations: [
@@ -42,8 +42,8 @@ import { RateAccommodationComponent } from './modules/rate-accommodation/rate-ac
     AllAccommodationsComponent,
     ProfileComponent,
     RateHostComponent,
-    MyRatingsComponent,
     RateAccommodationComponent,
+    RatingsComponent,
   ],
   imports: [
     MatSlideToggleModule,

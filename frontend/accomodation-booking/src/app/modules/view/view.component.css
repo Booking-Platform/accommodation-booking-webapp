@@ -1,7 +1,7 @@
 .card-deck {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  grid-column-gap: 10px; /* smanjena širina horizontalnih razmaka */
+  grid-column-gap: 10px; /* smanjena Å¡irina horizontalnih razmaka */
   grid-row-gap: 10px; /* smanjena visina vertikalnih razmaka */
   margin-top: 2%;
   margin-bottom: 2%;
@@ -147,4 +147,33 @@ button:active {
   }
 }
 
+.btn {
+  background-color: #4CAF50;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  float: right;
+  margin-right: 10px; /* add margin between buttons */
+}
 
+.btn:hover {
+  background-color: #2ecc71;
+  color: #fff;
+  transition: background-color 0.3s ease-in-out;
+}
+
+.btn:focus {
+  outline: none;
+}
+
+.btn:active {
+  background-color: #3e8e41;
+}
+
+.card-footer {
+  display: flex;
+  justify-content: flex-end; /* align buttons to the right */
+  align-items: center;
+}

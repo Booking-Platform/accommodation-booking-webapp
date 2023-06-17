@@ -17,7 +17,10 @@ type Config struct {
 	AuthPort                 string
 	RatingHost               string
 	RatingPort               string
-	AllowedCorsOrigin        string
+	AllowedCorsOrigin        []string
+	AllowedMethods           []string
+	AllowedHeaders           []string
+	AllowCredentials         bool
 }
 
 func NewConfig() *Config {
@@ -37,6 +40,9 @@ func NewConfig() *Config {
 		RatingHost:               os.Getenv("RATING_SERVICE_HOST"),
 		RatingPort:               os.Getenv("RATING_SERVICE_PORT"),
 
-		AllowedCorsOrigin: "http://localhost:4200",
+		AllowedCorsOrigin: []string{os.Getenv("CLIENT_PORT")},
+		AllowedMethods:    []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+		AllowedHeaders:    []string{"Authorization", "Access-Control-Allow-Origin", "Content-Type"},
+		AllowCredentials:  true,
 	}
 }

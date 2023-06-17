@@ -1,4 +1,9 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
+import jwtDecode from 'jwt-decode';
+import { ToastrService } from 'ngx-toastr';
+import { AuthService } from 'src/app/services/auth/auth.service';
+import { UserService } from 'src/app/services/user/user.service';
 
 @Component({
   selector: 'app-profile',
@@ -22,6 +27,13 @@ export class ProfileComponent {
     this.email = localStorage.getItem('email')!;
     this.address = localStorage.getItem('address')!;
   }
+
+  constructor(
+    private authService: AuthService,
+    private userService: UserService,
+    private toastr: ToastrService,
+    private router: Router
+  ) {}
 
   enableInputs() {
     var editButton = document.getElementById('edit-button');
@@ -67,5 +79,19 @@ export class ProfileComponent {
     this.address = localStorage.getItem('address')!;
 
     this.disableInputs();
+  }
+
+  deleteUser() {
+    const tokenString = this.authService.getToken();
+    if (tokenString) var decoded = jwtDecode(tokenString) as any;
+    this.userService.deleteUser(decoded['userId']).subscribe((res) => {
+      if (res) {
+        this.toastr.success('Deleted!');
+        this.authService.removeToken();
+        this.router.navigate(['/']);
+      } else {
+        this.toastr.error("Can't delete!");
+      }
+    });
   }
 }
