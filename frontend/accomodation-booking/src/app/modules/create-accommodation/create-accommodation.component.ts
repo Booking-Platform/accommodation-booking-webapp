@@ -3,6 +3,7 @@ import { Component } from '@angular/core';
 import { AccommodationService } from 'src/app/services/accommodation/accommodation.service';
 import { Router } from '@angular/router';
 import { Accommodation } from 'src/app/model/accommodation';
+import { JwtHelperService } from '@auth0/angular-jwt';
 
 @Component({
   selector: 'app-create-accommodation',
@@ -23,10 +24,15 @@ export class CreateAccommodationComponent {
 
   constructor(
     private accommodationService: AccommodationService,
-    private router: Router
+    private router: Router,
+    private jwtHelper: JwtHelperService
   ) {}
 
   createAccommodation(): void {
+    var userID = this.jwtHelper.decodeToken().userId;
+
+    this.accommodation.host_id = userID
+    
     const splitBenefits = this.benefits.split(',').map((b) => b.trim());
     this.accommodation.benefits = splitBenefits;
 

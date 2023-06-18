@@ -41,12 +41,27 @@ service accommodation_reserve_service{
     };
   }
 
+  rpc GetAllReservationsThatPassed(IdMessageRequest) returns(GetAllReservationsThatPassedResponse) {
+
+  }
+
+  rpc DeleteAllUserReservations(DeleteAllUserReservationsRequest) returns(DeleteAllUserReservationsResponse){
+    option (google.api.http) = {
+      delete: "/api/reservation/deleteAll/{id}"
+    };
+  }
 }
 
+message DeleteAllUserReservationsRequest {
+  string id = 1;
+}
+
+message DeleteAllUserReservationsResponse {
+  bool status = 1;
+}
 
 message ChangeReservationStatusRequest {
   ReservationWithIdAndStatus reservationWithIdAndStatus = 1;
-
 }
 
 message ReservationWithIdAndStatus {
@@ -67,6 +82,10 @@ message GetAllForConfirmationRequest {
 }
 
 message GetAllForConfirmationResponse {
+  repeated Reservation reservations = 1;
+}
+
+message  GetAllReservationsThatPassedResponse {
   repeated Reservation reservations = 1;
 }
 

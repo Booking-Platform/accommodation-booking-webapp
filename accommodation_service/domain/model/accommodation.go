@@ -14,4 +14,5 @@ type Accommodation struct {
 	Photos                []string           `bson:"photos"`
 	Benefits              []*Benefit         `bson:"benefits,omitempty"`
 	Appointments          []*Appointment     `bson:"appointments,omitempty"`
+	HostID                primitive.ObjectID `bson:"host_id"`
 }

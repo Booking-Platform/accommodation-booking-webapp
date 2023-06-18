@@ -11,7 +11,7 @@ import { User } from 'src/app/model/user';
 })
 export class RegisterComponent {
   user: User = {
-    id: null,
+    id: '',
     name: '',
     surname: '',
     email: '',

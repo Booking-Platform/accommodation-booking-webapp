@@ -1,6 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { AuthService } from '../auth/auth.service';
 
 @Injectable({
   providedIn: 'root',
@@ -11,9 +12,12 @@ export class ReservationService {
 
   headers: HttpHeaders = new HttpHeaders({
     'Content-Type': 'application/json',
+    Authorization: this.authService.getToken()
+      ? 'Bearer ' + this.authService.getToken()!
+      : '',
   });
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private authService: AuthService) {}
 
   createReservation(newReservation: any): Observable<any> {
     const url = this.apiHost;
@@ -26,11 +30,10 @@ export class ReservationService {
   }
 
   changeReservationStatus(reservationID: any, status: string) {
-    const headers = new HttpHeaders().set('Content-Type', 'application/json');
     const body = { id: reservationID, status: status };
 
     return this.http.post(this.apiHost + '/changeStatus', body, {
-      headers: headers,
+      headers: this.headers,
     });
   }
 

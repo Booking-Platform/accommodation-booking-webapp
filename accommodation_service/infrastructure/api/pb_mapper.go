@@ -9,8 +9,14 @@ import (
 )
 
 func mapNewAccommodation(accommodationPb *pb.NewAccommodation) (*model.Accommodation, error) {
+	hostID, err := primitive.ObjectIDFromHex(accommodationPb.HostId)
+	if err != nil {
+		return nil, err
+	}
+
 	accommodation := &model.Accommodation{
 		Name:        accommodationPb.Name,
+		HostID:      hostID,
 		MinGuestNum: int(accommodationPb.MinGuestNum),
 		MaxGuestNum: int(accommodationPb.MaxGuestNum),
 		Address: model.Address{
@@ -57,6 +63,7 @@ func mapAccommodationPb(accommodation *model.Accommodation) *pb.Accommodation {
 		AutomaticConfirmation: accommodation.AutomaticConfirmation,
 		Photo:                 accommodation.Photos,
 		Benefits:              pbBenefits,
+		HostId:                accommodation.HostID.Hex(),
 		Appointments:          pbAppointments,
 	}
 	return accommodationPb
@@ -83,6 +90,8 @@ func mapAccommodationDTOPb(accommodation *model.Accommodation) *pb.Accommodation
 		Photos:                accommodation.Photos,
 		Benefits:              pbBenefits,
 		Appointments:          pbAppointments,
+		IsFeaturedHost:        false,
+		HostId:                accommodation.HostID.Hex(),
 	}
 	return accommodationPb
 }
@@ -129,7 +138,3 @@ func mapAddressPb(address *model.Address) *pb.Address {
 		Number:  strconv.Itoa(address.Number),
 	}
 }
-
-//func mapUpdateAccommodation(accommodation *model.Accommodation, appointment *pb.Appointment) *model.Accommodation {
-//
-//}

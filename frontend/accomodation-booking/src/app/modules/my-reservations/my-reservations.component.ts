@@ -22,7 +22,6 @@ export class MyReservationsComponent implements OnInit {
       .getAllReservationsByUserID(this.userID)
       .subscribe((res: any) => {
         this.reservations = res;
-        console.log(res);
       });
   }
 

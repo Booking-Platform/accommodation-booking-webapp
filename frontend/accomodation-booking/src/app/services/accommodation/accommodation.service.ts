@@ -2,18 +2,21 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Accommodation } from 'src/app/model/accommodation';
+import { AuthService } from '../auth/auth.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AccommodationService {
-
   apiHost: string = 'http://localhost:8000/';
   headers: HttpHeaders = new HttpHeaders({
     'Content-Type': 'application/json',
+    Authorization: this.authService.getToken()
+      ? 'Bearer ' + this.authService.getToken()!
+      : '',
   });
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private authService: AuthService) {}
 
   getAccommodations(): Observable<Accommodation[]> {
     return this.http.get<Accommodation[]>(this.apiHost + 'accommodations', {
@@ -29,7 +32,8 @@ export class AccommodationService {
     params.set('city', searchParams.city);
 
     return this.http.get<Accommodation[]>(
-      `${this.apiHost}reservation/getAllByParams?${params.toString()}`
+      `${this.apiHost}reservation/getAllByParams?${params.toString()}`,
+      { headers: this.headers }
     );
   }
 
@@ -42,6 +46,11 @@ export class AccommodationService {
         headers: this.headers,
       }
     );
+  }
+
+  getAccommodationsByHostID(id: string) {
+      const url = `${this.apiHost}accommodation/getAllAccommodationsByHostID/${id}`;
+    return this.http.get<any[]>(url, { headers: this.headers });
   }
 
   getAccommodationByID(id: string): Observable<any[]> {

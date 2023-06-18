@@ -11,6 +11,9 @@ import { AuthGuard } from './guard/auth.guard';
 import { AddAppointmentComponent } from './modules/add-appointment/add-appointment.component';
 import { AllAccommodationsComponent } from './modules/all-accommodations/all-accommodations.component';
 import { ProfileComponent } from './modules/profile/profile.component';
+import { RateHostComponent } from './modules/rate-host/rate-host.component';
+import { RateAccommodationComponent } from './modules/rate-accommodation/rate-accommodation.component';
+import { RatingsComponent } from './modules/ratings/ratings.component';
 
 const routes: Routes = [
   { path: 'view', component: ViewComponent },
@@ -51,6 +54,22 @@ const routes: Routes = [
     component: AllAccommodationsComponent,
     canActivate: [AuthGuard],
     data: { requiredRole: 'Host' },
+  },
+  {
+    path: 'rateHost',
+    component: RateHostComponent,
+    canActivate: [AuthGuard],
+    data: { requiredRole: 'Guest' },
+  },
+  {
+    path: 'rateAccommodation',
+    component: RateAccommodationComponent,
+  },
+  {
+    path: 'ratings',
+    component: RatingsComponent,
+    canActivate: [AuthGuard],
+    data: { requiredRole: 'Guest' },
   },
   {
     path: 'profile',

@@ -31,6 +31,11 @@ func NewAccommodationMongoDBStore(client *mongo.Client) domain.AccommodationStor
 	}
 }
 
+func (store *AccommodationMongoDBStore) FindAllAccommodationsByHostID(id primitive.ObjectID) ([]*model.Accommodation, error) {
+	filter := bson.M{"host_id": id}
+	return store.filter(filter)
+}
+
 func (store *AccommodationMongoDBStore) GetAllAccommodations() ([]*model.Accommodation, error) {
 	filter := bson.D{{}}
 	return store.filter(filter)

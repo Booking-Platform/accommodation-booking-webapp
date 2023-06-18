@@ -3,10 +3,13 @@ package api
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"github.com/Booking-Platform/accommodation-booking-webapp/api_gateway/infrastructure/services"
+	"github.com/Booking-Platform/accommodation-booking-webapp/common/proto/accommodation_reserve_service"
 	reservation "github.com/Booking-Platform/accommodation-booking-webapp/common/proto/accommodation_reserve_service"
 	accommodation "github.com/Booking-Platform/accommodation-booking-webapp/common/proto/accommodation_service"
+	user_info "github.com/Booking-Platform/accommodation-booking-webapp/common/proto/user_info_service"
+
+	"github.com/Booking-Platform/accommodation-booking-webapp/common/utils"
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"net/http"
 	"strconv"
@@ -15,23 +18,31 @@ import (
 type AccommodationHandler struct {
 	accommodationReserveClientAddress string
 	accommodationClientAddress        string
+	userInfoClientAddress             string
 }
 
-func NewAccommodationHandler(accommodationReserveClientAddress, accommodationClientAddress string) Handler {
+func NewAccommodationHandler(accommodationReserveClientAddress, userInfoClientAddress, accommodationClientAddress string) Handler {
 	return &AccommodationHandler{
 		accommodationReserveClientAddress: accommodationReserveClientAddress,
 		accommodationClientAddress:        accommodationClientAddress,
+		userInfoClientAddress:             userInfoClientAddress,
 	}
 }
 
 func (handler *AccommodationHandler) Init(mux *runtime.ServeMux) {
 	err := mux.HandlePath("GET", "/reservation/getAllByParams", handler.GetAllByParams)
+
 	if err != nil {
 		panic(err)
 	}
 }
 
 func (handler *AccommodationHandler) GetAllByParams(w http.ResponseWriter, r *http.Request, pathParams map[string]string) {
+	err, done := utils.PreAuthorize(w, r)
+	if done {
+		return
+	}
+
 	from := r.URL.Query().Get("from")
 	to := r.URL.Query().Get("to")
 	numOfGuests := r.URL.Query().Get("numOfGuests")
@@ -43,6 +54,10 @@ func (handler *AccommodationHandler) GetAllByParams(w http.ResponseWriter, r *ht
 	}
 	accommodations, err := handler.getAccommodations(numOfGuests, city, accommodationIds.Id)
 
+	for _, accommodation := range accommodations.Accommodations {
+		//user, _ := handler.getUserById(accommodation.HostId)
+		accommodation.IsFeaturedHost = true
+	}
 	response, err := json.Marshal(accommodations)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
@@ -78,8 +93,17 @@ func (handler *AccommodationHandler) getAccommodations(numOfGuests string, city 
 	return accommodationClient.Search(context.TODO(), &accommodation.GetAccommodationsByParamsRequest{SearchParams: searchParams})
 }
 
-func (handler *AccommodationHandler) ChangeAutomaticConfirmation(request accommodation.ChangeAutomaticConfirmationRequest) (*accommodation.ChangeAutomaticConfirmationResponse, error) {
+func (handler *AccommodationHandler) getUserById(id string) (*user_info.GetUserByIDResponse, error) {
+	userClient := services.NewUserClient(handler.userInfoClientAddress)
+	return userClient.GetUserByID(context.TODO(), &user_info.GetUserByIDRequest{Id: id})
+}
 
-	fmt.Println('s')
-	return nil, nil
+func (handler *AccommodationHandler) getAllReservationsThatPassed(id string) (*accommodation_reserve.GetAllReservationsThatPassedResponse, error) {
+	reservationClient := services.NewReservationClient(handler.accommodationReserveClientAddress)
+	return reservationClient.GetAllReservationsThatPassed(context.TODO(), &reservation.IdMessageRequest{Id: id})
+}
+
+func (handler *AccommodationHandler) getAccommodationForReservation(id string) (*accommodation.GetAccommodationByIdResponse, error) {
+	accommodationClient := services.NewAccommodationClient(handler.accommodationClientAddress)
+	return accommodationClient.GetById(context.TODO(), &accommodation.GetAccommodationByIdRequest{Id: id})
 }

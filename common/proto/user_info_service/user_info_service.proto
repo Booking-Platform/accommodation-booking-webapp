@@ -19,6 +19,20 @@ service user_info_service{
       body: "newUser"
     };
   }
+
+  rpc DeleteUser(DeleteUserRequest) returns(DeleteUserResponse) {
+    option (google.api.http) = {
+      delete: "/api/user/{id}"
+    };
+  }
+}
+
+message DeleteUserRequest{
+  string id = 1;
+}
+
+message DeleteUserResponse{
+  bool status = 1;
 }
 
 message GetUserByIDRequest {
@@ -28,6 +42,7 @@ message GetUserByIDRequest {
 message GetUserByIDResponse {
   string name = 1;
   string surname = 2;
+  float avgRating = 3;
 }
 
 message CreateUserRequest {

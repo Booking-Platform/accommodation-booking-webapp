@@ -1,7 +1,0 @@
-{
-  "dependencies": {
-    "bson": "^5.2.0",
-    "mongodb": "^5.4.0",
-    "ngx-toastr": "^16.2.0"
-  }
-}

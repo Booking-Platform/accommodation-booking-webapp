@@ -11,7 +11,9 @@ import (
 	accommodation_reserve_Gw "github.com/Booking-Platform/accommodation-booking-webapp/common/proto/accommodation_reserve_service"
 	accommodation_Gw "github.com/Booking-Platform/accommodation-booking-webapp/common/proto/accommodation_service"
 	auth_Gw "github.com/Booking-Platform/accommodation-booking-webapp/common/proto/auth_service"
+	rating_Gw "github.com/Booking-Platform/accommodation-booking-webapp/common/proto/rating_service"
 	user_info_Gw "github.com/Booking-Platform/accommodation-booking-webapp/common/proto/user_info_service"
+
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"github.com/rs/cors"
 	"google.golang.org/grpc"
@@ -60,6 +62,12 @@ func (server *Server) initHandlers() {
 		panic(err)
 	}
 
+	ratingEndpoint := fmt.Sprintf("%s:%s", server.config.RatingHost, server.config.RatingPort)
+	err = rating_Gw.RegisterRatingServiceHandlerFromEndpoint(context.TODO(), server.mux, ratingEndpoint, opts)
+	if err != nil {
+		panic(err)
+	}
+
 }
 
 func (server *Server) Start() {
@@ -73,20 +81,31 @@ func (server *Server) initCustomHandlers() {
 	userInfoEndpoint := fmt.Sprintf("%s:%s", server.config.UserInfoHost, server.config.UserInfoPort)
 	accommodationEndpoint := fmt.Sprintf("%s:%s", server.config.AccommodationHost, server.config.AccommodationPort)
 	authEndpoint := fmt.Sprintf("%s:%s", server.config.AuthHost, server.config.AuthPort)
+	ratingEndpoint := fmt.Sprintf("%s:%s", server.config.RatingHost, server.config.RatingPort)
 
 	reservationHandler := api.NewReservationHandler(accommodationReserveEndpoint, userInfoEndpoint, accommodationEndpoint)
 	reservationHandler.Init(server.mux)
 
-	accommodationHandler := api.NewAccommodationHandler(accommodationReserveEndpoint, accommodationEndpoint)
+	accommodationHandler := api.NewAccommodationHandler(accommodationReserveEndpoint, userInfoEndpoint, accommodationEndpoint)
 	accommodationHandler.Init(server.mux)
 
 	authHandler := api.NewAuthHandler(userInfoEndpoint, authEndpoint)
 	authHandler.Init(server.mux)
+
+	userInfoHandler := api.NewUserInfoHandler(accommodationReserveEndpoint, userInfoEndpoint, accommodationEndpoint, authEndpoint)
+	userInfoHandler.Init(server.mux)
+
+	ratingHandler := api.NewRatingHandler(ratingEndpoint, accommodationReserveEndpoint, userInfoEndpoint, accommodationEndpoint)
+	ratingHandler.Init(server.mux)
+
 }
 
 func (server *Server) getHandlerCORSWrapped() http.Handler {
 	corsMiddleware := cors.New(cors.Options{
-		AllowedOrigins: []string{server.config.AllowedCorsOrigin},
+		AllowedOrigins:   server.config.AllowedCorsOrigin,
+		AllowedMethods:   server.config.AllowedMethods,
+		AllowedHeaders:   server.config.AllowedHeaders,
+		AllowCredentials: server.config.AllowCredentials,
 	})
 	handler := corsMiddleware.Handler(server.mux)
 	return handler

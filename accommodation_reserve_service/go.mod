@@ -5,7 +5,7 @@ go 1.19
 replace github.com/Booking-Platform/accommodation-booking-webapp/common => ../common
 
 require (
-	github.com/Booking-Platform/accommodation-booking-webapp/common v0.0.0-00010101000000-000000000000
+	github.com/Booking-Platform/accommodation-booking-webapp/common v0.0.0-20230521093144-ea467a46cfb5
 	github.com/joho/godotenv v1.5.1
 	go.mongodb.org/mongo-driver v1.11.4
 	google.golang.org/genproto v0.0.0-20230410155749-daa745c078e1
@@ -13,6 +13,7 @@ require (
 )
 
 require (
+	github.com/dgrijalva/jwt-go v3.2.0+incompatible // indirect
 	github.com/golang/protobuf v1.5.3 // indirect
 	github.com/golang/snappy v0.0.1 // indirect
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.15.2 // indirect

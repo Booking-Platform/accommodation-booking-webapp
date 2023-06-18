@@ -5,7 +5,7 @@
     [routerLink]="['/allAccommodations']"
     routerLinkActive="active"
     *ngIf="isLoggedIn && role === 'Host'"
-    >All accommodations</a
+    >My accommodations</a
   >
   <a
     class="nav-item nav-link"
@@ -27,6 +27,20 @@
     routerLinkActive="active"
     *ngIf="isLoggedIn && role === 'Host'"
     >Create accommodation</a
+  >
+  <a
+    class="nav-item nav-link"
+    [routerLink]="['/rateHost']"
+    routerLinkActive="active"
+    *ngIf="isLoggedIn && role === 'Guest'"
+    >Rate host</a
+  >
+  <a
+  class="nav-item nav-link"
+  [routerLink]="['/rateAccommodation']"
+  routerLinkActive="active"
+  *ngIf="isLoggedIn && role === 'Guest'"
+  >Rate accommodation</a
   >
   <a
     class="nav-item nav-link"

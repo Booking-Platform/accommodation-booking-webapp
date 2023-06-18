@@ -1,0 +1,24 @@
+<h1 style="margin-left: 35%; margin-top: 1%; margin-bottom: 2%;">Leave rating for accommodation</h1>
+<div class="container">
+  <div class="card">
+    <div *ngFor="let host of hosts" class="reservation-card">
+      <div class="card-header">
+        <h2>{{ host.AccommodationName }} | {{ host.AccommodationStreet }}</h2>
+        <p>host: {{ host.Name }} {{ host.Surname }}</p>
+      </div>
+      <div class="card-body">
+        <div class="rating">
+          <span
+            class="star"
+            *ngFor="let star of stars"
+            [class.filled]="star <= host.selectedRating"
+            (click)="rateCard(host, star, host.AccommodationName)"
+          >
+            &#9733;
+          </span>
+        </div>
+        <ng-content></ng-content>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,76 @@
+syntax = "proto3";
+
+option go_package = "github.com/Booking-Platform/accommodation-booking-webapp/common/rating";
+
+package rating;
+
+import "google/api/annotations.proto";
+
+service rating_service{
+  rpc GetAccommodationRatingsByAccommodationID(IdMessageRequest) returns(AccommodationRatingsResponse) {}
+  rpc GetHostRatingsByHostID(IdMessageRequest) returns(HostRatingsResponse) {}
+
+  rpc CreateRating(CreateRatingRequest) returns(BlankResponse) {
+    option (google.api.http) = {
+      post: "/api/rating"
+      body: "newRating"
+    };
+  }
+
+  rpc CreateAccommodationRating(CreateAccommodationRatingRequest) returns(BlankResponse) {
+    option (google.api.http) = {
+      post: "/api/rating/accommodation"
+      body: "newAccommodationRating"
+    };
+  }
+}
+
+message AccommodationRatingsResponse {
+  repeated AccommodationRating ratings = 1;
+}
+
+message AccommodationRating {
+  string GuestID = 2;
+  string AccommodationName = 3;
+  string Rating = 4;
+  string Date = 5;
+}
+
+message HostRatingsResponse {
+  repeated HostRating ratings = 1;
+}
+
+message HostRating {
+  string GuestID = 1;
+  string HostID = 2;
+  string Rating = 3;
+  string Date = 4;
+}
+
+
+message IdMessageRequest {
+  string id = 1;
+}
+
+message CreateAccommodationRatingRequest {
+  NewAccommodationRating newAccommodationRating = 1;
+}
+
+message CreateRatingRequest {
+  NewRating newRating = 1;
+}
+
+message BlankResponse {
+}
+
+message NewRating {
+  string hostID = 1;
+  string guestID = 2;
+  string rating = 3;
+}
+
+message NewAccommodationRating {
+  string accommodationName = 1;
+  string guestID = 2;
+  string rating = 3;
+}
