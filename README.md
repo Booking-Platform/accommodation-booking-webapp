@@ -49,9 +49,9 @@ Project is created with:
 
 ## Setup
  * Backend(do it from root directory):
-   1 docker-compose build
-   2 docker-compose up
+   1. docker-compose build
+   2. docker-compose up
  * Frontend(do it from root 'frontend/accommodation-booking/'):
-   1 npm install
-   2 npm start
+   1. npm install
+   2. npm start
 
