@@ -2,7 +2,7 @@ package persistence
 
 import (
 	"context"
-	"fmt"
+	"github.com/Booking-Platform/accommodation-booking-webapp/common/utils"
 	"github.com/Booking-Platform/accommodation-booking-webapp/rating_service/domain"
 	"github.com/Booking-Platform/accommodation-booking-webapp/rating_service/domain/model"
 	"go.mongodb.org/mongo-driver/bson"
@@ -17,17 +17,34 @@ const (
 )
 
 type RatingMongoDBStore struct {
-	host_ratings          *mongo.Collection
-	accommodation_ratings *mongo.Collection
+	hostRatings          *mongo.Collection
+	accommodationRatings *mongo.Collection
+}
+
+func (store *RatingMongoDBStore) GetHostRatingsByHostID(id primitive.ObjectID) ([]*model.HostRating, error) {
+	filter := bson.M{"host_id": id}
+	return store.hostRatingsFilter(filter)
+
 }
 
 func (store *RatingMongoDBStore) UpdateAccommodationRatingByID(ratingID primitive.ObjectID, newRating int) error {
 	filter := bson.M{"_id": ratingID}
 	update := bson.M{"$set": bson.M{"rating": newRating}}
 
-	_, err := store.accommodation_ratings.UpdateOne(context.TODO(), filter, update)
+	_, err := store.accommodationRatings.UpdateOne(context.TODO(), filter, update)
 	if err != nil {
-		fmt.Println(err)
+		return err
+	}
+
+	return nil
+}
+
+func (store *RatingMongoDBStore) UpdateHostRatingByID(ratingID primitive.ObjectID, newRating int) error {
+	filter := bson.M{"_id": ratingID}
+	update := bson.M{"$set": bson.M{"rating": newRating}}
+
+	_, err := store.hostRatings.UpdateOne(context.TODO(), filter, update)
+	if err != nil {
 		return err
 	}
 
@@ -36,10 +53,22 @@ func (store *RatingMongoDBStore) UpdateAccommodationRatingByID(ratingID primitiv
 
 func (store *RatingMongoDBStore) CreateRatingForAccommodation(accommodationRating *model.AccommodationRating) error {
 	accommodationRating.Id = primitive.NewObjectID()
+	accommodationRating.Date = utils.CurrentDate()
 
-	_, err := store.accommodation_ratings.InsertOne(context.TODO(), accommodationRating)
+	_, err := store.accommodationRatings.InsertOne(context.TODO(), accommodationRating)
 	if err != nil {
-		fmt.Println(err)
+		return err
+	}
+
+	return nil
+}
+
+func (store *RatingMongoDBStore) CreateRatingForHost(rating *model.HostRating) error {
+	rating.Id = primitive.NewObjectID()
+	rating.Date = utils.CurrentDate()
+
+	_, err := store.hostRatings.InsertOne(context.TODO(), rating)
+	if err != nil {
 		return err
 	}
 
@@ -52,8 +81,7 @@ func (store *RatingMongoDBStore) GetRatingByUserAndAccommodationName(accommodati
 		"accommodation_name": accommodationName,
 	}
 
-	ratings, err := store.AccommodationsRatingsFilter(filter)
-
+	ratings, err := store.accommodationRatingsFilter(filter)
 	if err != nil {
 		return nil, err
 	}
@@ -63,84 +91,79 @@ func (store *RatingMongoDBStore) GetRatingByUserAndAccommodationName(accommodati
 	}
 
 	return nil, nil
-}
-
-func (store *RatingMongoDBStore) CreateRatingForHost(rating *model.HostRating) error {
-	rating.Id = primitive.NewObjectID()
-	_, err := store.host_ratings.InsertOne(context.TODO(), rating)
-	if err != nil {
-		fmt.Println(err)
-		return err
-	}
-
-	return nil
-
 }
 
 func NewRatingMongoDBStore(client *mongo.Client) domain.RatingStore {
-	accommodation_ratings := client.Database(DATABASE).Collection(ACCOMMODATION_RATINGS_COLLECTION)
-	host_ratings := client.Database(DATABASE).Collection(HOST_RATINGS_COLLECTION)
+	hostRatings := client.Database(DATABASE).Collection(HOST_RATINGS_COLLECTION)
+	accommodationRatings := client.Database(DATABASE).Collection(ACCOMMODATION_RATINGS_COLLECTION)
 
 	return &RatingMongoDBStore{
-		host_ratings:          host_ratings,
-		accommodation_ratings: accommodation_ratings,
+		hostRatings:          hostRatings,
+		accommodationRatings: accommodationRatings,
 	}
 }
 
-func (store *RatingMongoDBStore) HostRatingsFilter(filter interface{}) ([]*model.HostRating, error) {
-	cursor, err := store.host_ratings.Find(context.TODO(), filter)
-	defer cursor.Close(context.TODO())
-
+func (store *RatingMongoDBStore) hostRatingsFilter(filter interface{}) ([]*model.HostRating, error) {
+	cursor, err := store.hostRatings.Find(context.TODO(), filter)
 	if err != nil {
 		return nil, err
 	}
-	return decode(cursor)
-}
-
-func (store *RatingMongoDBStore) AccommodationsRatingsFilter(filter interface{}) ([]*model.AccommodationRating, error) {
-	cursor, err := store.accommodation_ratings.Find(context.TODO(), filter)
 	defer cursor.Close(context.TODO())
 
+	return decodeHostRatings(cursor)
+}
+
+func (store *RatingMongoDBStore) accommodationRatingsFilter(filter interface{}) ([]*model.AccommodationRating, error) {
+	cursor, err := store.accommodationRatings.Find(context.TODO(), filter)
 	if err != nil {
 		return nil, err
 	}
-	return decodeAccommodation(cursor)
+	defer cursor.Close(context.TODO())
+
+	return decodeAccommodationRatings(cursor)
 }
 
-func decodeAccommodation(cursor *mongo.Cursor) (products []*model.AccommodationRating, err error) {
+func decodeAccommodationRatings(cursor *mongo.Cursor) ([]*model.AccommodationRating, error) {
+	var ratings []*model.AccommodationRating
 	for cursor.Next(context.TODO()) {
 		var rating model.AccommodationRating
-		err = cursor.Decode(&rating)
+		err := cursor.Decode(&rating)
 		if err != nil {
-			return
+			return nil, err
 		}
-		products = append(products, &rating)
+		ratings = append(ratings, &rating)
 	}
-	err = cursor.Err()
-	return
+	if err := cursor.Err(); err != nil {
+		return nil, err
+	}
+
+	return ratings, nil
 }
 
-func decode(cursor *mongo.Cursor) (products []*model.HostRating, err error) {
+func decodeHostRatings(cursor *mongo.Cursor) ([]*model.HostRating, error) {
+	var ratings []*model.HostRating
 	for cursor.Next(context.TODO()) {
 		var rating model.HostRating
-		err = cursor.Decode(&rating)
+		err := cursor.Decode(&rating)
 		if err != nil {
-			return
+			return nil, err
 		}
-		products = append(products, &rating)
+		ratings = append(ratings, &rating)
 	}
-	err = cursor.Err()
-	return
+	if err := cursor.Err(); err != nil {
+		return nil, err
+	}
+
+	return ratings, nil
 }
 
-func (store *RatingMongoDBStore) GetRatingByUserAndGuest(guest_id, host_id primitive.ObjectID) (*model.HostRating, error) {
+func (store *RatingMongoDBStore) GetRatingByUserAndGuest(guestID, hostID primitive.ObjectID) (*model.HostRating, error) {
 	filter := bson.M{
-		"guest_id": guest_id,
-		"host_id":  host_id,
+		"guest_id": guestID,
+		"host_id":  hostID,
 	}
 
-	ratings, err := store.HostRatingsFilter(filter)
-
+	ratings, err := store.hostRatingsFilter(filter)
 	if err != nil {
 		return nil, err
 	}
@@ -152,15 +175,15 @@ func (store *RatingMongoDBStore) GetRatingByUserAndGuest(guest_id, host_id primi
 	return nil, nil
 }
 
-func (store *RatingMongoDBStore) UpdateHostRatingByID(ratingID primitive.ObjectID, newRating int) error {
-	filter := bson.M{"_id": ratingID}
-	update := bson.M{"$set": bson.M{"rating": newRating}}
-
-	_, err := store.host_ratings.UpdateOne(context.TODO(), filter, update)
-	if err != nil {
-		fmt.Println(err)
-		return err
+func (store *RatingMongoDBStore) GetRatingsByAccommodationName(accommodationName string) ([]*model.AccommodationRating, error) {
+	filter := bson.M{
+		"accommodation_name": accommodationName,
 	}
 
-	return nil
+	ratings, err := store.accommodationRatingsFilter(filter)
+	if err != nil {
+		return nil, err
+	}
+
+	return ratings, nil
 }

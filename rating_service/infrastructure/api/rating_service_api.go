@@ -21,7 +21,7 @@ func NewRatingHandler(service *application.RatingService) *RatingHandler {
 
 func (handler *RatingHandler) CreateRating(ctx context.Context, request *pb.CreateRatingRequest) (*pb.BlankResponse, error) {
 
-	rating, err := mapRating(request.NewRating)
+	rating, err := MapNewRatingToHostRating(request.NewRating)
 	if err != nil {
 		return nil, err
 	}
@@ -39,7 +39,7 @@ func (handler *RatingHandler) CreateRating(ctx context.Context, request *pb.Crea
 
 func (handler *RatingHandler) CreateAccommodationRating(ctx context.Context, request *pb.CreateAccommodationRatingRequest) (*pb.BlankResponse, error) {
 
-	rating, err := mapAccommodationRating(request.NewAccommodationRating)
+	rating, err := MapNewAccommodationRatingToAccommodationRating(request.NewAccommodationRating)
 	if err != nil {
 		return nil, err
 	}
@@ -55,12 +55,46 @@ func (handler *RatingHandler) CreateAccommodationRating(ctx context.Context, req
 	return response, nil
 }
 
-func (handler *RatingHandler) GetAccommodationRatingsByAccommodationID(ctx context.Context, request *pb.IdMessageRequest) (*pb.RatingsResponse, error) {
+func (handler *RatingHandler) GetAccommodationRatingsByAccommodationID(ctx context.Context, request *pb.IdMessageRequest) (*pb.AccommodationRatingsResponse, error) {
 
-	_, err := primitive.ObjectIDFromHex(request.Id)
+	accommodationName := request.Id
+
+	accommodationratings, err := handler.service.GetAccommodationRatingsByAccommodationID(accommodationName)
+
 	if err != nil {
 		return nil, err
 	}
 
-	return nil, nil
+	response := &pb.AccommodationRatingsResponse{
+		Ratings: []*pb.AccommodationRating{},
+	}
+	for _, accommodationrating := range accommodationratings {
+		current, _ := MapAccommodationRatingToPb(accommodationrating)
+
+		response.Ratings = append(response.Ratings, current)
+	}
+	return response, nil
+}
+func (handler *RatingHandler) GetHostRatingsByHostID(ctx context.Context, request *pb.IdMessageRequest) (*pb.HostRatingsResponse, error) {
+	id := request.Id
+	objectId, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		return nil, err
+	}
+
+	hostRatings, err := handler.service.GetHostRatingsByHostID(objectId)
+
+	if err != nil {
+		return nil, err
+	}
+
+	response := &pb.HostRatingsResponse{
+		Ratings: []*pb.HostRating{},
+	}
+	for _, rating := range hostRatings {
+		current, _ := MapHostRatingToPb(rating)
+
+		response.Ratings = append(response.Ratings, current)
+	}
+	return response, nil
 }

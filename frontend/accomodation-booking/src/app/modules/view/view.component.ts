@@ -44,10 +44,12 @@ export class ViewComponent implements OnInit {
   goToRatings(acc: Accommodation) {
     this.router.navigate(['/ratings'], {
       queryParams: {
-        accommodationID: acc.id,
+        accommodationName: acc.name,
+        hostID: acc.host_id,
         startDate: this.from,
         endDate: this.to,
         numOfGuests: this.numOfGuests,
+        accommodationID: acc.id,
       },
     });
   }

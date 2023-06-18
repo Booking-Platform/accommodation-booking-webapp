@@ -12,4 +12,6 @@ type RatingStore interface {
 	UpdateAccommodationRatingByID(ratingID primitive.ObjectID, newRating int) error
 	CreateRatingForAccommodation(hostRating *model.AccommodationRating) error
 	GetRatingByUserAndAccommodationName(accommodationName string, guestID primitive.ObjectID) (*model.AccommodationRating, error)
+	GetRatingsByAccommodationName(name string) ([]*model.AccommodationRating, error)
+	GetHostRatingsByHostID(id primitive.ObjectID) ([]*model.HostRating, error)
 }

@@ -138,7 +138,3 @@ func mapAddressPb(address *model.Address) *pb.Address {
 		Number:  strconv.Itoa(address.Number),
 	}
 }
-
-//func mapUpdateAccommodation(accommodation *model.Accommodation, appointment *pb.Appointment) *model.Accommodation {
-//
-//}

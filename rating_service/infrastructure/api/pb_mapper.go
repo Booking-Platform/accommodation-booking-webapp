@@ -8,14 +8,13 @@ import (
 	"strconv"
 )
 
-func mapRating(ratingPb *pb.NewRating) (*model.HostRating, error) {
+func MapNewRatingToHostRating(ratingPb *pb.NewRating) (*model.HostRating, error) {
 	guestID, err := primitive.ObjectIDFromHex(ratingPb.GuestID)
 	if err != nil {
 		return nil, err
 	}
 
 	hostID, err := primitive.ObjectIDFromHex(ratingPb.HostID)
-
 	if err != nil {
 		return nil, err
 	}
@@ -27,16 +26,15 @@ func mapRating(ratingPb *pb.NewRating) (*model.HostRating, error) {
 	}
 
 	rating := &model.HostRating{
-
 		Rating:  ratingNumber,
-		HostId:  hostID,
 		GuestId: guestID,
+		HostId:  hostID,
 	}
 
 	return rating, nil
 }
 
-func mapAccommodationRating(ratingPb *pb.NewAccommodationRating) (*model.AccommodationRating, error) {
+func MapNewAccommodationRatingToAccommodationRating(ratingPb *pb.NewAccommodationRating) (*model.AccommodationRating, error) {
 	guestID, err := primitive.ObjectIDFromHex(ratingPb.GuestID)
 	if err != nil {
 		return nil, err
@@ -49,11 +47,28 @@ func mapAccommodationRating(ratingPb *pb.NewAccommodationRating) (*model.Accommo
 	}
 
 	rating := &model.AccommodationRating{
-
 		Rating:            ratingNumber,
-		AccommodationName: ratingPb.GetAccommodationName(),
 		GuestId:           guestID,
+		AccommodationName: ratingPb.GetAccommodationName(),
 	}
 
 	return rating, nil
+}
+
+func MapAccommodationRatingToPb(accommodationRating *model.AccommodationRating) (*pb.AccommodationRating, error) {
+	return &pb.AccommodationRating{
+		GuestID:           accommodationRating.GuestId.Hex(),
+		AccommodationName: accommodationRating.AccommodationName,
+		Rating:            strconv.Itoa(accommodationRating.Rating),
+		Date:              accommodationRating.Date.String(),
+	}, nil
+}
+
+func MapHostRatingToPb(hostRating *model.HostRating) (*pb.HostRating, error) {
+	return &pb.HostRating{
+		Rating:  strconv.Itoa(hostRating.Rating),
+		Date:    hostRating.Date.String(),
+		GuestID: hostRating.GuestId.Hex(),
+		HostID:  hostRating.HostId.Hex(),
+	}, nil
 }

@@ -1,0 +1,56 @@
+.ratings-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+  
+  .ratings-section {
+    width: 45%;
+    border: 1px solid #ccc;
+    padding: 10px;
+  }
+  
+  .left-section {
+    margin-right: 10px;
+  }
+  
+  .right-section {
+    margin-left: 10px;
+  }
+  
+  h2 {
+    text-align: center;
+    margin-top: 0;
+  }
+  
+  h3 {
+    margin-top: 0;
+  }
+  
+  .rating-item {
+    margin-bottom: 10px;
+  }
+  
+  .user-info {
+    font-weight: bold;
+  }
+  
+  .user-email {
+    color: #777;
+  }
+  
+  .rating-details {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .rating-value {
+    font-size: 18px;
+    font-weight: bold;
+  }
+  
+  .rating-date {
+    color: #777;
+  }
+  

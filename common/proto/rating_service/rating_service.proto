@@ -7,6 +7,8 @@ package rating;
 import "google/api/annotations.proto";
 
 service rating_service{
+  rpc GetAccommodationRatingsByAccommodationID(IdMessageRequest) returns(AccommodationRatingsResponse) {}
+  rpc GetHostRatingsByHostID(IdMessageRequest) returns(HostRatingsResponse) {}
 
   rpc CreateRating(CreateRatingRequest) returns(BlankResponse) {
     option (google.api.http) = {
@@ -21,22 +23,30 @@ service rating_service{
       body: "newAccommodationRating"
     };
   }
-
-  rpc GetAccommodationRatingsByAccommodationID(IdMessageRequest) returns(RatingsResponse) {}
-
 }
 
-message RatingsResponse {
-  repeated Rating ratings = 1;
+message AccommodationRatingsResponse {
+  repeated AccommodationRating ratings = 1;
 }
 
-message Rating {
-  string hostID = 1;
+message AccommodationRating {
   string GuestID = 2;
   string AccommodationName = 3;
   string Rating = 4;
   string Date = 5;
 }
+
+message HostRatingsResponse {
+  repeated HostRating ratings = 1;
+}
+
+message HostRating {
+  string GuestID = 1;
+  string HostID = 2;
+  string Rating = 3;
+  string Date = 4;
+}
+
 
 message IdMessageRequest {
   string id = 1;
