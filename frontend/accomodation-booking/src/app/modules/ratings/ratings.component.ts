@@ -9,7 +9,7 @@ import { RatingService } from 'src/app/services/rating/rating.service';
   styleUrls: ['./ratings.component.css'],
 })
 export class RatingsComponent implements OnInit {
-  public accommodationID: any = '';
+  public accommodationName: any = '';
   public startDate: any = '';
   public endDate: any = '';
   public guestNum: any = '';
@@ -21,6 +21,12 @@ export class RatingsComponent implements OnInit {
   public perGuest: any = '';
   public totalDays: any = '';
   public totalPrice: any = '';
+  public hostID = '';
+  public accommodationID: any = '';
+
+  public accommodationComments: any[] = [];
+  public hostComments: any[] = [];
+
 
   constructor(
     private route: ActivatedRoute,
@@ -28,16 +34,34 @@ export class RatingsComponent implements OnInit {
     private router: Router
   ) {}
 
+  continue(): void {
+    this.router.navigate(['/accommodation-details'], {
+      queryParams: {
+        accommodationID: this.accommodationID,
+        startDate: this.startDate,
+        endDate: this.endDate,
+        numOfGuests: this.numOfGuests,
+      },
+    });
+  }
+
   ngOnInit(): void {
     this.route.queryParams.subscribe((params) => {
       this.startDate = params['startDate'];
       this.endDate = params['endDate'];
-      this.accommodationID = params['accommodationID'];
+      this.accommodationName = params['accommodationName'];
       this.numOfGuests = params['numOfGuests'];
+      this.hostID = params['hostID'];
+      this.accommodationID = params['accommodationID'];
     });
-
-    this.ratingService.getRattingsForAccommodation(this.accommodationID).subscribe((res) => {
-
+  
+    window.alert(this.accommodationID)
+    this.ratingService.getRattingsForAccommodation(this.accommodationName).subscribe((res) => {
+      this.accommodationComments = res;    
+    });
+  
+    this.ratingService.getRattingsForHost(this.hostID).subscribe((res) => {
+      this.hostComments = res;    
     });
   
   }

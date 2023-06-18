@@ -7,7 +7,7 @@ import { AuthService } from '../auth/auth.service';
   providedIn: 'root',
 })
 export class RatingService {
-  
+
   apiHost: string = 'http://localhost:8000/api/rating';
   headers: HttpHeaders = new HttpHeaders({
     'Content-Type': 'application/json',
@@ -30,8 +30,14 @@ export class RatingService {
     return this.http.post(url, JSON.stringify(newAccommodationRating), { headers: this.headers });
   }
 
-  getRattingsForAccommodation(accommodationID: any) {
-    const url = `${this.apiHost}/getAllRatingsForAccommodation/${accommodationID}`;
+  getRattingsForAccommodation(accommodationName: string) {
+    const url = `${this.apiHost}/getAllRatingsForAccommodation/${accommodationName}`;
+    return this.http.get<any[]>(url, { headers: this.headers });
+  }
+ 
+
+  getRattingsForHost(hostID: string) {
+    const url = `${this.apiHost}/getRattingsForHost/${hostID}`;
     return this.http.get<any[]>(url, { headers: this.headers });
   }
   

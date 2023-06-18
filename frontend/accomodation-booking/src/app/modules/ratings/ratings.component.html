@@ -1,1 +1,39 @@
-<p>ratings works!</p>
+<h1 style="margin-top: 1%; margin-bottom: 2%; margin-left: 35%">
+  {{ accommodationName }}
+</h1>
+
+<div class="ratings-container">
+  <div class="ratings-section left-section">
+    <h2>Accommodation Ratings</h2>
+    <br />
+    <div *ngFor="let comment of accommodationComments" class="rating-item">
+      <div class="user-info">
+        <h3>Guest: {{ comment.User.Name }} {{ comment.User.Surname }}</h3>
+        <p class="user-email">{{ comment.User.Email }}</p>
+      </div>
+      <div class="rating-details">
+        <p class="rating-value">Rating: {{ comment.Rating }}</p>
+        <p class="rating-date">Date: {{ comment.Date }}</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="ratings-section right-section">
+    <h2>Host Ratings</h2>
+    <br />
+    <div *ngFor="let comment of hostComments" class="rating-item">
+      <div class="user-info">
+        <h3>Guest: {{ comment.Guest.Name }} {{ comment.Guest.Surname }}</h3>
+        <p class="user-email">
+          Host: {{ comment.Host.Name }} {{ comment.Host.Surname }}
+        </p>
+      </div>
+      <div class="rating-details">
+        <p class="rating-value">Rating: {{ comment.Rating }}</p>
+        <p class="rating-date">Date: {{ comment.Date }}</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<button (click)="continue()">continue to reservation</button>

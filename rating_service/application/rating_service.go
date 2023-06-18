@@ -3,6 +3,7 @@ package application
 import (
 	"github.com/Booking-Platform/accommodation-booking-webapp/rating_service/domain"
 	"github.com/Booking-Platform/accommodation-booking-webapp/rating_service/domain/model"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"google.golang.org/genproto/googleapis/type/date"
 	"time"
 )
@@ -18,17 +19,23 @@ func NewRatingService(store domain.RatingStore) *RatingService {
 }
 
 func (service *RatingService) RateHost(rating *model.HostRating) error {
-	fetchedRating, _ := service.store.GetRatingByUserAndGuest(rating.GuestId, rating.HostId)
+	fetchedRating, err := service.store.GetRatingByUserAndGuest(rating.GuestId, rating.HostId)
+	if err != nil {
+		return err
+	}
+
 	if fetchedRating == nil {
 		return service.store.CreateRatingForHost(rating)
 	} else {
 		return service.store.UpdateHostRatingByID(fetchedRating.Id, rating.Rating)
 	}
-
 }
 
 func (service *RatingService) RateAccommodation(rating *model.AccommodationRating) error {
-	fetchedRating, _ := service.store.GetRatingByUserAndAccommodationName(rating.AccommodationName, rating.GuestId)
+	fetchedRating, err := service.store.GetRatingByUserAndAccommodationName(rating.AccommodationName, rating.GuestId)
+	if err != nil {
+		return err
+	}
 
 	currentDate := time.Now().UTC()
 
@@ -47,4 +54,14 @@ func (service *RatingService) RateAccommodation(rating *model.AccommodationRatin
 		}
 		return service.store.UpdateAccommodationRatingByID(fetchedRating.Id, rating.Rating)
 	}
+
+}
+
+func (service *RatingService) GetAccommodationRatingsByAccommodationID(accommodationName string) ([]*model.AccommodationRating, error) {
+	return service.store.GetRatingsByAccommodationName(accommodationName)
+}
+
+func (service *RatingService) GetHostRatingsByHostID(id primitive.ObjectID) ([]*model.HostRating, error) {
+	return service.store.GetHostRatingsByHostID(id)
+
 }
