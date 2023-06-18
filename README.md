@@ -3,8 +3,8 @@
 
 ## Table of contents
 * [General info](#general-info)
-* [Technologies](#technologies)
 * [App Architecture](#app-architecture)
+* [Technologies](#technologies)
 * [Setup](#setup)
 
 
