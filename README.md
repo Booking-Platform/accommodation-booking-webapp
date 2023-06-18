@@ -29,14 +29,6 @@ Has had at least 5 past reservations
 The total duration of all reservations is greater than 50 days
 If a host meets these criteria, their profile will display the Featured Host status. This status is not permanent and can change based on the host's performance
 
-## Technologies
-Project is created with:
-* golang:  1.19
-* @angular/core:     15.2.5
-
-
-## Setup
-
 
 ## App Architecture
 
@@ -48,4 +40,18 @@ The Accommodation-Booking-Webapp follows a microservices architecture for its ba
 </figure>
 
 The diagram above illustrates the system architecture of the Accommodation-Booking-Webapp. It shows how the different components and services interact with each other to deliver the desired functionality.
+
+## Technologies
+Project is created with:
+* golang:  1.19
+* @angular/core:     15.2.5
+
+
+## Setup
+ * Backend(do it from root directory):
+   1. docker-compose build
+   2. docker-compose up
+ * Frontend(do it from root 'frontend/accommodation-booking/'):
+   1. npm install
+   2. npm start
 
