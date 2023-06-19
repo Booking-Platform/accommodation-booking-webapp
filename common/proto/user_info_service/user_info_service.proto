@@ -7,6 +7,9 @@ package user_info;
 import "google/api/annotations.proto";
 
 service user_info_service{
+
+  rpc SetFeaturedHost(SetFeaturedHostRequest) returns(BlankResponse) {}
+
   rpc GetUserByID(GetUserByIDRequest) returns(GetUserByIDResponse) {
     option (google.api.http) = {
       get: "/api/user/{id}"
@@ -35,6 +38,9 @@ message DeleteUserResponse{
   bool status = 1;
 }
 
+message BlankResponse{
+}
+
 message GetUserByIDRequest {
   string id = 1;
 }
@@ -42,7 +48,7 @@ message GetUserByIDRequest {
 message GetUserByIDResponse {
   string name = 1;
   string surname = 2;
-  float avgRating = 3;
+  bool isFeatured = 3;
 }
 
 message CreateUserRequest {
@@ -51,6 +57,11 @@ message CreateUserRequest {
 
 message CreateUserResponse {
   User user = 1;
+}
+
+message SetFeaturedHostRequest{
+  string id = 1;
+  bool featured = 2;
 }
 
 message NewUser {

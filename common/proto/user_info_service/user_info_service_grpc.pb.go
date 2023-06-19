@@ -19,15 +19,17 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	UserInfoService_GetUserByID_FullMethodName = "/user_info.user_info_service/GetUserByID"
-	UserInfoService_CreateUser_FullMethodName  = "/user_info.user_info_service/CreateUser"
-	UserInfoService_DeleteUser_FullMethodName  = "/user_info.user_info_service/DeleteUser"
+	UserInfoService_SetFeaturedHost_FullMethodName = "/user_info.user_info_service/SetFeaturedHost"
+	UserInfoService_GetUserByID_FullMethodName     = "/user_info.user_info_service/GetUserByID"
+	UserInfoService_CreateUser_FullMethodName      = "/user_info.user_info_service/CreateUser"
+	UserInfoService_DeleteUser_FullMethodName      = "/user_info.user_info_service/DeleteUser"
 )
 
 // UserInfoServiceClient is the client API for UserInfoService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type UserInfoServiceClient interface {
+	SetFeaturedHost(ctx context.Context, in *SetFeaturedHostRequest, opts ...grpc.CallOption) (*BlankResponse, error)
 	GetUserByID(ctx context.Context, in *GetUserByIDRequest, opts ...grpc.CallOption) (*GetUserByIDResponse, error)
 	CreateUser(ctx context.Context, in *CreateUserRequest, opts ...grpc.CallOption) (*CreateUserResponse, error)
 	DeleteUser(ctx context.Context, in *DeleteUserRequest, opts ...grpc.CallOption) (*DeleteUserResponse, error)
@@ -39,6 +41,15 @@ type userInfoServiceClient struct {
 
 func NewUserInfoServiceClient(cc grpc.ClientConnInterface) UserInfoServiceClient {
 	return &userInfoServiceClient{cc}
+}
+
+func (c *userInfoServiceClient) SetFeaturedHost(ctx context.Context, in *SetFeaturedHostRequest, opts ...grpc.CallOption) (*BlankResponse, error) {
+	out := new(BlankResponse)
+	err := c.cc.Invoke(ctx, UserInfoService_SetFeaturedHost_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
 }
 
 func (c *userInfoServiceClient) GetUserByID(ctx context.Context, in *GetUserByIDRequest, opts ...grpc.CallOption) (*GetUserByIDResponse, error) {
@@ -72,6 +83,7 @@ func (c *userInfoServiceClient) DeleteUser(ctx context.Context, in *DeleteUserRe
 // All implementations must embed UnimplementedUserInfoServiceServer
 // for forward compatibility
 type UserInfoServiceServer interface {
+	SetFeaturedHost(context.Context, *SetFeaturedHostRequest) (*BlankResponse, error)
 	GetUserByID(context.Context, *GetUserByIDRequest) (*GetUserByIDResponse, error)
 	CreateUser(context.Context, *CreateUserRequest) (*CreateUserResponse, error)
 	DeleteUser(context.Context, *DeleteUserRequest) (*DeleteUserResponse, error)
@@ -82,6 +94,9 @@ type UserInfoServiceServer interface {
 type UnimplementedUserInfoServiceServer struct {
 }
 
+func (UnimplementedUserInfoServiceServer) SetFeaturedHost(context.Context, *SetFeaturedHostRequest) (*BlankResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SetFeaturedHost not implemented")
+}
 func (UnimplementedUserInfoServiceServer) GetUserByID(context.Context, *GetUserByIDRequest) (*GetUserByIDResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetUserByID not implemented")
 }
@@ -102,6 +117,24 @@ type UnsafeUserInfoServiceServer interface {
 
 func RegisterUserInfoServiceServer(s grpc.ServiceRegistrar, srv UserInfoServiceServer) {
 	s.RegisterService(&UserInfoService_ServiceDesc, srv)
+}
+
+func _UserInfoService_SetFeaturedHost_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SetFeaturedHostRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserInfoServiceServer).SetFeaturedHost(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: UserInfoService_SetFeaturedHost_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserInfoServiceServer).SetFeaturedHost(ctx, req.(*SetFeaturedHostRequest))
+	}
+	return interceptor(ctx, in, info, handler)
 }
 
 func _UserInfoService_GetUserByID_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
@@ -165,6 +198,10 @@ var UserInfoService_ServiceDesc = grpc.ServiceDesc{
 	ServiceName: "user_info.user_info_service",
 	HandlerType: (*UserInfoServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "SetFeaturedHost",
+			Handler:    _UserInfoService_SetFeaturedHost_Handler,
+		},
 		{
 			MethodName: "GetUserByID",
 			Handler:    _UserInfoService_GetUserByID_Handler,

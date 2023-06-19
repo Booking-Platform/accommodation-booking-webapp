@@ -31,7 +31,7 @@ const (
 type RatingServiceClient interface {
 	GetAccommodationRatingsByAccommodationID(ctx context.Context, in *IdMessageRequest, opts ...grpc.CallOption) (*AccommodationRatingsResponse, error)
 	GetHostRatingsByHostID(ctx context.Context, in *IdMessageRequest, opts ...grpc.CallOption) (*HostRatingsResponse, error)
-	CreateRating(ctx context.Context, in *CreateRatingRequest, opts ...grpc.CallOption) (*BlankResponse, error)
+	CreateRating(ctx context.Context, in *CreateRatingRequest, opts ...grpc.CallOption) (*AvgRatingResponse, error)
 	CreateAccommodationRating(ctx context.Context, in *CreateAccommodationRatingRequest, opts ...grpc.CallOption) (*BlankResponse, error)
 }
 
@@ -61,8 +61,8 @@ func (c *ratingServiceClient) GetHostRatingsByHostID(ctx context.Context, in *Id
 	return out, nil
 }
 
-func (c *ratingServiceClient) CreateRating(ctx context.Context, in *CreateRatingRequest, opts ...grpc.CallOption) (*BlankResponse, error) {
-	out := new(BlankResponse)
+func (c *ratingServiceClient) CreateRating(ctx context.Context, in *CreateRatingRequest, opts ...grpc.CallOption) (*AvgRatingResponse, error) {
+	out := new(AvgRatingResponse)
 	err := c.cc.Invoke(ctx, RatingService_CreateRating_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -85,7 +85,7 @@ func (c *ratingServiceClient) CreateAccommodationRating(ctx context.Context, in 
 type RatingServiceServer interface {
 	GetAccommodationRatingsByAccommodationID(context.Context, *IdMessageRequest) (*AccommodationRatingsResponse, error)
 	GetHostRatingsByHostID(context.Context, *IdMessageRequest) (*HostRatingsResponse, error)
-	CreateRating(context.Context, *CreateRatingRequest) (*BlankResponse, error)
+	CreateRating(context.Context, *CreateRatingRequest) (*AvgRatingResponse, error)
 	CreateAccommodationRating(context.Context, *CreateAccommodationRatingRequest) (*BlankResponse, error)
 	mustEmbedUnimplementedRatingServiceServer()
 }
@@ -100,7 +100,7 @@ func (UnimplementedRatingServiceServer) GetAccommodationRatingsByAccommodationID
 func (UnimplementedRatingServiceServer) GetHostRatingsByHostID(context.Context, *IdMessageRequest) (*HostRatingsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetHostRatingsByHostID not implemented")
 }
-func (UnimplementedRatingServiceServer) CreateRating(context.Context, *CreateRatingRequest) (*BlankResponse, error) {
+func (UnimplementedRatingServiceServer) CreateRating(context.Context, *CreateRatingRequest) (*AvgRatingResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateRating not implemented")
 }
 func (UnimplementedRatingServiceServer) CreateAccommodationRating(context.Context, *CreateAccommodationRatingRequest) (*BlankResponse, error) {

@@ -27,3 +27,7 @@ func (service *UserService) Create(user *model.User) error {
 func (service *UserService) Delete(id primitive.ObjectID) (bool, error) {
 	return service.store.Delete(id)
 }
+
+func (service *UserService) SetFeaturedHost(id primitive.ObjectID, featured bool) {
+	service.store.SetFeaturedHost(id, featured)
+}
