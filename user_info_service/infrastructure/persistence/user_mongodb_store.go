@@ -18,6 +18,19 @@ type UserMongoDBStore struct {
 	users *mongo.Collection
 }
 
+func (u *UserMongoDBStore) SetFeaturedHost(id primitive.ObjectID, featured bool) bool {
+
+	filter := bson.M{"_id": id}
+	update := bson.M{"$set": bson.M{"isFeatured": featured}}
+
+	_, err := u.users.UpdateOne(context.Background(), filter, update)
+	if err != nil {
+		return false
+	}
+	return true
+
+}
+
 func (u *UserMongoDBStore) Delete(id primitive.ObjectID) (bool, error) {
 	filter := bson.M{"_id": id}
 

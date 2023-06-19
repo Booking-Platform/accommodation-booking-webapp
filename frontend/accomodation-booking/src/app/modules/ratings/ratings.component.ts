@@ -55,7 +55,6 @@ export class RatingsComponent implements OnInit {
       this.accommodationID = params['accommodationID'];
     });
   
-    window.alert(this.accommodationID)
     this.ratingService.getRattingsForAccommodation(this.accommodationName).subscribe((res) => {
       this.accommodationComments = res;    
     });

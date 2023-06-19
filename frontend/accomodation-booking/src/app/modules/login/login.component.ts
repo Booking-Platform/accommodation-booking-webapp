@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, withNavigationErrorHandler } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { User } from 'src/app/model/user';
 import { AuthService } from 'src/app/services/auth/auth.service';

@@ -19,7 +19,7 @@ export class RatingService {
   constructor(private http: HttpClient, private authService: AuthService) {}
 
   createRating(newRating: any): Observable<any> {
-    const url = this.apiHost;
+    const url = this.apiHost + "/host";
     return this.http.post(url, JSON.stringify(newRating), {
       headers: this.headers,
     });
@@ -37,7 +37,7 @@ export class RatingService {
  
 
   getRattingsForHost(hostID: string) {
-    const url = `${this.apiHost}/getRattingsForHost/${hostID}`;
+    const url = `${this.apiHost}/getRatingsForHost/${hostID}`;
     return this.http.get<any[]>(url, { headers: this.headers });
   }
   

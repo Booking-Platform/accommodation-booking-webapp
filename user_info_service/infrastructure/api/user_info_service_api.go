@@ -27,9 +27,9 @@ func (handler *UserInfoHandler) GetUserByID(ctx context.Context, request *pb.Get
 	user, _ := handler.service.GetByID(id)
 
 	response := &pb.GetUserByIDResponse{
-		Surname: user.Surname,
-		Name:    user.Name,
-		//		AvgRating: 4.8,
+		Surname:    user.Surname,
+		Name:       user.Name,
+		IsFeatured: user.IsFeatured,
 	}
 
 	return response, nil
@@ -62,4 +62,16 @@ func (handler *UserInfoHandler) DeleteUser(ctx context.Context, request *pb.Dele
 
 	result, _ := handler.service.Delete(objectId)
 	return &pb.DeleteUserResponse{Status: result}, nil
+}
+
+func (handler *UserInfoHandler) SetFeaturedHost(ctx context.Context, request *pb.SetFeaturedHostRequest) (*pb.BlankResponse, error) {
+	id := request.Id
+	objectId, err := primitive.ObjectIDFromHex(id)
+	featured := request.Featured
+	if err != nil {
+		return nil, err
+	}
+
+	handler.service.SetFeaturedHost(objectId, featured)
+	return &pb.BlankResponse{}, nil
 }

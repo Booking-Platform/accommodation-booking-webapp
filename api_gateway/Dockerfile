@@ -10,6 +10,9 @@ COPY ./api_gateway/go.mod ./api_gateway/go.sum ./
 # Copy the local dependency
 COPY /common ../common
 
+# Copy the .env file
+COPY .env .
+
 # Download all dependencies. Dependencies will be cached if the go.mod and go.sum files are not changed
 RUN go mod download
 
@@ -28,6 +31,9 @@ WORKDIR /root/
 
 # Copy the Pre-built binary file from the previous stage
 COPY --from=builder /app/main .
+
+# Copy the .env file
+COPY .env .
 
 # Expose port 8000 to the outside world
 EXPOSE 8000

@@ -20,6 +20,7 @@ func NewRatingService(store domain.RatingStore) *RatingService {
 
 func (service *RatingService) RateHost(rating *model.HostRating) error {
 	fetchedRating, err := service.store.GetRatingByUserAndGuest(rating.GuestId, rating.HostId)
+
 	if err != nil {
 		return err
 	}
@@ -42,14 +43,14 @@ func (service *RatingService) RateAccommodation(rating *model.AccommodationRatin
 	if fetchedRating == nil {
 		rating.Date = date.Date{
 			Year:  int32(currentDate.Year()),
-			Month: int32(int(currentDate.Month())),
+			Month: int32(currentDate.Month()),
 			Day:   int32(currentDate.Day()),
 		}
 		return service.store.CreateRatingForAccommodation(rating)
 	} else {
 		fetchedRating.Date = date.Date{
 			Year:  int32(currentDate.Year()),
-			Month: int32(int(currentDate.Month())),
+			Month: int32(currentDate.Month()),
 			Day:   int32(currentDate.Day()),
 		}
 		return service.store.UpdateAccommodationRatingByID(fetchedRating.Id, rating.Rating)
@@ -63,5 +64,25 @@ func (service *RatingService) GetAccommodationRatingsByAccommodationID(accommoda
 
 func (service *RatingService) GetHostRatingsByHostID(id primitive.ObjectID) ([]*model.HostRating, error) {
 	return service.store.GetHostRatingsByHostID(id)
+}
 
+func (service *RatingService) GetAvgRatingForHostID(hostid primitive.ObjectID) (float64, int) {
+
+	ratings, err := service.store.GetHostRatingsByHostID(hostid)
+	if err != nil {
+		panic(err)
+	}
+
+	totalRatings := len(ratings)
+	if totalRatings == 0 {
+		return 0.0, totalRatings
+	}
+
+	var sumRatings int
+	for _, rating := range ratings {
+		sumRatings += rating.Rating
+	}
+
+	avgRating := float64(sumRatings) / float64(totalRatings)
+	return avgRating, totalRatings
 }
