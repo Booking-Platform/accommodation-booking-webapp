@@ -10,12 +10,7 @@ service rating_service{
   rpc GetAccommodationRatingsByAccommodationID(IdMessageRequest) returns(AccommodationRatingsResponse) {}
   rpc GetHostRatingsByHostID(IdMessageRequest) returns(HostRatingsResponse) {}
 
-  rpc CreateRating(CreateRatingRequest) returns(BlankResponse) {
-    option (google.api.http) = {
-      post: "/api/rating"
-      body: "newRating"
-    };
-  }
+  rpc CreateRating(CreateRatingRequest) returns(AvgRatingResponse) {}
 
   rpc CreateAccommodationRating(CreateAccommodationRatingRequest) returns(BlankResponse) {
     option (google.api.http) = {
@@ -61,6 +56,11 @@ message CreateRatingRequest {
 }
 
 message BlankResponse {
+}
+
+message AvgRatingResponse {
+  double avgRating = 1;
+  uint32 numOfRatings = 2;
 }
 
 message NewRating {

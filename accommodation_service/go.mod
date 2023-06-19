@@ -6,7 +6,6 @@ go 1.19
 
 require (
 	github.com/Booking-Platform/accommodation-booking-webapp/common v0.0.0-20230521093144-ea467a46cfb5
-	github.com/joho/godotenv v1.5.1
 	go.mongodb.org/mongo-driver v1.11.6
 	google.golang.org/grpc v1.55.0
 )
@@ -16,6 +15,7 @@ require (
 	github.com/golang/protobuf v1.5.3 // indirect
 	github.com/golang/snappy v0.0.1 // indirect
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.15.2 // indirect
+	github.com/joho/godotenv v1.5.1 // indirect
 	github.com/klauspost/compress v1.13.6 // indirect
 	github.com/montanaflynn/stats v0.0.0-20171201202039-1bf9dbcd8cbe // indirect
 	github.com/pkg/errors v0.9.1 // indirect

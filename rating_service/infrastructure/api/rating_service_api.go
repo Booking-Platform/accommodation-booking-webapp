@@ -19,7 +19,7 @@ func NewRatingHandler(service *application.RatingService) *RatingHandler {
 	}
 }
 
-func (handler *RatingHandler) CreateRating(ctx context.Context, request *pb.CreateRatingRequest) (*pb.BlankResponse, error) {
+func (handler *RatingHandler) CreateRating(ctx context.Context, request *pb.CreateRatingRequest) (*pb.AvgRatingResponse, error) {
 
 	rating, err := MapNewRatingToHostRating(request.NewRating)
 	if err != nil {
@@ -32,7 +32,9 @@ func (handler *RatingHandler) CreateRating(ctx context.Context, request *pb.Crea
 		return nil, err
 	}
 
-	response := &pb.BlankResponse{}
+	avgRating, numOfRatings := handler.service.GetAvgRatingForHostID(rating.HostId)
+
+	response := &pb.AvgRatingResponse{AvgRating: avgRating, NumOfRatings: uint32(numOfRatings)}
 
 	return response, nil
 }

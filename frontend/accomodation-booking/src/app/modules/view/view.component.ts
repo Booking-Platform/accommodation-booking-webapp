@@ -90,7 +90,7 @@ export class ViewComponent implements OnInit {
         (this.maxPrice === undefined || price <= this.maxPrice) &&
         fromDate >= appointmentFromDate &&
         toDate <= appointmentToDate &&
-        this.featuredOnly === acc.isFeaturedHost &&
+        // this.featuredOnly === acc.isFeaturedHost &&
         (selectedBenefits.length === 0 || hasSelectedBenefits)
       );
 

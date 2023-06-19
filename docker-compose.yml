@@ -8,6 +8,8 @@ services:
       context: .
       dockerfile: ./accommodation_reserve_service/Dockerfile
     restart: on-failure
+    env_file:
+      - .env
     environment:
       ACCOMMODATION_RESERVE_DB_HOST: ${ACCOMMODATION_RESERVE_DB_HOST}
       ACCOMMODATION_RESERVE_DB_PORT: ${ACCOMMODATION_RESERVE_DB_PORT}
@@ -24,6 +26,8 @@ services:
       context: .
       dockerfile: ./accommodation_service/Dockerfile
     restart: on-failure
+    env_file:
+      - .env
     environment:
       ACCOMMODATION_DB_HOST: ${ACCOMMODATION_DB_HOST}
       ACCOMMODATION_DB_PORT: ${ACCOMMODATION_DB_PORT}
@@ -40,6 +44,8 @@ services:
       context: .
       dockerfile: ./user_info_service/Dockerfile
     restart: on-failure
+    env_file:
+      - .env
     environment:
       USER_INFO_DB_HOST: ${USER_INFO_DB_HOST}
       USER_INFO_DB_PORT: ${USER_INFO_DB_PORT}
@@ -56,12 +62,32 @@ services:
       context: .
       dockerfile: ./auth_service/Dockerfile
     restart: on-failure
+    env_file:
+      - .env
     environment:
       AUTH_DB_HOST: ${AUTH_DB_HOST}
       AUTH_DB_PORT: ${AUTH_DB_PORT}
       AUTH_SERVICE_PORT: ${AUTH_SERVICE_PORT}
     depends_on:
-      - auth_db
+      - auth_db-1
+    networks:
+      - network
+
+  rating_service:
+    image: rating_service
+    container_name: rating_service
+    build:
+      context: .
+      dockerfile: ./rating_service/Dockerfile
+    restart: on-failure
+    env_file:
+      - .env
+    environment:
+      AUTH_DB_HOST: ${RATING_DB_HOST}
+      AUTH_DB_PORT: ${RATING_DB_PORT}
+      AUTH_SERVICE_PORT: ${RATING_SERVICE_PORT}
+    depends_on:
+      - rating_db
     networks:
       - network
 
@@ -72,6 +98,8 @@ services:
       context: .
       dockerfile: ./api_gateway/Dockerfile
     restart: on-failure
+    env_file:
+      - .env
     ports:
       - ${GATEWAY_PORT}:${GATEWAY_PORT}
     environment:
@@ -84,6 +112,8 @@ services:
       USER_INFO_SERVICE_PORT: ${USER_INFO_SERVICE_PORT}
       AUTH_SERVICE_HOST: ${AUTH_SERVICE_HOST}
       AUTH_SERVICE_PORT: ${AUTH_SERVICE_PORT}
+      RATING_SERVICE_HOST: ${RATING_SERVICE_HOST}
+      RATING_SERVICE_PORT: ${RATING_SERVICE_PORT}
 
     networks:
       - network
@@ -110,17 +140,23 @@ services:
     networks:
       - network
 
-  auth_db:
+  auth_db-1:
     image: mongo
     container_name: auth_db
     restart: on-failure
     networks:
       - network
 
+  rating_db:
+    image: mongo
+    container_name: rating_db
+    restart: on-failure
+    networks:
+      - network
 
   mongo_express:
     image: mongo-express
-    container_name: mongo_express
+    container_name: auth_db-mongo_express
     restart: on-failure
     environment:
       ME_CONFIG_MONGODB_SERVER: auth_db
@@ -132,7 +168,7 @@ services:
 
   mongo_express_db2:
     image: mongo-express
-    container_name: mongo_express_db2
+    container_name: user_info_db-mongo_express
     restart: on-failure
     environment:
       ME_CONFIG_MONGODB_SERVER: user_info_db
@@ -144,7 +180,7 @@ services:
 
   mongo_express_db3:
     image: mongo-express
-    container_name: mongo_express_db3
+    container_name: accommodation_reserve_db-mongo_express
     restart: on-failure
     environment:
       ME_CONFIG_MONGODB_SERVER: accommodation_reserve_db
@@ -156,13 +192,25 @@ services:
 
   mongo_express_db4:
     image: mongo-express
-    container_name: mongo_express_db4
+    container_name: accommodation_db-mongo_express
     restart: on-failure
     environment:
       ME_CONFIG_MONGODB_SERVER: accommodation_db
       ME_CONFIG_MONGODB_PORT: 27017
     ports:
       - 8084:8081
+    networks:
+      - network
+
+  mongo_express_db5:
+    image: mongo-express
+    container_name: rating_db-mongo_express
+    restart: on-failure
+    environment:
+      ME_CONFIG_MONGODB_SERVER: rating_db
+      ME_CONFIG_MONGODB_PORT: 27017
+    ports:
+      - 8085:8081
     networks:
       - network
 
